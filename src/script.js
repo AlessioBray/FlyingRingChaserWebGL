@@ -167,13 +167,6 @@ function animate(){
 		gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
 	}
 
-	
-
-    
-    
-
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
-
 	window.requestAnimationFrame(drawScene);
 }
 
@@ -182,25 +175,25 @@ function animate(){
 **********************************/
 
 var cubeNormalMatrix;
-  var cubeWorldMatrix = new Array();    //One world matrix for each cube...
+var cubeWorldMatrix = new Array();    //One world matrix for each cube...
 
-  //define directional light
-  var dirLightAlpha = -utils.degToRad(60);
-  var dirLightBeta  = -utils.degToRad(120);
+//define directional light
+var dirLightAlpha = -utils.degToRad(60);
+var dirLightBeta  = -utils.degToRad(120);
 
-  var directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
-              Math.sin(dirLightAlpha),
-              Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
-              ];
-  var directionalLightColor = [0.1, 1.0, 1.0];
+var directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
+          Math.sin(dirLightAlpha),
+          Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
+          ];
+var directionalLightColor = [0.1, 1.0, 1.0];
 
-  //Define material color
-  var cubeMaterialColor = [0.5, 0.5, 0.5];
-  var lastUpdateTime = (new Date).getTime();
+//Define material color
+var cubeMaterialColor = [0.5, 0.5, 0.5];
+var lastUpdateTime = (new Date).getTime();
 
-  var cubeRx = 0.0;
-  var cubeRy = 0.0;
-  var cubeRz = 0.0;
+var cubeRx = 0.0;
+var cubeRy = 0.0;
+var cubeRz = 0.0;
 
 
 function main() {
