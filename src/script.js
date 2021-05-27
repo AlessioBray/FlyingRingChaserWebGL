@@ -208,6 +208,8 @@ function main() {
     
   drawScene();
 
+  begin(); // game
+
 }
 
 window.onload = main;

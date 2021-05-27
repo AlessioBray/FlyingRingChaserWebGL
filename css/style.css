@@ -1,0 +1,75 @@
+ 
+#scoringtab{
+    width: 240px;
+    height: 100px;
+    position: absolute;
+    left: 70px;
+    top: 50px;
+    background-color: purple;
+    color:yellow;
+    border: 2px solid;
+    border-radius: 5px;
+    box-shadow:0 3px 7px rgba(0,0,0,0.25);
+    text-align: center;
+    font-family: verdana, arial, sans-serif;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: bold;
+ }
+
+ #popup{
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background-color: rgba(116,126,138,0.5);
+    position: fixed;
+    z-index: 6; 
+ }
+
+ #popupContent{
+    width: 30%;
+    height: 40%;
+    min-width: 220px;
+    min-height: 220px;
+    position: relative;
+    left: 35%;
+    top: 30%;
+    background-color: rgba(250,250,210,1);
+    border: 2px solid;
+    border-radius: 5px;
+    box-shadow:0 3px 7px rgba(0,0,0,0.25);
+ }
+ 
+ #popupContent div{
+    position:relative;
+    bottom:-30px;
+    padding: 3pt;
+    font-weight: bold;
+    text-align: center;
+    font-size: x-large;
+ }
+
+ a.closeButton{
+    width: 32px;
+    height: 32px;
+    position: relative;
+    display: block;
+    left: 95%;
+    top: -16px;
+    background: url('./../assets/close_button.png') no-repeat;
+    z-index: 7;
+ }
+
+ a.closeButton:hover{
+    cursor:pointer;
+    width: 32px;
+    height: 32px;
+    display: block;
+    position: relative;
+    left: 95%;
+    top: -16px;
+    background: url('./../assets/close_button_over.png') no-repeat;
+    z-index: 7;
+ }
+ 
