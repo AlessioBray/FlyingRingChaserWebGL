@@ -3,7 +3,7 @@ function begin(){
 
   score=document.getElementById('scoringtab');
   createScore(); 
-  //gameOver();
+  gameOver();
 
 }
 
@@ -68,7 +68,7 @@ function createPopup(action){
     document.body.appendChild(popup);
 }
 
-//creates a close popup
+//close popup
 function closePopup(){
     var popup = document.getElementById(POPUP_ID);
     if (popup === null)
