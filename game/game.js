@@ -1,9 +1,9 @@
 //start the game!!
-function begin(){
+function game(){
 
   score=document.getElementById('scoringtab');
   createScore(); 
-  gameOver();
+  //gameOver();
 
 }
 

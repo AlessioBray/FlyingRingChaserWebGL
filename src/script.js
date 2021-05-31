@@ -1,39 +1,6 @@
-var vs = `#version 300 es
-
-in vec3 inPosition;
-in vec3 inNormal;
-out vec3 fsNormal;
-
-uniform mat4 matrix; 
-uniform mat4 nMatrix;     //matrix to transform normals
-
-void main() {
-  fsNormal = mat3(nMatrix) * inNormal; 
-  gl_Position = matrix * vec4(inPosition, 1.0);
-}`;
-
-var fs = `#version 300 es
-
-precision mediump float;
-
-in vec3 fsNormal;
-out vec4 outColor;
-
-uniform vec3 mDiffColor; //material diffuse color 
-uniform vec3 lightDirection; // directional light direction vec
-uniform vec3 lightColor; //directional light color 
-
-void main() {
-
-  vec3 nNormal = normalize(fsNormal);
-  vec3 lambertColor = mDiffColor * lightColor * dot(-lightDirection,nNormal);
-  outColor = vec4(clamp(lambertColor, 0.0, 1.0),1.0);
-}`;
-
 /***********************
  Get the context
 ************************/
-
 var canvas;
 var gl;
 
@@ -56,13 +23,6 @@ function getCanvas(){
 ************************/
 
 var program = null;
-
-function compileAndLinkShaders(){
-	var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vs);
-	var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fs);
-	program = utils.createProgram(gl, vertexShader, fragmentShader);
-	gl.useProgram(program);
-}
 
 var positionAttributeLocation;  
 var normalAttributeLocation;  
@@ -113,7 +73,6 @@ function putAttributesOnGPU(){
 }
 
 function initializeProgram(){
-	compileAndLinkShaders();
 	getAttributesAndUniformLocations();
 	createVAO();
 	putAttributesOnGPU();
@@ -202,17 +161,15 @@ function main() {
   cubeWorldMatrix[1] = utils.MakeWorld( 3.0, 0.0, -1.5, 0.0, 0.0, 0.0, 0.5);
   cubeWorldMatrix[2] = utils.MakeWorld( 0.0, 0.0, -3.0, 0.0, 0.0, 0.0, 0.5);
 
-  getCanvas();
+  //getCanvas();
 
   initializeProgram();
     
   drawScene();
 
-  begin(); // game
+  game(); // game
 
 }
-
-window.onload = main;
 
 var camera_x = 0.0;
 var camera_y = 0.0;
@@ -243,6 +200,31 @@ function keyFunction(e){
       window.requestAnimationFrame(drawScene);
 }
 window.addEventListener("keydown", keyFunction, false);
+
+
+async function init(){ //init is an async function so we can use await inside it
+  var path = window.location.pathname;
+  var page = path.split("/").pop();
+  baseDir = window.location.href.replace(page, '');
+  shaderDir = baseDir+"shaders/"; //Shader files will be put in the shaders folder
+
+  //[..Retrieve canvas and webgl context here..]
+  getCanvas();
+
+  //await makes the init function stop until the loadFiles function has completed
+
+  //compile and link shaders
+  await utils.loadFiles([shaderDir + 'vs.glsl', shaderDir + 'fs.glsl'], function (shaderText){
+  var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+  var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+  program = utils.createProgram(gl, vertexShader, fragmentShader);
+  });
+  gl.useProgram(program);
+  main(); //Call the main function from here so it doesn’t have to be async too
+
+  }
+  
+  window.onload = init; //Put init function here instead of main
 
 // ---------------------------------------------------------------------------------------------------
 // Se vogliamo aggiungere la visione angolata durante il movimento. Non è facile perchè mettendo 
