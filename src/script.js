@@ -167,7 +167,11 @@ function main() {
     
   drawScene();
 
-  game(); // game
+  //init global variables
+  lightController = document.getElementById("lightcontroller");
+  moveController = document.getElementById("movecontroller");
+  score=document.getElementById('scoringtab');
+  createScore(); 
 
 }
 
@@ -177,12 +181,14 @@ var delta = 0.1;
 var camera_roll = 0;
 var camera_pitch = 0;
 
-function keyFunction(e){
- 
+function keyDownFunction(e){
+
+      
       if (e.keyCode == 37 || e.keyCode == 65) {  // Left arrow | a
         camera_x -= delta;
         camera_roll = 30;
       }
+      
       if (e.keyCode == 39 || e.keyCode == 68) {  // Right arrow | d
         camera_x += delta;
         camera_roll = -30;
@@ -199,8 +205,18 @@ function keyFunction(e){
       //If you put it here instead, you will redraw the cube only when the camera has been moved
       window.requestAnimationFrame(drawScene);
 }
-window.addEventListener("keydown", keyFunction, false);
 
+function keyUpFunction(e){
+
+  if (e.keyCode == 32 ) {  // spacebar
+    game();
+  } 
+  
+}
+
+
+window.addEventListener("keydown", keyDownFunction, false);
+window.addEventListener("keyup", keyUpFunction, false);
 
 async function init(){ //init is an async function so we can use await inside it
   var path = window.location.pathname;
