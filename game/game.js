@@ -22,6 +22,7 @@ function gameOver(){
 }
 
 function HideShowElement(x){ // takes an element and hides/shows it
+  console.log("FUNCTION");
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {

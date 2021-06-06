@@ -1,18 +1,3 @@
-///////////
-var pLight = new PointLight(new Vec2(0,0),"#000000", "");    //look in physics
-
-function normalizeVec3(a) {  //to put in lib
-
-  out = [];
-  var normV = Math.sqrt(a[0]*a[0] + a[1]*a[1] + a[2]*a[2]);
-  out[0] = a[0]/normV;
-  out[1] = a[1]/normV;
-  out[2] = a[2]/normV;	 
-  
-  return out;
-}
-////////////
-
 /***********************
  Get the context
 ************************/
@@ -33,8 +18,6 @@ function getCanvas(){
 	gl.enable(gl.DEPTH_TEST);
 }
 
-
-
 /***********************
  Program initialization
 ************************/
@@ -44,47 +27,19 @@ var program = null;
 var positionAttributeLocation;  
 var normalAttributeLocation;  
 var matrixLocation;
-
-//////////////////////
 var materialDiffColorHandle;
 var lightDirectionHandle;
 var lightColorHandle;
 var normalMatrixPositionHandle;
-var ambientLightColorHandle;
-var ambientMaterialHandle;
-var specularColorHandle;
-var shineSpecularHandle;
-var emissionColorHandle;
-var lightDirectionHandleA;
-var lightColorHandleA;
-var lightDirectionHandleB;
-var lightColorHandleB;
-var pointLightPositionHandle;
-var pointLightColorHandle;
-//////////////////
 
 function getAttributesAndUniformLocations(){
-
 	positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
 	normalAttributeLocation = gl.getAttribLocation(program, "inNormal");  
 	matrixLocation = gl.getUniformLocation(program, "matrix");
+	materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
+	lightDirectionHandle = gl.getUniformLocation(program, 'lightDirection');
+	lightColorHandle = gl.getUniformLocation(program, 'lightColor');
 	normalMatrixPositionHandle = gl.getUniformLocation(program, 'nMatrix');
-
-  //////////////////////////////////////
-  ambientLightColorHandle = gl.getUniformLocation(program, "ambientLightCol");
-  ambientMaterialHandle = gl.getUniformLocation(program, "ambientMat");
-  materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
-  specularColorHandle = gl.getUniformLocation(program, "specularColor");
-  shineSpecularHandle = gl.getUniformLocation(program, "specShine");
-  emissionColorHandle = gl.getUniformLocation(program, "emit");    
-  lightDirectionHandleA = gl.getUniformLocation(program, 'lightDirectionA');
-  lightColorHandleA = gl.getUniformLocation(program, 'lightColorA');
-  lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
-  lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
-  pointLightPositionHandle = gl.getUniformLocation(program, 'pLPos');
-  pointLightColorHandle = gl.getUniformLocation(program, 'pLCol');
-  ///////////////////////////////////////
-
 }
 
 var vao;
@@ -155,37 +110,6 @@ function animate(){
 	gl.clearColor(1.0, 1.0, 1.0, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  ////////////
-
-    // CAMERA SPACE TRANSFORMATION OF DIRECTIONAL LIGHTS 
-
-    // Directional Lights direction transformation to Camera Space
-    var lightDirMatrix = utils.sub3x3from4x4(utils.invertMatrix(utils.transposeMatrix(viewMatrix)));
-
-    var lightDirectionTransformedA = normalizeVec3(utils.multiplyMatrix3Vector3(lightDirMatrix, directionalLightA));
-    var lightDirectionTransformedB = normalizeVec3(utils.multiplyMatrix3Vector3(lightDirMatrix, directionalLightB));
-    
-    // POINT LIGHT
-
-    //Position
-    var x = pLight.position.x;
-    var y = 9.853;//parseFloat(document.getElementById("y").value/1000);
-    var z = pLight.position.y;
-
-    let realCoords = [x,y,z];//fromPlaneToSpace(x,z);
-
-    x = realCoords[0];
-    z = realCoords[2];
-
-    var pointLightPos = [x,y,z,1.0];
-
-    //Color
-    var pointLightColor = fromHexToRGBVec(pLight.color);
-
-    //Transform the point light's Position into Camera Space
-    var pointLightPosTransformationMatrix = viewMatrix;
-    var pointLightPosTransformed = utils.multiplyMatrixVector(pointLightPosTransformationMatrix,pointLightPos);
-
 	for(i = 0; i < 4; i++){
 		var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, cubeWorldMatrix[i]);
 		var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
@@ -194,21 +118,9 @@ function animate(){
 		if (i < 3) gl.uniformMatrix4fv(normalMatrixPositionHandle, gl.FALSE, utils.transposeMatrix(cubeWorldMatrix[i]));
 		else gl.uniformMatrix4fv(normalMatrixPositionHandle, gl.FALSE, utils.transposeMatrix(cubeNormalMatrix));
 
-    // Passing "static" parameters to the shaders
-
-    gl.uniform4fv(pointLightPositionHandle, pointLightPosTransformed);
-    gl.uniform3fv(pointLightColorHandle, pointLightColor);
-
-    gl.uniform3fv(materialDiffColorHandle, materialColor);
-    gl.uniform3fv(lightColorHandleA, directionalLightColorA);
-    gl.uniform3fv(lightDirectionHandleA, lightDirectionTransformedA);
-    gl.uniform3fv(lightColorHandleB, directionalLightColorB);
-    gl.uniform3fv(lightDirectionHandleB, lightDirectionTransformedB);
-    gl.uniform3fv(ambientLightColorHandle, ambientLight);
-    gl.uniform3fv(ambientMaterialHandle, ambientMat);
-    gl.uniform3fv(specularColorHandle, specularColor);
-    gl.uniform1f(shineSpecularHandle, specShine);
-    //////////
+		gl.uniform3fv(materialDiffColorHandle, cubeMaterialColor);
+		gl.uniform3fv(lightColorHandle,  directionalLightColor);
+		gl.uniform3fv(lightDirectionHandle,  directionalLight);
 
 		gl.bindVertexArray(vao);
 		gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
@@ -224,50 +136,15 @@ function animate(){
 var cubeNormalMatrix;
 var cubeWorldMatrix = new Array();    //One world matrix for each cube...
 
-///////////////////////////// define directional light
+//define directional light
+var dirLightAlpha = -utils.degToRad(60);
+var dirLightBeta  = -utils.degToRad(120);
 
-function fromHexToRGBVec(hex) {
-  col = hex.substring(1,7);
-    R = parseInt(col.substring(0,2) ,16) / 255;
-    G = parseInt(col.substring(2,4) ,16) / 255;
-    B = parseInt(col.substring(4,6) ,16) / 255;
-  return [R,G,B]
-}
-
-var dirLightAlphaA = utils.degToRad(document.getElementById("dirLightAlphaA").value);//20
-var dirLightBetaA = utils.degToRad(document.getElementById("dirLightBetaA").value);//32
-
-var directionalLightA = [Math.cos(180 - dirLightAlphaA) * Math.cos(dirLightBetaA),
-  Math.sin(180 - dirLightAlphaA),
-  Math.cos(180 - dirLightAlphaA) * Math.sin(dirLightBetaA)
-  ];
-var directionalLightColorA = fromHexToRGBVec(document.getElementById("LAlightColor").value);//#4d4d4d
-
-// directional light B
-var dirLightAlphaB = utils.degToRad(document.getElementById("dirLightAlphaB").value);//55
-var dirLightBetaB = utils.degToRad(document.getElementById("dirLightBetaB").value);//95
-
-var directionalLightB = [-Math.cos(dirLightAlphaB) * Math.cos(dirLightBetaB),
-  Math.sin(dirLightAlphaB),
-  Math.cos(dirLightAlphaB) * Math.sin(dirLightBetaB)
-  ];
-var directionalLightColorB = fromHexToRGBVec(document.getElementById("LBlightColor").value);//5e5e5e
-
-// define ambient light color and material
-var ambientLight = [0.15, 0.9, 0.8];
-var ambientMat = [0.4, 0.2, 0.6];
-  
-//define specular component of color
-var specularColor = [1.0, 1.0, 1.0];
-var specShine = 10.0;
-
-
-// define material color 
-var materialColor = [1.0, 1.0, 0.0];
-
-
-/////////////
-
+var directionalLight = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
+          Math.sin(dirLightAlpha),
+          Math.cos(dirLightAlpha) * Math.sin(dirLightBeta)
+          ];
+var directionalLightColor = [0.1, 1.0, 1.0];
 
 //Define material color
 var cubeMaterialColor = [0.5, 0.5, 0.5];
@@ -306,45 +183,34 @@ var camera_pitch = 0;
 
 function keyDownFunction(e){
 
-     
-     switch(e.key){
       
-      case "ArrowLeft" :
-      case "a" :  
+      if (e.keyCode == 37 || e.keyCode == 65) {  // Left arrow | a
         camera_x -= delta;
         camera_roll = 30;
-        break;
+      }
       
-      case "ArrowRight":
-      case "d":   
+      if (e.keyCode == 39 || e.keyCode == 68) {  // Right arrow | d
         camera_x += delta;
         camera_roll = -30;
-        break;
-
-      case "ArrowUp":
-      case "w": 
+      }
+      if (e.keyCode == 38 || e.keyCode == 87) { // up | w
         camera_y += delta;
         camera_pitch = 30;
-        break;
-
-      case "ArrowDown":
-      case "s": 
+      }
+      if (e.keyCode == 40 || e.keyCode == 83) { // down | s
         camera_y -= delta;
         camera_pitch = -30;
-        break;
-
-      default:
-        break;  
-     }
+      }
+      
       //If you put it here instead, you will redraw the cube only when the camera has been moved
       window.requestAnimationFrame(drawScene);
 }
 
 function keyUpFunction(e){
-  
- if (e.keyCode == 32){
+
+  if (e.keyCode == 32 ) {  // spacebar
     game();
-  }
+  } 
   
 }
 
