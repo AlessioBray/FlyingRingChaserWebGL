@@ -1,12 +1,8 @@
 //start the game!!
 function game(){
-
-  //hides controllers
   HideShowElement(lightController);
   HideShowElement(moveController);
- 
   //gameOver();
-
 }
 
 //game over
@@ -22,7 +18,6 @@ function gameOver(){
 }
 
 function HideShowElement(x){ // takes an element and hides/shows it
-  console.log("FUNCTION");
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {
