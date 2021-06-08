@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'Moon рабочий.blend'
 # www.blender.org
-#mtllib Moon 2K.mtl
+mtllib Moon 2K.mtl
 o Moon_Cube.002
 v 0.855280 0.336304 -1.484441
 v 0.951093 0.634256 -1.319587

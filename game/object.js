@@ -78,3 +78,21 @@ var camera_pitch = 0;
 var zNear = 0.1;
 var zFar = 100;
 var fieldOfViewDeg = 15;
+
+
+
+
+
+// initialize resource paths
+var path = window.location.pathname;
+var page = path.split("/").pop();
+var baseDir = window.location.href.replace(page, '');
+var shaderDir = baseDir + "shaders/";
+var modelsDir = baseDir + "assets/models/";
+
+
+
+
+var allMeshes;
+var moonMesh;
+var vaos;

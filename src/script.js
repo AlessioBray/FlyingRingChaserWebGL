@@ -22,7 +22,8 @@ function main() {
     lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
 
-    //var vaos = new Array(allMeshes.length);
+    vaos = new Array(1); //allMeshes.length
+
     /*
     texture = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -37,10 +38,12 @@ function main() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    for (let i in allMeshes)
-    addMeshToScene(i);
     */
-
+/*
+    for (let i in allMeshes){
+        addMeshToScene(i);
+    }
+  */      
     updateLight();
     drawScene();
 }
@@ -51,7 +54,7 @@ function animate(){
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
 
 
-    Ry = Ry+0.2;
+    Ry = Ry + 0.2;
 }
     
 function drawScene() {    
@@ -63,7 +66,7 @@ function drawScene() {
     var perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
   	var viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw); 
     var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
-
+    
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
@@ -79,7 +82,8 @@ function drawScene() {
     var indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW); 
-  
+    
+
     utils.resizeCanvasToDisplaySize(gl.canvas);
     gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -104,35 +108,6 @@ function drawScene() {
 
     window.requestAnimationFrame(drawScene);
 }
-
-function init(){
-
-    gl = canvas.getContext("webgl2");
-    if (!gl) {
-        document.write("GL context not opened");
-        return;
-    }
-
-    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vs);
-    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fs);
-    program = utils.createProgram(gl, vertexShader, fragmentShader);
-    gl.useProgram(program);
-    
-    model = new OBJ.Mesh(worldObjStr);
-    vertices = model.vertices;
-    normals = model.vertexNormals;
-    indices = model.indices;
-    
-    main();
-}
-
-/*
-
-var allMeshes;
-
-var moonMesh;
-
-var texture;
 
 function addMeshToScene(i) {
     let mesh = allMeshes[i];
@@ -161,22 +136,57 @@ function addMeshToScene(i) {
     var indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
-  }
+}
 
-var path = window.location.pathname;
-var page = path.split("/").pop();
-var baseDir = window.location.href.replace(page, '');
-var shaderDir = baseDir + "shaders/";
-var modelsDir = baseDir + "/assets/models/"
+
+
+async function loadShaders() {
+
+    // load vertex and fragment shaders from file
+    await utils.loadFiles([shaderDir + 'vs.glsl', shaderDir + 'fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+        program = utils.createProgram(gl, vertexShader, fragmentShader);
+
+    });
+
+    gl.useProgram(program);
+}
 
 async function loadMeshes() {
     moonMesh = await utils.loadMesh(modelsDir + "Moon_2K.obj");
     allMeshes = [moonMesh];
-  }
-  
 }
 
-*/
+async function init(){
+
+    gl = canvas.getContext("webgl2");
+    if (!gl) {
+        document.write("GL context not opened");
+        return;
+    }
+
+    
+    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vs);
+    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fs);
+    program = utils.createProgram(gl, vertexShader, fragmentShader);
+    gl.useProgram(program);
+    
+
+    //loadShaders();
+
+    model = new OBJ.Mesh(worldObjStr);
+    vertices = model.vertices;
+    normals = model.vertexNormals;
+    indices = model.indices;
+    
+    //await loadMeshes();
+    
+    main();
+}
+
+
+
 
 window.onload = init;
 
