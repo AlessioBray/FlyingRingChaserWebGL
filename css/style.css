@@ -1,20 +1,25 @@
  
 #scoringtab{
-    width: 240px;
+    width: 150px;
     height: 100px;
-    position: absolute;
-    left: 70px;
-    top: 50px;
-    background-color: purple;
-    color:yellow;
-    border: 2px solid;
-    border-radius: 5px;
-    box-shadow:0 3px 7px rgba(0,0,0,0.25);
+    
     text-align: center;
-    font-family: verdana, arial, sans-serif;
     font-size: 24px;
-    font-style: italic;
-    font-weight: bold;
+
+    font-family: Soloist; 
+    position: absolute; 
+    left: 0px; 
+    top: 0px; 
+    background-color: #fcba03; 
+    opacity: 1.0; 
+    padding: 10px 0px 0px 0px; 
+    overflow: auto; 
+    border-radius: 5px 15px 30px 15px; 
+    box-shadow: rgba(252, 186, 3, 0.4) 5px 5px, 
+                rgba(252, 186, 3, 0.3) 10px 10px, 
+                rgba(252, 186, 3, 0.2) 15px 15px, 
+                rgba(252, 186, 3, 0.1) 20px 20px, 
+                rgba(252, 186, 3, 0.05) 25px 25px;
  }
 
  #popup{
@@ -76,8 +81,8 @@
 
 
 #lightcontroller{
-    font-family: Soloist; 
-    position: absolute; 
+    font-family: Soloist;
+    position: absolute; text-align: center;
     left:0px; 
     bottom: 0px; 
     background-color: #fcba03; 
@@ -100,7 +105,8 @@
 }
 
 #movecontroller{
-    font-family: Soloist; 
+    font-family: Soloist;
+    text-align: center;
     position: absolute; 
     right: 0px; 
     bottom: 0px; 
