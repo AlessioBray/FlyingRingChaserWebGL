@@ -6,10 +6,6 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
 
-    vertices = model.vertices;
-    normals = model.vertexNormals;
-    indices = model.indices;
-
     positionAttributeLocation = gl.getAttribLocation(program, "a_position");  
     normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
     matrixLocation = gl.getUniformLocation(program, "matrix");  
@@ -26,11 +22,41 @@ function main() {
     lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
 
+    //var vaos = new Array(allMeshes.length);
+    /*
+    texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    var image = new Image();
+    image.src = baseDir + "textures/SuperMarioPinballTemp8.png";
+    image.onload = function () {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    for (let i in allMeshes)
+    addMeshToScene(i);
+    */
+
     updateLight();
     drawScene();
 }
+
+function animate(){
     
-    function drawScene() {    
+    
+    //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
+
+
+    Ry = Ry+0.2;
+}
+    
+function drawScene() {    
+
+    animate();
 
     // Compute the camera matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -93,9 +119,64 @@ function init(){
     gl.useProgram(program);
     
     model = new OBJ.Mesh(worldObjStr);
+    vertices = model.vertices;
+    normals = model.vertexNormals;
+    indices = model.indices;
     
     main();
 }
+
+/*
+
+var allMeshes;
+
+var moonMesh;
+
+var texture;
+
+function addMeshToScene(i) {
+    let mesh = allMeshes[i];
+    let vao = gl.createVertexArray();
+    vaos[i] = vao;
+    gl.bindVertexArray(vao);
+
+    var positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertices), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(positionAttributeLocation);
+    gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+
+    var uvBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(uvAttributeLocation);
+    gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
+    var normalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(normalAttributeLocation);
+    gl.vertexAttribPointer(normalAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+
+    var indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
+  }
+
+var path = window.location.pathname;
+var page = path.split("/").pop();
+var baseDir = window.location.href.replace(page, '');
+var shaderDir = baseDir + "shaders/";
+var modelsDir = baseDir + "/assets/models/"
+
+async function loadMeshes() {
+    moonMesh = await utils.loadMesh(modelsDir + "Moon_2K.obj");
+    allMeshes = [moonMesh];
+  }
+  
+}
+
+*/
 
 window.onload = init;
 

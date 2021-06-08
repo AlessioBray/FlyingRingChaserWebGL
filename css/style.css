@@ -1,4 +1,8 @@
- 
+body {
+   overflow-y: hidden; /* Hide vertical scrollbar */
+   overflow-x: hidden; /* Hide horizontal scrollbar */
+ }
+  
 #scoringtab{
     width: 150px;
     height: 100px;

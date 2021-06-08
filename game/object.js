@@ -12,11 +12,11 @@ var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
-var dirLightBetaASlider = document.getElementById("dirLightBetaA");//32
+var dirLightBetaASlider = document.getElementById("dirLightBetaA"); //32
 var dirLightAlphaBSlider = document.getElementById("dirLightAlphaB");
-var dirLightBetaBSlider = document.getElementById("dirLightBetaB");//32
-var directionalLightColorASlider = document.getElementById("LAlightColor");//#4d4d4d
-var directionalLightColorBSlider = document.getElementById("LBlightColor");//#4d4d4d
+var dirLightBetaBSlider = document.getElementById("dirLightBetaB"); //32
+var directionalLightColorASlider = document.getElementById("LAlightColor"); //#4d4d4d
+var directionalLightColorBSlider = document.getElementById("LBlightColor"); //#4d4d4d
 
 var program;
 var gl;
