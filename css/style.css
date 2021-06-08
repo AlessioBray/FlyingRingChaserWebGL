@@ -72,4 +72,46 @@
     background: url('./../assets/close_button_over.png') no-repeat;
     z-index: 7;
  }
- 
+
+
+
+#lightcontroller{
+    font-family: Soloist; 
+    position: absolute; 
+    left:0px; 
+    bottom: 0px; 
+    background-color: #fcba03; 
+    opacity: 1.0; 
+    padding: 0px 20px 0px 0px; 
+    overflow:auto; 
+    padding: 20px; 
+    border-radius: 15px 30px 15px 5px; 
+    box-shadow: rgba(252, 186, 3, 0.4) 5px -5px, 
+                rgba(252, 186, 3, 0.3) 10px -10px,
+                rgba(252, 186, 3, 0.2) 15px -15px, 
+                rgba(252, 186, 3, 0.1) 20px -20px, 
+                rgba(252, 186, 3, 0.05) 25px -25px;
+}
+
+#LC51{
+    font-family: Soloist;
+    font-size: 15px;
+    color: #000000;
+}
+
+#movecontroller{
+    font-family: Soloist; 
+    position: absolute; 
+    right: 0px; 
+    bottom: 0px; 
+    background-color: #fcba03; 
+    opacity: 1.0; 
+    padding: 0px 20px 0px 0px; 
+    overflow:auto; 
+    border-radius: 30px 15px 5px 15px; 
+    box-shadow: rgba(252, 186, 3, 0.4) -5px -5px, 
+                rgba(252, 186, 3, 0.3) -10px -10px, 
+                rgba(252, 186, 3, 0.2) -15px -15px, 
+                rgba(252, 186, 3, 0.1) -20px -20px, 
+                rgba(252, 186, 3, 0.05) -25px -25px;
+}
