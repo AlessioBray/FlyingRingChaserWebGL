@@ -34,12 +34,9 @@ function main() {
 
     // Compute the camera matrix
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    var zNear = 0.1;
-    var zFar = 100;
-    var fieldOfViewDeg = 90;
     var perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-  	var viewMatrix = utils.MakeView(camera_x, camera_y, 3.5, 0, 0); // was (..., -45, 40)
-    var worldMatrix = utils.MakeWorld(Rx, Ry, Rz, 0.0, 0.0, 0.0, S);
+  	var viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw); 
+    var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
 
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);

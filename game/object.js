@@ -43,7 +43,7 @@ var lightColorHandleB;
 var perspectiveMatrix;
 var viewMatrix;
 
-//lights 
+// lights 
 var directionalLightA;
 var directionalLightColorA;
 var directionalLightB;
@@ -56,19 +56,25 @@ var materialColor = [1.0, 1.0, 1.0];
 var ambientLight = [0.15, 0.9, 0.8];
 var ambientMat = [0.4, 0.2, 0.6];
   
-//define specular component of color
+// define specular component of color
 var specularColor = [1.0, 1.0, 1.0];
 var specShine = 10.0;
 
-//world matrix
+// World matrix
 var Rx = 0.0;
 var Ry = 0.0;
 var Rz = 0.0;
 var S  = 0.5;
 
-//camera
+// Camera
 var camera_x = 0.0;
-var camera_y = 0.0;
-var delta = 0.1;
-var camera_roll = 0;
+var camera_y = 1.25;
+var camera_z = 4;
+var delta = 5;
+var camera_yaw = 0;
 var camera_pitch = 0;
+
+// Perspective
+var zNear = 0.1;
+var zFar = 100;
+var fieldOfViewDeg = 15;
