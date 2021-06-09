@@ -69,7 +69,7 @@ var S  = 0.5;
 // Camera
 var camera_x = 0.0;
 var camera_y = 1.25;
-var camera_z = 4;
+var camera_z = 20;
 var delta = 5;
 var camera_yaw = 0;
 var camera_pitch = 0;
@@ -89,8 +89,6 @@ var page = path.split("/").pop();
 var baseDir = window.location.href.replace(page, '');
 var shaderDir = baseDir + "shaders/";
 var modelsDir = baseDir + "assets/models/";
-
-
 
 
 var allMeshes;

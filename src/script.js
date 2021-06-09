@@ -147,7 +147,6 @@ async function loadShaders() {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
         program = utils.createProgram(gl, vertexShader, fragmentShader);
-
     });
 
     gl.useProgram(program);
@@ -166,22 +165,15 @@ async function init(){
         return;
     }
 
-    
-    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, vs);
-    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, fs);
-    program = utils.createProgram(gl, vertexShader, fragmentShader);
-    gl.useProgram(program);
-    
-
-    //loadShaders();
+    await loadShaders(); //// sposta await a meshes
 
     model = new OBJ.Mesh(worldObjStr);
     vertices = model.vertices;
     normals = model.vertexNormals;
     indices = model.indices;
-    
+
     //await loadMeshes();
-    
+ 
     main();
 }
 
