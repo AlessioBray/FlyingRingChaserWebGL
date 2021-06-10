@@ -11,6 +11,6 @@ uniform mat4 nMatrix;
 
 void main() {
   fsNormal = mat3(nMatrix) * inNormal;
-  fsPosition = pMatrix * vec4(inPosition,1.0); //.xyz? // coordinates in world space
+  fsPosition = pMatrix * vec4(inPosition,1.0).xyzw; //.xyz? // coordinates in world space
   gl_Position = matrix * vec4(inPosition,1.0);
 }
