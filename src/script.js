@@ -6,10 +6,11 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.enable(gl.DEPTH_TEST);
 
-    positionAttributeLocation = gl.getAttribLocation(program, "a_position");  
-    normalsAttributeLocation = gl.getAttribLocation(program, "a_normal");
+    positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
+    normalsAttributeLocation = gl.getAttribLocation(program, "inNormal");
     matrixLocation = gl.getUniformLocation(program, "matrix");  
     nMatrixLocation = gl.getUniformLocation(program, "nMatrix");
+    pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
 
     ambientLightColorHandle = gl.getUniformLocation(program, "ambientLightCol");
     ambientMaterialHandle = gl.getUniformLocation(program, "ambientMat");
@@ -88,11 +89,21 @@ function drawScene() {
     gl.clearColor(0.85, 0.85, 0.85, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+
+    normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
+    MV = utils.multiplyMatrices(viewMatrix,worldMatrix);
+    Projection = utils.multiplyMatrices(perspectiveMatrix,MV);
+    gl.uniformMatrix4fv(matrixLocation, gl.FALSE,utils.transposeMatrix(Projection));
+    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE,utils.transposeMatrix(normalMatrix));
+    gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE,utils.transposeMatrix(worldMatrix));
+
+    /*
     var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
     var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
+    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));*/
+        
 
     gl.uniform3fv(materialDiffColorHandle, materialColor);
     gl.uniform3fv(lightColorHandleA, directionalLightColorA);
@@ -176,9 +187,6 @@ async function init(){
  
     main();
 }
-
-
-
 
 window.onload = init;
 
