@@ -9,7 +9,13 @@ uniform mat4 matrix;
 uniform mat4 pMatrix;
 uniform mat4 nMatrix; 
 
+in vec2 in_uv;
+
+out vec2 fsUV;
+
 void main() {
+
+  fsUV = in_uv;
   fsNormal = mat3(nMatrix) * inNormal;
   fsPosition = (pMatrix * vec4(inPosition,1.0)).xyzw; // coordinates in world space
   gl_Position = matrix * vec4(inPosition,1.0);

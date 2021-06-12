@@ -26,6 +26,8 @@ var normals;
 var indices;
 var positionAttributeLocation;
 var normalAttributeLocation;
+var uvAttributeLocation;
+var textLocation;
 var matrixLocation;
 var nMatrixLocation;
 
@@ -65,9 +67,13 @@ var specShine = 10.0;
 
 // World matrix
 var Rx = 0.0;
-var Ry = 0.0;
+var Ry = 90.0;
 var Rz = 0.0;
-var S  = 0.5;
+var S  = 1.0;
+
+var matricesArray= [ 
+    utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S),
+    utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S)];
 
 // Camera
 var camera_x = 0.0;
@@ -82,10 +88,6 @@ var zNear = 0.1;
 var zFar = 100;
 var fieldOfViewDeg = 15;
 
-
-
-
-
 // initialize resource paths
 var path = window.location.pathname;
 var page = path.split("/").pop();
@@ -96,6 +98,7 @@ var modelsDir = baseDir + "assets/models/";
 
 var allMeshes;
 var moonMesh;
+var ringMesh;
 var vaos;
 
 

@@ -18,6 +18,8 @@ function GetAttributesAndUniforms(){
     //Uniforms
     positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
     normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
+    uvAttributeLocation = gl.getAttribLocation(program, "in_uv");
+    textLocation = gl.getUniformLocation(program, "in_texture");
     matrixLocation = gl.getUniformLocation(program, "matrix");  
     nMatrixLocation = gl.getUniformLocation(program, "nMatrix");
     pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
@@ -32,6 +34,8 @@ function GetAttributesAndUniforms(){
     lightColorHandleA = gl.getUniformLocation(program, 'lightColorA');
     lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
+
+    
 }
 
 function main() {
@@ -41,13 +45,14 @@ function main() {
 
     GetAttributesAndUniforms();
 
-    vaos = new Array(1); //allMeshes.length
+    vaos = new Array(allMeshes.length);    
 
-/*
+    
     for (let i in allMeshes){
         addMeshToScene(i);
     }
-  */      
+      
+
     updateLight();
     drawScene();
 }
@@ -58,7 +63,7 @@ function animate(){
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
 
 
-    Ry = Ry + 0.2;
+    //Ry = Ry + 0.2;
 }
 
 function DrawSkybox(){
@@ -76,6 +81,10 @@ function DrawSkybox(){
     gl.depthFunc(gl.LEQUAL);
     gl.drawArrays(gl.TRIANGLES, 0, 1*6);
 }
+
+function updateWorldMatrix(){
+    matricesArray[1] = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S); // update ring matrix world with new pos
+}
     
 function drawScene() {    
 
@@ -84,8 +93,15 @@ function drawScene() {
     // Compute the camera matrix
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw); 
-    worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
+  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
+    
+    updateWorldMatrix(); // to update rings world matrices
+
+    // add each mesh / object with its world matrix
+    for (var i = 0; i < allMeshes.length; i++) {
+
+    //worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
+    worldMatrix = matricesArray[i];
     
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -122,7 +138,7 @@ function drawScene() {
     gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
     gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));*/
         
-
+    
     gl.uniform3fv(materialDiffColorHandle, materialColor);
     gl.uniform3fv(lightColorHandleA, directionalLightColorA);
     gl.uniform3fv(lightDirectionHandleA, directionalLightA);
@@ -134,6 +150,8 @@ function drawScene() {
     gl.uniform1f(shineSpecularHandle, specShine);
 
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
+
+    }
 
     window.requestAnimationFrame(drawScene);
 }
@@ -150,11 +168,12 @@ function addMeshToScene(i) {
     gl.enableVertexAttribArray(positionAttributeLocation);
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
+    
     var uvBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(uvAttributeLocation);
-    gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0); 
 
     var normalBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
@@ -183,7 +202,10 @@ async function loadShaders() {
 
 async function loadMeshes() {
     moonMesh = await utils.loadMesh(modelsDir + "Moon_2K.obj");
-    allMeshes = [moonMesh];
+    ringMesh = await utils.loadMesh(modelsDir + "ring.obj");
+    allMeshes = [moonMesh
+                ,ringMesh
+                 ];
 }
 
 async function init(){
@@ -197,12 +219,12 @@ async function init(){
 
     await loadShaders(); //// sposta await a meshes
 
-    model = new OBJ.Mesh(worldObjStr);
+    await loadMeshes();
+    //model = new OBJ.Mesh(worldObjStr);
+    model = allMeshes[1];
     vertices = model.vertices;
     normals = model.vertexNormals;
     indices = model.indices;
-
-    //await loadMeshes();
  
     main();
 }

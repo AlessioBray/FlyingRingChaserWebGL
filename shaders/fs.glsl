@@ -3,6 +3,7 @@ precision mediump float;
 
 in vec3 fsNormal;
 in vec4 fsPosition;
+in vec2 fsUV;
 
 uniform vec3 specularColor;
 uniform float specShine;
@@ -20,6 +21,9 @@ uniform vec3 lightColorB;
 //ambient
 uniform vec3 ambientLightCol;
 uniform vec3 ambientMat;
+
+//texture
+uniform sampler2D in_texture;
 
 out vec4 outColor;
 
@@ -47,8 +51,7 @@ void main() {
   //light directions
   vec3 lDirA = normalize(-lightDirectionA); 
   vec3 lDirB = normalize(-lightDirectionB);
-    
-
+  
   //computing Lambert diffuse color
   //directional lights
   vec3 diffA = lambertDiffuse(lDirA,lightColorA,nNormal);
@@ -69,5 +72,6 @@ void main() {
   //computing BRDF color
   vec4 color = vec4(clamp(blinnSpec + lambertDiff + ambient + emit, 0.0, 1.0).rgb,1.0);
   
+  vec4 outColorfs = color * texture(in_texture, fsUV);
   outColor = color;
 }
