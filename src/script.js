@@ -7,7 +7,7 @@ function main() {
     gl.enable(gl.DEPTH_TEST);
 
     positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
-    normalsAttributeLocation = gl.getAttribLocation(program, "inNormal");
+    normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
     matrixLocation = gl.getUniformLocation(program, "matrix");  
     nMatrixLocation = gl.getUniformLocation(program, "nMatrix");
     pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
@@ -77,8 +77,8 @@ function drawScene() {
     var normalsBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(normalsAttributeLocation);
-    gl.vertexAttribPointer(normalsAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(normalAttributeLocation);
+    gl.vertexAttribPointer(normalAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
     var indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);

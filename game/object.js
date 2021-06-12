@@ -25,7 +25,7 @@ var vertices;
 var normals;
 var indices;
 var positionAttributeLocation;
-var normalsAttributeLocation;
+var normalAttributeLocation;
 var matrixLocation;
 var nMatrixLocation;
 
