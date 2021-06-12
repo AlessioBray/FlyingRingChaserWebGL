@@ -1,11 +1,21 @@
-function main() {
-
-    utils.resizeCanvasToDisplaySize(gl.canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+function ClearBits(){
     gl.clearColor(0.85, 1.0, 0.85, 1.0); 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    gl.enable(gl.DEPTH_TEST);
+}
 
+function SetViewportAndCanvas(){
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    gl.enable(gl.DEPTH_TEST);
+    ClearBits();
+}
+
+function SetMatrices(){
+    viewMatrix = utils.MakeView(cx, cy, cz, 0.0, 0.0);
+    perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+}
+
+function GetAttributesAndUniforms(){
+    //Uniforms
     positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
     normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
     matrixLocation = gl.getUniformLocation(program, "matrix");  
@@ -22,24 +32,17 @@ function main() {
     lightColorHandleA = gl.getUniformLocation(program, 'lightColorA');
     lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
+}
+
+function main() {
+
+    utils.resizeCanvasToDisplaySize(gl.canvas);
+    SetViewportAndCanvas();
+
+    GetAttributesAndUniforms();
 
     vaos = new Array(1); //allMeshes.length
 
-    /*
-    texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    var image = new Image();
-    image.src = baseDir + "textures/SuperMarioPinballTemp8.png";
-    image.onload = function () {
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.generateMipmap(gl.TEXTURE_2D);
-    };
-    */
 /*
     for (let i in allMeshes){
         addMeshToScene(i);
@@ -57,16 +60,32 @@ function animate(){
 
     Ry = Ry + 0.2;
 }
+
+function DrawSkybox(){
+    gl.useProgram(skyboxProgram);
+    
+    gl.activeTexture(gl.TEXTURE0+3);
+    gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
+    gl.uniform1i(skyboxTexHandle, 3);
+    
+    var viewProjMat = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
+    inverseViewProjMatrix = utils.invertMatrix(viewProjMat);
+    gl.uniformMatrix4fv(inverseViewProjMatrixHandle, gl.FALSE, utils.transposeMatrix(inverseViewProjMatrix));
+    
+    gl.bindVertexArray(skyboxVao);
+    gl.depthFunc(gl.LEQUAL);
+    gl.drawArrays(gl.TRIANGLES, 0, 1*6);
+}
     
 function drawScene() {    
 
     animate();
 
     // Compute the camera matrix
-    var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    var perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-  	var viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw); 
-    var worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
+    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw); 
+    worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
     
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -86,9 +105,8 @@ function drawScene() {
     
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
-    gl.clearColor(0.85, 0.85, 0.85, 1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+    ClearBits();
 
     normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
     MV = utils.multiplyMatrices(viewMatrix,worldMatrix);
@@ -175,6 +193,7 @@ async function init(){
         document.write("GL context not opened");
         return;
     }
+    utils.resizeCanvasToDisplaySize(gl.canvas);
 
     await loadShaders(); //// sposta await a meshes
 
@@ -190,3 +209,86 @@ async function init(){
 
 window.onload = init;
 
+function LoadEnvironment(){
+    skyboxVertPos = new Float32Array(
+    [
+      -1, -1, 1.0,
+       1, -1, 1.0,
+      -1,  1, 1.0,
+      -1,  1, 1.0,
+       1, -1, 1.0,
+       1,  1, 1.0,
+    ]);
+    
+    skyboxVao = gl.createVertexArray();
+    gl.bindVertexArray(skyboxVao);
+    
+    var positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, skyboxVertPos, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(skyboxVertPosAttr);
+    gl.vertexAttribPointer(skyboxVertPosAttr, 3, gl.FLOAT, false, 0, 0);
+    
+    skyboxTexture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0+3);
+    gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
+    
+    var envTexDir = baseDir+"assets/env/";
+ 
+    const faceInfos = [
+        {
+            target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
+            url: envTexDir+'right.png',
+        },
+        {
+            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
+            url: envTexDir+'left.png',
+        },
+        {
+            target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
+            url: envTexDir+'top.png',
+        },
+        {
+            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
+            url: envTexDir+'bottom.png',
+        },
+        {
+            target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
+            url: envTexDir+'back.png',
+        },
+        {
+            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
+            url: envTexDir+'front.png',
+        },
+    ];
+    faceInfos.forEach((faceInfo) => {
+        const {target, url} = faceInfo;
+        
+        // Upload the canvas to the cubemap face.
+        const level = 0;
+        const internalFormat = gl.RGBA;
+        const width = 1024;
+        const height = 1024;
+        const format = gl.RGBA;
+        const type = gl.UNSIGNED_BYTE;
+        
+        // setup each face so it's immediately renderable
+        gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
+        
+        // Asynchronously load an image
+        const image = new Image();
+        image.src = url;
+        image.addEventListener('load', function() {
+            // Now that the image has loaded upload it to the texture.
+            gl.activeTexture(gl.TEXTURE0+3);
+            gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
+            gl.texImage2D(target, level, internalFormat, format, type, image);
+            gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+        });
+    
+        
+    });
+    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    
+}

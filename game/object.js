@@ -40,8 +40,11 @@ var lightColorHandleA;
 var lightDirectionHandleB;
 var lightColorHandleB;
 
+var aspect;
 var perspectiveMatrix;
 var viewMatrix;
+var worldmatrix;
+
 
 // lights 
 var directionalLightA;
@@ -94,3 +97,12 @@ var modelsDir = baseDir + "assets/models/";
 var allMeshes;
 var moonMesh;
 var vaos;
+
+
+//skybox
+var skyboxVertPos;
+
+var skyboxVao;
+
+var skyboxTexHandle;
+var reflCubemapHandle;
