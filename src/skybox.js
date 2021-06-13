@@ -68,8 +68,8 @@ function LoadEnvironment(){
         // Upload the canvas to the cubemap face.
         const level = 0;
         const internalFormat = gl.RGBA;
-        const width = 2048;
-        const height = 2048;
+        const width = 1024;
+        const height = 1024;
         const format = gl.RGBA;
         const type = gl.UNSIGNED_BYTE;
         
