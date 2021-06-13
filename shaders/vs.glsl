@@ -1,7 +1,8 @@
 #version 300 es
 
 in vec3 inPosition; 
-in vec3 inNormal; 
+in vec3 inNormal;
+
 out vec3 fsNormal; 
 out vec4 fsPosition;
 
@@ -17,6 +18,6 @@ void main() {
 
   fsUV = in_uv;
   fsNormal = mat3(nMatrix) * inNormal;
-  fsPosition = (pMatrix * vec4(inPosition,1.0)).xyzw; // coordinates in world space
-  gl_Position = matrix * vec4(inPosition,1.0);
+  fsPosition = (pMatrix * vec4(inPosition, 1.0)).xyzw; // coordinates in world space
+  gl_Position = matrix * vec4(inPosition, 1.0);
 }

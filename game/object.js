@@ -103,9 +103,13 @@ var vaos;
 
 
 //skybox
+var skyboxTexture;
+
 var skyboxVertPos;
 
 var skyboxVao;
 
 var skyboxTexHandle;
 var reflCubemapHandle;
+
+var skyboxProgram;

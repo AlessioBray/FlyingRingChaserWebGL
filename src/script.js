@@ -10,8 +10,8 @@ function SetViewportAndCanvas(){
 }
 
 function SetMatrices(){
-    viewMatrix = utils.MakeView(cx, cy, cz, 0.0, 0.0);
-    perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+    //viewMatrix = utils.MakeView(cx, cy, cz, 0.0, 0.0);
+    //perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
 }
 
 function GetAttributesAndUniforms(){
@@ -47,11 +47,9 @@ function main() {
 
     vaos = new Array(allMeshes.length);    
 
-    
     for (let i in allMeshes){
         addMeshToScene(i);
-    }
-      
+    }      
 
     updateLight();
     drawScene();
@@ -67,6 +65,7 @@ function animate(){
 }
 
 function DrawSkybox(){
+    
     gl.useProgram(skyboxProgram);
     
     gl.activeTexture(gl.TEXTURE0+3);
@@ -100,55 +99,41 @@ function drawScene() {
     // add each mesh / object with its world matrix
     for (var i = 0; i < allMeshes.length; i++) {
 
-    //worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
-    worldMatrix = matricesArray[i];
-    
-    var positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(positionAttributeLocation);
-    gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+        //worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S);
+        worldMatrix = matricesArray[i];
 
-    var normalsBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(normalAttributeLocation);
-    gl.vertexAttribPointer(normalAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+        utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    var indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW); 
-    
-    utils.resizeCanvasToDisplaySize(gl.canvas);
+        ClearBits();
 
-    ClearBits();
+        normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
+        MV = utils.multiplyMatrices(viewMatrix,worldMatrix);
+        Projection = utils.multiplyMatrices(perspectiveMatrix,MV);
+        gl.uniformMatrix4fv(matrixLocation, gl.FALSE,utils.transposeMatrix(Projection));
+        gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE,utils.transposeMatrix(normalMatrix));
+        gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE,utils.transposeMatrix(worldMatrix));
 
-    normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
-    MV = utils.multiplyMatrices(viewMatrix,worldMatrix);
-    Projection = utils.multiplyMatrices(perspectiveMatrix,MV);
-    gl.uniformMatrix4fv(matrixLocation, gl.FALSE,utils.transposeMatrix(Projection));
-    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE,utils.transposeMatrix(normalMatrix));
-    gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE,utils.transposeMatrix(worldMatrix));
+        /*
+        var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
+        var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
-    /*
-    var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
-    var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+        gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
+        gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));*/
+            
 
-    gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));*/
-        
-    
-    gl.uniform3fv(materialDiffColorHandle, materialColor);
-    gl.uniform3fv(lightColorHandleA, directionalLightColorA);
-    gl.uniform3fv(lightDirectionHandleA, directionalLightA);
-    gl.uniform3fv(lightColorHandleB, directionalLightColorB);
-    gl.uniform3fv(lightDirectionHandleB, directionalLightB);
-    gl.uniform3fv(ambientLightColorHandle, ambientLight);
-    gl.uniform3fv(ambientMaterialHandle, ambientMat);
-    gl.uniform3fv(specularColorHandle, specularColor);
-    gl.uniform1f(shineSpecularHandle, specShine);
+        gl.uniform3fv(materialDiffColorHandle, materialColor);
+        gl.uniform3fv(lightColorHandleA, directionalLightColorA);
+        gl.uniform3fv(lightDirectionHandleA, directionalLightA);
+        gl.uniform3fv(lightColorHandleB, directionalLightColorB);
+        gl.uniform3fv(lightDirectionHandleB, directionalLightB);
+        gl.uniform3fv(ambientLightColorHandle, ambientLight);
+        gl.uniform3fv(ambientMaterialHandle, ambientMat);
+        gl.uniform3fv(specularColorHandle, specularColor);
+        gl.uniform1f(shineSpecularHandle, specShine);
 
-    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0 );
+        gl.bindVertexArray(vaos[i]);
+
+        gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
 
     }
 
@@ -156,6 +141,7 @@ function drawScene() {
 }
 
 function addMeshToScene(i) {
+
     let mesh = allMeshes[i];
     let vao = gl.createVertexArray();
     vaos[i] = vao;
@@ -167,12 +153,13 @@ function addMeshToScene(i) {
     gl.enableVertexAttribArray(positionAttributeLocation);
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
-    
+/*
     var uvBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(uvAttributeLocation);
     gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0); 
+*/
 
     var normalBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
@@ -198,11 +185,9 @@ async function loadShaders() {
 }
 
 async function loadMeshes() {
-    moonMesh = await utils.loadMesh(modelsDir + "Moon_2K.obj");
+
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj");
-    allMeshes = [moonMesh
-                ,ringMesh
-                 ];
+    allMeshes = [ringMesh];
 }
 
 async function init(){
@@ -217,16 +202,18 @@ async function init(){
     await loadShaders(); //// sposta await a meshes
 
     await loadMeshes();
+    /*
     //model = new OBJ.Mesh(worldObjStr);
     model = allMeshes[1];
     vertices = model.vertices;
     normals = model.vertexNormals;
     indices = model.indices;
- 
+ */
     main();
 }
 
 window.onload = init;
+window.onresize = main;
 
 function LoadEnvironment(){
     skyboxVertPos = new Float32Array(
@@ -286,8 +273,8 @@ function LoadEnvironment(){
         // Upload the canvas to the cubemap face.
         const level = 0;
         const internalFormat = gl.RGBA;
-        const width = 1024;
-        const height = 1024;
+        const width = 2048;
+        const height = 2048;
         const format = gl.RGBA;
         const type = gl.UNSIGNED_BYTE;
         
