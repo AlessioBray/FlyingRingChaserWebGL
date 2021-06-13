@@ -5,6 +5,8 @@ in vec3 fsNormal;
 in vec4 fsPosition;
 in vec2 fsUV;
 
+in vec3 skybox_position;
+
 uniform vec3 specularColor;
 uniform float specShine;
 uniform vec3 mDiffColor;
@@ -78,9 +80,10 @@ void main() {
   //computing BRDF color
   vec4 color = vec4(clamp(blinnSpec + lambertDiff + ambient + emit, 0.0, 1.0).rgb,1.0);
   
-  vec4 outColorfs = color * texture(in_texture, fsUV);
+  //vec4 outColorfs = color * texture(in_texture, fsUV);
 
-  vec4 sampleDir = matrix * fsPosition;
-
-  outColor = color ;//* texture(u_texture, normalize(sampleDir.xyz / sampleDir.w));
+  vec4 sampleDir = matrix * vec4(skybox_position, 1.0);
+  vec4 rgba = texture(u_texture, normalize(sampleDir.xyz / sampleDir.w));
+  
+  outColor = color; // vec4(rgba.rgb, 1.0);
 }

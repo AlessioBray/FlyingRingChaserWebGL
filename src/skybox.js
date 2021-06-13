@@ -1,3 +1,15 @@
+var skyboxTexture;
+
+var skyboxVertPos;
+var skyboxVertPosAttr;
+
+var skyboxVao;
+
+var skyboxTexHandle;
+
+var skyboxProgram;
+
+
 function LoadEnvironment(){
     skyboxVertPos = new Float32Array(
     [
@@ -12,14 +24,14 @@ function LoadEnvironment(){
     skyboxVao = gl.createVertexArray();
     gl.bindVertexArray(skyboxVao);
     
-    var positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    var skyboxPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, skyboxPositionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, skyboxVertPos, gl.STATIC_DRAW);
     gl.enableVertexAttribArray(skyboxVertPosAttr);
     gl.vertexAttribPointer(skyboxVertPosAttr, 3, gl.FLOAT, false, 0, 0);
     
     skyboxTexture = gl.createTexture();
-    gl.activeTexture(gl.TEXTURE0+3);
+    gl.activeTexture(gl.TEXTURE0 + 3);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
     
     var envTexDir = baseDir+"assets/env/";
@@ -27,27 +39,27 @@ function LoadEnvironment(){
     const faceInfos = [
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
-            url: envTexDir+'right.png',
+            url: envTexDir+'posx.jpg',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
-            url: envTexDir+'left.png',
+            url: envTexDir+'negx.jpg',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
-            url: envTexDir+'top.png',
+            url: envTexDir+'posy.jpg',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
-            url: envTexDir+'bottom.png',
+            url: envTexDir+'negy.jpg',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
-            url: envTexDir+'back.png',
+            url: envTexDir+'posz.jpg',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
-            url: envTexDir+'front.png',
+            url: envTexDir+'negz.jpg',
         },
     ];
     faceInfos.forEach((faceInfo) => {
@@ -69,7 +81,7 @@ function LoadEnvironment(){
         image.src = url;
         image.addEventListener('load', function() {
             // Now that the image has loaded upload it to the texture.
-            gl.activeTexture(gl.TEXTURE0+3);
+            gl.activeTexture(gl.TEXTURE0 + 3);
             gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
             gl.texImage2D(target, level, internalFormat, format, type, image);
             gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
@@ -87,10 +99,6 @@ function DrawSkybox(){
     gl.activeTexture(gl.TEXTURE0 + 3);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
     gl.uniform1i(skyboxTexHandle, 3);
-    
-    var viewProjMat = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
-    inverseViewProjMatrix = utils.invertMatrix(viewProjMat);
-    gl.uniformMatrix4fv(inverseViewProjMatrixHandle, gl.FALSE, utils.transposeMatrix(inverseViewProjMatrix));
     
     gl.bindVertexArray(skyboxVao);
     gl.depthFunc(gl.LEQUAL);

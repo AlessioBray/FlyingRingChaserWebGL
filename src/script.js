@@ -36,6 +36,9 @@ function GetAttributesAndUniforms(){
     lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
 
+    //skybox
+    skyboxTexHandle = gl.getUniformLocation(program, "u_texture"); // uniform
+    skyboxVertPosAttr = gl.getAttribLocation(program, "in_skybox_position"); // attribute
 }
 
 function main() {
@@ -108,7 +111,6 @@ function drawScene() {
         gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
         */
             
-
         gl.uniform3fv(materialDiffColorHandle, materialColor);
         gl.uniform3fv(lightColorHandleA, directionalLightColorA);
         gl.uniform3fv(lightDirectionHandleA, directionalLightA);
@@ -123,6 +125,9 @@ function drawScene() {
         gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
 
     }
+
+    DrawSkybox();
+
 
     window.requestAnimationFrame(drawScene);
 }
@@ -189,6 +194,8 @@ async function init(){
     await loadShaders();
 
     await loadMeshes();
+
+    //LoadEnvironment();
     
     main();
 }

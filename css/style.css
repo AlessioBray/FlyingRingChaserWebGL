@@ -1,6 +1,15 @@
 body {
    overflow-y: hidden; /* Hide vertical scrollbar */
    overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+ body {
+   margin: 0;
+   background-color: gray;
+ }
+ canvas {
+   display: block;
+   background-color: white;
  }
   
 #scoringtab{

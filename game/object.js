@@ -77,7 +77,7 @@ var matricesArray= [
 
 // Camera
 var camera_x = 0.0;
-var camera_y = 1.25;
+var camera_y = 0.0;
 var camera_z = 20;
 var delta = 5;
 var camera_yaw = 0;
@@ -100,16 +100,3 @@ var allMeshes;
 var moonMesh;
 var ringMesh;
 var vaos;
-
-
-//skybox
-var skyboxTexture;
-
-var skyboxVertPos;
-
-var skyboxVao;
-
-var skyboxTexHandle;
-var reflCubemapHandle;
-
-var skyboxProgram;
