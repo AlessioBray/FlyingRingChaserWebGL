@@ -64,24 +64,16 @@ function animate(){
     Rz = Rz + 0.5;
 }
 
-function DrawSkybox(){
-    
-    gl.useProgram(skyboxProgram);
-    
-    gl.activeTexture(gl.TEXTURE0+3);
-    gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
-    gl.uniform1i(skyboxTexHandle, 3);
-    
-    var viewProjMat = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
-    inverseViewProjMatrix = utils.invertMatrix(viewProjMat);
-    gl.uniformMatrix4fv(inverseViewProjMatrixHandle, gl.FALSE, utils.transposeMatrix(inverseViewProjMatrix));
-    
-    gl.bindVertexArray(skyboxVao);
-    gl.depthFunc(gl.LEQUAL);
-    gl.drawArrays(gl.TRIANGLES, 0, 1*6);
-}
 
 function updateWorldMatrix(){
+
+    SetMatrices();
+
+    // Compute the camera matrix
+    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
+
     matricesArray[0] = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S); // update ring matrix world with new pos
 }
     
@@ -89,11 +81,6 @@ function drawScene() {
 
     animate();
 
-    // Compute the camera matrix
-    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
-    
     updateWorldMatrix(); // to update rings world matrices
 
     // add each mesh / object with its world matrix
@@ -107,18 +94,19 @@ function drawScene() {
         ClearBits();
 
         normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
-        MV = utils.multiplyMatrices(viewMatrix,worldMatrix);
-        Projection = utils.multiplyMatrices(perspectiveMatrix,MV);
-        gl.uniformMatrix4fv(matrixLocation, gl.FALSE,utils.transposeMatrix(Projection));
-        gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE,utils.transposeMatrix(normalMatrix));
-        gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE,utils.transposeMatrix(worldMatrix));
+        MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
+        Projection = utils.multiplyMatrices(perspectiveMatrix, MV);
+        gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(Projection));
+        gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(normalMatrix));
+        gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
 
         /*
         var viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
         var projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
         gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
-        gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));*/
+        gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
+        */
             
 
         gl.uniform3fv(materialDiffColorHandle, materialColor);
@@ -132,7 +120,6 @@ function drawScene() {
         gl.uniform1f(shineSpecularHandle, specShine);
 
         gl.bindVertexArray(vaos[i]);
-
         gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
 
     }
@@ -199,102 +186,12 @@ async function init(){
     }
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    await loadShaders(); //// sposta await a meshes
+    await loadShaders();
 
     await loadMeshes();
-    /*
-    //model = new OBJ.Mesh(worldObjStr);
-    model = allMeshes[1];
-    vertices = model.vertices;
-    normals = model.vertexNormals;
-    indices = model.indices;
- */
+    
     main();
 }
 
 window.onload = init;
 window.onresize = main;
-
-function LoadEnvironment(){
-    skyboxVertPos = new Float32Array(
-    [
-      -1, -1, 1.0,
-       1, -1, 1.0,
-      -1,  1, 1.0,
-      -1,  1, 1.0,
-       1, -1, 1.0,
-       1,  1, 1.0,
-    ]);
-    
-    skyboxVao = gl.createVertexArray();
-    gl.bindVertexArray(skyboxVao);
-    
-    var positionBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, skyboxVertPos, gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(skyboxVertPosAttr);
-    gl.vertexAttribPointer(skyboxVertPosAttr, 3, gl.FLOAT, false, 0, 0);
-    
-    skyboxTexture = gl.createTexture();
-    gl.activeTexture(gl.TEXTURE0+3);
-    gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
-    
-    var envTexDir = baseDir+"assets/env/";
- 
-    const faceInfos = [
-        {
-            target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
-            url: envTexDir+'right.png',
-        },
-        {
-            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
-            url: envTexDir+'left.png',
-        },
-        {
-            target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
-            url: envTexDir+'top.png',
-        },
-        {
-            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
-            url: envTexDir+'bottom.png',
-        },
-        {
-            target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
-            url: envTexDir+'back.png',
-        },
-        {
-            target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
-            url: envTexDir+'front.png',
-        },
-    ];
-    faceInfos.forEach((faceInfo) => {
-        const {target, url} = faceInfo;
-        
-        // Upload the canvas to the cubemap face.
-        const level = 0;
-        const internalFormat = gl.RGBA;
-        const width = 2048;
-        const height = 2048;
-        const format = gl.RGBA;
-        const type = gl.UNSIGNED_BYTE;
-        
-        // setup each face so it's immediately renderable
-        gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
-        
-        // Asynchronously load an image
-        const image = new Image();
-        image.src = url;
-        image.addEventListener('load', function() {
-            // Now that the image has loaded upload it to the texture.
-            gl.activeTexture(gl.TEXTURE0+3);
-            gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
-            gl.texImage2D(target, level, internalFormat, format, type, image);
-            gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-        });
-    
-        
-    });
-    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    
-}

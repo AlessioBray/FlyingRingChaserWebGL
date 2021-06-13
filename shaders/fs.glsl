@@ -1,5 +1,5 @@
 #version 300 es
-precision mediump float;
+precision highp float;
 
 in vec3 fsNormal;
 in vec4 fsPosition;
@@ -22,8 +22,14 @@ uniform vec3 lightColorB;
 uniform vec3 ambientLightCol;
 uniform vec3 ambientMat;
 
+// inverseprojmatrix
+uniform mat4 matrix;
+
 //texture
 uniform sampler2D in_texture;
+
+//skybox
+uniform samplerCube u_texture;
 
 out vec4 outColor;
 
@@ -36,8 +42,8 @@ vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
 //computes the blinn specular
 vec3 blinnSpecular(vec3 lightDir, vec3 lightCol, vec3 normalVec, vec4 fsPosition, float specShine) {
   // camera space implies eye position to be (0,0,0)
-  vec4 eyePosition = vec4(0.0,0.0,0.0,0.0);   // what is eyePos in world space??
-  vec3 eyeDir = vec3(normalize(eyePosition-fsPosition));
+  vec4 eyePosition = vec4(0.0, 0.0, 0.0, 0.0);   // what is eyePos in world space??
+  vec3 eyeDir = vec3(normalize(eyePosition - fsPosition));
   vec3 halfVec = normalize(eyeDir + lightDir);
   vec3 specularBl = pow(max(dot(halfVec, normalVec), 0.0), specShine) * lightCol;
 
@@ -73,5 +79,8 @@ void main() {
   vec4 color = vec4(clamp(blinnSpec + lambertDiff + ambient + emit, 0.0, 1.0).rgb,1.0);
   
   vec4 outColorfs = color * texture(in_texture, fsUV);
-  outColor = color;
+
+  vec4 sampleDir = matrix * fsPosition;
+
+  outColor = color ;//* texture(u_texture, normalize(sampleDir.xyz / sampleDir.w));
 }
