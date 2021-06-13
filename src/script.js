@@ -186,8 +186,6 @@ function addMeshToScene(i) {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
 }
 
-
-
 async function loadShaders() {
 
     // load vertex and fragment shaders from file

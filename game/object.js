@@ -58,12 +58,12 @@ var directionalLightColorB;
 var materialColor = [1.0, 1.0, 1.0];
 
 // define ambient light color and material
-var ambientLight = [0.15, 0.9, 0.8];
-var ambientMat = [0.4, 0.2, 0.6];
+var ambientLight = [1.0, 1.0, 1.0];
+var ambientMat = [0.24725,	0.1995,	0.0745];
   
 // define specular component of color
-var specularColor = [1.0, 1.0, 1.0];
-var specShine = 10.0;
+var specularColor = [0.628281,	0.555802,	0.366065];
+var specShine = 0.4*128;
 
 // World matrix
 var Rx = 0.0;
