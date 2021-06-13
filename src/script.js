@@ -15,6 +15,7 @@ function SetMatrices(){
 }
 
 function GetAttributesAndUniforms(){
+
     //Uniforms
     positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
     normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
@@ -35,7 +36,6 @@ function GetAttributesAndUniforms(){
     lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
 
-    
 }
 
 function main() {
@@ -63,7 +63,7 @@ function animate(){
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
 
 
-    //Ry = Ry + 0.2;
+    Rz = Rz + 0.5;
 }
 
 function DrawSkybox(){
@@ -119,7 +119,6 @@ function drawScene() {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW); 
     
-
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
     ClearBits();

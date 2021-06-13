@@ -1,13 +1,13 @@
 // Global variables and constants 
 
-var textScore=null;
+var textScore = null;
 var maxScore = null;
 
 POPUP_ID = 'popup';
 POPUP_CONTENT_ID= 'popupContent' ;
 CLOSE_BUTTON_ID= 'closeButton';
 
-var score= document.getElementById('scoringtab');
+var score = document.getElementById('scoringtab');
 var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
@@ -54,16 +54,16 @@ var directionalLightColorA;
 var directionalLightB;
 var directionalLightColorB;
 
-// define material color 
-var materialColor = [1.0, 1.0, 1.0];
+// define material diffusion color 
+var materialColor = [0.75164, 0.60648, 0.22648];
 
 // define ambient light color and material
 var ambientLight = [1.0, 1.0, 1.0];
-var ambientMat = [0.24725,	0.1995,	0.0745];
+var ambientMat = [0.24725, 0.1995, 0.0745];
   
 // define specular component of color
 var specularColor = [0.628281,	0.555802,	0.366065];
-var specShine = 0.4*128;
+var specShine = 0.4*64;
 
 // World matrix
 var Rx = 0.0;

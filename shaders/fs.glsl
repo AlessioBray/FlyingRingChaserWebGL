@@ -54,17 +54,17 @@ void main() {
   
   //computing Lambert diffuse color
   //directional lights
-  vec3 diffA = lambertDiffuse(lDirA,lightColorA,nNormal);
-  vec3 diffB = lambertDiffuse(lDirB,lightColorB,nNormal);
+  vec3 diffA = lambertDiffuse(lDirA, lightColorA, nNormal);
+  vec3 diffB = lambertDiffuse(lDirB, lightColorB, nNormal);
 
   //total lambert component
   vec3 lambertDiff = clamp((mDiffColor*(diffA + diffB)), 0.0, 1.0);
 
   //computing Blinn specular color
-  vec3 specA = blinnSpecular(lDirA,lightColorA,nNormal,fsPosition,specShine);
-  vec3 specB = blinnSpecular(lDirB,lightColorB,nNormal,fsPosition,specShine);
+  vec3 specA = blinnSpecular(lDirA, lightColorA, nNormal, fsPosition, specShine);
+  vec3 specB = blinnSpecular(lDirB, lightColorB, nNormal, fsPosition, specShine);
   //total specular component
-  vec3 blinnSpec = specularColor * (specA + specB );
+  vec3 blinnSpec = specularColor * (specA + specB);
 
   //computing ambient color
   vec3 ambient = ambientLightCol * ambientMat;
