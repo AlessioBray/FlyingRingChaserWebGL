@@ -82,7 +82,7 @@ function DrawSkybox(){
 }
 
 function updateWorldMatrix(){
-    matricesArray[1] = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S); // update ring matrix world with new pos
+    matricesArray[0] = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S); // update ring matrix world with new pos
 }
     
 function drawScene() {    
