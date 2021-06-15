@@ -67,13 +67,16 @@ var specShine = 0.4*64;
 
 // World matrix
 var Rx = 0.0;
-var Ry = 90.0;
-var Rz = 0.0;
+var Ry = 0.0;
+var Rz = 90.0;
 var S  = 1.0;
 
-var matricesArray= [ 
-    utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S),
-    utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S)];
+
+var matricesArrays= [
+    //rings
+    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5),utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5),utils.MakeWorld( 0.0, 0.0, -3.0, Rx, Ry, Rz, 0.5)]
+    //other objects .... [],[]...
+];  
 
 // Camera
 var camera_x = 0.0;
@@ -100,3 +103,4 @@ var allMeshes;
 var moonMesh;
 var ringMesh;
 var vaos;
+var vao;
