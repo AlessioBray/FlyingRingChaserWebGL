@@ -10,16 +10,18 @@ function SetViewportAndCanvas(){
 }
 
 function SetMatrices(){
-    //viewMatrix = utils.MakeView(cx, cy, cz, 0.0, 0.0);
-    //perspectiveMatrix = utils.MakePerspective(30, gl.canvas.width/gl.canvas.height, 0.1, 100.0);
+    // Compute the camera matrix
+    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
 }
 
 function GetAttributesAndUniforms(){
 
     //Uniforms
-    positionAttributeLocation = gl.getAttribLocation(program, "inPosition");  
-    normalAttributeLocation = gl.getAttribLocation(program, "inNormal");
-    uvAttributeLocation = gl.getAttribLocation(program, "in_uv");
+    positionAttributeLocation = gl.getAttribLocation(program, "in_position");  
+    normalAttributeLocation = gl.getAttribLocation(program, "in_normal");
+    uvAttributeLocation = gl.getAttribLocation(program, "in_UV");
     textLocation = gl.getUniformLocation(program, "in_texture");
     matrixLocation = gl.getUniformLocation(program, "matrix");  
     nMatrixLocation = gl.getUniformLocation(program, "nMatrix");
@@ -70,22 +72,17 @@ function animate(){
 function updateWorldMatrix(){
 
     SetMatrices();
-
-    // Compute the camera matrix
-    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
-      
+  
     matricesArray =  matricesArrays[0]; 
-    matricesArray[0]=utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    matricesArray[1]=utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    matricesArray[2]=utils.MakeWorld( 0.0, 0.0, -3.0, Rx, Ry, Rz, S);
+    matricesArray[0] = utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    matricesArray[1] = utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    matricesArray[2] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
 
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
 
-    let matricesArray=matricesArrays[i]; 
+    let matricesArray = matricesArrays[i]; 
     let worldMatrix = matricesArray[j];
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
@@ -121,23 +118,50 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
 
 }
+
+function loadTexture(){
+    
+    // Create a texture.
+    var texture = gl.createTexture();
+    // use texture unit 0
+    gl.activeTexture(gl.TEXTURE0);
+    // bind to the TEXTURE_2D bind point of texture unit 0
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // Asynchronously load an image
+    var image = new Image();
+    image.src = textureDir + "X-Wing-textures.png";
+    image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+}
     
 function drawScene() {    
 
     animate();
 
     updateWorldMatrix(); // to update rings world matrices
+
     ClearBits();
 
     // add each mesh / object with its world matrix
     
-    for (var i = 0; i <allMeshes.length; i++) { //for each type of object
-     for(var j=0; j<matricesArray.length; j++){  // for each instance of that type
-        drawElement(i,j);
-     }
+    for (var i = 0; i < allMeshes.length; i++) { //for each type of object
+        for(var j = 0; j < matricesArray.length; j++){  // for each instance of that type
+            drawElement(i,j);
+        }
     }
 
-    DrawSkybox();
+    loadTexture();
+
+    //DrawSkybox();
 
     window.requestAnimationFrame(drawScene);
 }
@@ -185,9 +209,9 @@ async function loadShaders() {
 
 async function loadMeshes() {
 
-    ringMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
-    allMeshes = [ringMesh
-        //,ringMesh
+    x_wingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
+    allMeshes = [x_wingMesh
+               //,ringMesh
     ];
 }
 
