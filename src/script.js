@@ -1,5 +1,5 @@
 function ClearBits(){
-    gl.clearColor(0.85, 1.0, 0.85, 1.0); 
+    gl.clearColor(0.0, 0.0, 0.0, 0.0); 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
@@ -39,8 +39,8 @@ function GetAttributesAndUniforms(){
     lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
 
     //skybox
-    skyboxTexHandle = gl.getUniformLocation(program, "u_texture"); // uniform
-    skyboxVertPosAttr = gl.getAttribLocation(program, "in_skybox_position"); // attribute
+    //skyboxTexHandle = gl.getUniformLocation(program, "u_texture");
+    //skyboxVertPosAttr = gl.getAttribLocation(program, "in_skybox_position");
 }
 
 function main() {
@@ -97,7 +97,6 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(Projection));
     gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
-
     
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);

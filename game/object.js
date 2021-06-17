@@ -47,6 +47,8 @@ var perspectiveMatrix;
 var viewMatrix;
 var worldmatrix;
 
+var inverseViewProjMatrix; //used in skybox
+
 
 // lights 
 var directionalLightA;

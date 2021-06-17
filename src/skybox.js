@@ -39,37 +39,38 @@ function LoadEnvironment(){
     const faceInfos = [
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_X, 
-            url: envTexDir+'posx.jpg',
+            url: envTexDir+'right.png',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 
-            url: envTexDir+'negx.jpg',
+            url: envTexDir+'left.png',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 
-            url: envTexDir+'posy.jpg',
+            url: envTexDir+'top.png',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 
-            url: envTexDir+'negy.jpg',
+            url: envTexDir+'bottom.png',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
-            url: envTexDir+'posz.jpg',
+            url: envTexDir+'back.png',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
-            url: envTexDir+'negz.jpg',
+            url: envTexDir+'front.png',
         },
     ];
+
     faceInfos.forEach((faceInfo) => {
         const {target, url} = faceInfo;
         
         // Upload the canvas to the cubemap face.
         const level = 0;
         const internalFormat = gl.RGBA;
-        const width = 1024;
-        const height = 1024;
+        const width = 2048;
+        const height = 2048;
         const format = gl.RGBA;
         const type = gl.UNSIGNED_BYTE;
         
@@ -96,9 +97,15 @@ function LoadEnvironment(){
 
 function DrawSkybox(){
     
+    //gl.useProgram(skyboxProgram);
+    
     gl.activeTexture(gl.TEXTURE0 + 3);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
     gl.uniform1i(skyboxTexHandle, 3);
+
+    var viewProjMat = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
+    inverseViewProjMatrix = utils.invertMatrix(viewProjMat);
+    gl.uniformMatrix4fv(inverseViewProjMatrixHandle, gl.FALSE, utils.transposeMatrix(inverseViewProjMatrix));
     
     gl.bindVertexArray(skyboxVao);
     gl.depthFunc(gl.LEQUAL);
