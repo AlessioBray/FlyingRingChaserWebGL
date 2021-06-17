@@ -72,13 +72,14 @@ function animate(){
 function updateWorldMatrix(){
 
     SetMatrices();
-  
+    /*
     starshipArray = matricesArrays[0]; 
     ringsArray = matricesArrays[1];
+    asteroidsArray = matricesArrays[2];
     ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    ringsArray[1]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
     starshipArray[0] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
-
+     */
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
@@ -215,8 +216,9 @@ async function loadMeshes() {
 
     x_wingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
-    
-    allMeshes = [x_wingMesh,ringMesh
+    asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
+
+    allMeshes = [x_wingMesh,ringMesh,asteroidMesh
             
                //,ringMesh
     ];

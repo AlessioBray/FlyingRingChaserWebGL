@@ -73,9 +73,12 @@ var S  = 1.0;
 
 
 var matricesArrays= [
+    //starship
     [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, 0.5)],
     //rings
-    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5), utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)]
+    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)],
+    //asteroids
+    [utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)]
     //other objects .... [],[]...
     //
 ];  
