@@ -19,28 +19,77 @@ function SetMatrices(){
 function GetAttributesAndUniforms(){
 
     //Uniforms
-    positionAttributeLocation = gl.getAttribLocation(program, "in_position");  
-    normalAttributeLocation = gl.getAttribLocation(program, "in_normal");
-    uvAttributeLocation = gl.getAttribLocation(program, "in_UV");
-    textLocation = gl.getUniformLocation(program, "in_texture");
-    matrixLocation = gl.getUniformLocation(program, "matrix");  
-    nMatrixLocation = gl.getUniformLocation(program, "nMatrix");
-    pMatrixLocation = gl.getUniformLocation(program, "pMatrix");
+    positionAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_position");  
+    normalAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_normal");
+    uvAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_UV");
+    textLocation[0] = gl.getUniformLocation(programs[0], "in_texture");
+    matrixLocation[0] = gl.getUniformLocation(programs[0], "matrix");  
+    nMatrixLocation[0] = gl.getUniformLocation(programs[0], "nMatrix");
+    pMatrixLocation[0] = gl.getUniformLocation(programs[0], "pMatrix");
 
-    ambientLightColorHandle = gl.getUniformLocation(program, "ambientLightCol");
-    ambientMaterialHandle = gl.getUniformLocation(program, "ambientMat");
-    materialDiffColorHandle = gl.getUniformLocation(program, 'mDiffColor');
-    specularColorHandle = gl.getUniformLocation(program, "specularColor");
-    shineSpecularHandle = gl.getUniformLocation(program, "specShine");
-    emissionColorHandle = gl.getUniformLocation(program, "emit");    
-    lightDirectionHandleA = gl.getUniformLocation(program, 'lightDirectionA');
-    lightColorHandleA = gl.getUniformLocation(program, 'lightColorA');
-    lightDirectionHandleB = gl.getUniformLocation(program, 'lightDirectionB');
-    lightColorHandleB = gl.getUniformLocation(program, 'lightColorB');
+    ambientLightColorHandle[0] = gl.getUniformLocation(programs[0], "ambientLightCol");
+    ambientMaterialHandle[0] = gl.getUniformLocation(programs[0], "ambientMat");
+    materialDiffColorHandle[0] = gl.getUniformLocation(programs[0], 'mDiffColor');
+    specularColorHandle[0] = gl.getUniformLocation(programs[0], "specularColor");
+    shineSpecularHandle[0] = gl.getUniformLocation(programs[0], "specShine");
+    emissionColorHandle[0] = gl.getUniformLocation(programs[0], "emit");    
+    lightDirectionHandleA[0] = gl.getUniformLocation(programs[0], 'lightDirectionA');
+    lightColorHandleA[0] = gl.getUniformLocation(programs[0], 'lightColorA');
+    lightDirectionHandleB[0] = gl.getUniformLocation(programs[0], 'lightDirectionB');
+    lightColorHandleB[0] = gl.getUniformLocation(programs[0], 'lightColorB');
 
     //skybox
-    skyboxTexHandle = gl.getUniformLocation(program, "u_texture"); // uniform
-    skyboxVertPosAttr = gl.getAttribLocation(program, "in_skybox_position"); // attribute
+    //skyboxTexHandle[0] = gl.getUniformLocation(programs[0], "u_texture"); // uniform
+    //skyboxVertPosAttr[0] = gl.getAttribLocation(programs[0], "in_skybox_position"); // attribute
+    /*
+    //Uniforms
+    positionAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_position");  
+    normalAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_normal");
+    uvAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_UV");
+    textLocation[1] = gl.getUniformLocation(programs[1], "in_texture");
+    matrixLocation[1] = gl.getUniformLocation(programs[1], "matrix");  
+    nMatrixLocation[1] = gl.getUniformLocation(programs[1], "nMatrix");
+    pMatrixLocation[1] = gl.getUniformLocation(programs[1], "pMatrix");
+
+    ambientLightColorHandle[1] = gl.getUniformLocation(programs[1], "ambientLightCol");
+    ambientMaterialHandle[1] = gl.getUniformLocation(programs[1], "ambientMat");
+    materialDiffColorHandle[1] = gl.getUniformLocation(programs[1], 'mDiffColor');
+    specularColorHandle[1] = gl.getUniformLocation(programs[1], "specularColor");
+    shineSpecularHandle[1] = gl.getUniformLocation(programs[1], "specShine");
+    emissionColorHandle[1] = gl.getUniformLocation(programs[1], "emit");    
+    lightDirectionHandleA[1] = gl.getUniformLocation(programs[1], 'lightDirectionA');
+    lightColorHandleA[1] = gl.getUniformLocation(programs[1], 'lightColorA');
+    lightDirectionHandleB[1] = gl.getUniformLocation(programs[1], 'lightDirectionB');
+    lightColorHandleB[1] = gl.getUniformLocation(programs[1], 'lightColorB');
+
+    //skybox
+    //skyboxTexHandle[1] = gl.getUniformLocation(program[1], "u_texture"); // uniform
+    //skyboxVertPosAttr[1] = gl.getAttribLocation(program[1], "in_skybox_position"); // attribute
+
+    //Uniforms
+    positionAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_position");  
+    normalAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_normal");
+    uvAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_UV");
+    textLocation[2] = gl.getUniformLocation(programs[2], "in_texture");
+    matrixLocation[2] = gl.getUniformLocation(programs[2], "matrix");  
+    nMatrixLocation[2] = gl.getUniformLocation(programs[2], "nMatrix");
+    pMatrixLocation[2] = gl.getUniformLocation(programs[2], "pMatrix");
+
+    ambientLightColorHandle[2] = gl.getUniformLocation(programs[2], "ambientLightCol");
+    ambientMaterialHandle[2] = gl.getUniformLocation(programs[2], "ambientMat");
+    materialDiffColorHandle[2] = gl.getUniformLocation(programs[2], 'mDiffColor');
+    specularColorHandle[2] = gl.getUniformLocation(programs[2], "specularColor");
+    shineSpecularHandle[2] = gl.getUniformLocation(programs[2], "specShine");
+    emissionColorHandle[2] = gl.getUniformLocation(programs[2], "emit");    
+    lightDirectionHandleA[2] = gl.getUniformLocation(programs[2], 'lightDirectionA');
+    lightColorHandleA[2] = gl.getUniformLocation(programs[2], 'lightColorA');
+    lightDirectionHandleB[2] = gl.getUniformLocation(programs[2], 'lightDirectionB');
+    lightColorHandleB[2] = gl.getUniformLocation(programs[2], 'lightColorB');
+
+    //skybox
+    //skyboxTexHandle[2] = gl.getUniformLocation(program[2], "u_texture"); // uniform
+    //skyboxVertPosAttr[2] = gl.getAttribLocation(program[2], "in_skybox_position"); // attribute
+    */
 }
 
 function main() {
@@ -72,18 +121,21 @@ function animate(){
 function updateWorldMatrix(){
 
     SetMatrices();
-    /*
+    
     starshipArray = matricesArrays[0]; 
+    /*
     ringsArray = matricesArrays[1];
     asteroidsArray = matricesArrays[2];
     ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
     asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    */
     starshipArray[0] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
-     */
+     
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
 
+    gl.useProgram(programs[i]);
     let matricesArray = matricesArrays[i]; 
     let worldMatrix = matricesArray[j];
 
@@ -94,27 +146,27 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
     MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
     Projection = utils.multiplyMatrices(perspectiveMatrix, MV);
-    gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(Projection));
-    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(normalMatrix));
-    gl.uniformMatrix4fv(pMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
+    gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
+    gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
+    gl.uniformMatrix4fv(pMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
 
     
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
-    gl.uniformMatrix4fv(matrixLocation, gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation, gl.FALSE, utils.transposeMatrix(worldMatrix));
+    gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
     
         
-    gl.uniform3fv(materialDiffColorHandle, materialColor);
-    gl.uniform3fv(lightColorHandleA, directionalLightColorA);
-    gl.uniform3fv(lightDirectionHandleA, directionalLightA);
-    gl.uniform3fv(lightColorHandleB, directionalLightColorB);
-    gl.uniform3fv(lightDirectionHandleB, directionalLightB);
-    gl.uniform3fv(ambientLightColorHandle, ambientLight);
-    gl.uniform3fv(ambientMaterialHandle, ambientMat);
-    gl.uniform3fv(specularColorHandle, specularColor);
-    gl.uniform1f(shineSpecularHandle, specShine);
+    gl.uniform3fv(materialDiffColorHandle[i], materialColor);
+    gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
+    gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
+    gl.uniform3fv(lightColorHandleB[i], directionalLightColorB);
+    gl.uniform3fv(lightDirectionHandleB[i], directionalLightB);
+    gl.uniform3fv(ambientLightColorHandle[i], ambientLight);
+    gl.uniform3fv(ambientMaterialHandle[i], ambientMat);
+    gl.uniform3fv(specularColorHandle[i], specularColor);
+    gl.uniform1f(shineSpecularHandle[i], specShine);
 
     gl.bindVertexArray(vaos[i]);
     gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
@@ -202,14 +254,30 @@ function addMeshToScene(i) {
 
 async function loadShaders() {
 
-    // load vertex and fragment shaders from file
-    await utils.loadFiles([shaderDir + 'vs.glsl', shaderDir + 'fs.glsl'], function (shaderText) {
-        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-        program = utils.createProgram(gl, vertexShader, fragmentShader);
-    });
+    //MultipleShaders
+  await utils.loadFiles([shaderDir + 'vs_starship.glsl', shaderDir + 'fs_starship.glsl'], function (shaderText) {
+    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-    gl.useProgram(program);
+    programs[0] = utils.createProgram(gl, vertexShader, fragmentShader);
+  });
+  
+  /*
+  await utils.loadFiles([shaderDir + 'vs_ring.glsl', shaderDir + 'fs_ring.glsl'], function (shaderText) {
+    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+    programs[1] = utils.createProgram(gl, vertexShader, fragmentShader);
+  });
+  
+    await utils.loadFiles([shaderDir + 'vs_asteroid.glsl', shaderDir + 'fs_asteroid.glsl'], function (shaderText) {
+    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+    programs[2] = utils.createProgram(gl, vertexShader, fragmentShader);
+  }); */
+
+    //gl.useProgram(program);
 }
 
 async function loadMeshes() {
@@ -218,7 +286,7 @@ async function loadMeshes() {
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
 
-    allMeshes = [x_wingMesh,ringMesh,asteroidMesh
+    allMeshes = [x_wingMesh//x_wingMesh,ringMesh,asteroidMesh
             
                //,ringMesh
     ];

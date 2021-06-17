@@ -18,29 +18,30 @@ var dirLightBetaBSlider = document.getElementById("dirLightBetaB"); //32
 var directionalLightColorASlider = document.getElementById("LAlightColor"); //#4d4d4d
 var directionalLightColorBSlider = document.getElementById("LBlightColor"); //#4d4d4d
 
-var program;
+var programs = new Array();
 var gl;
 var model;
 var vertices;
 var normals;
 var indices;
-var positionAttributeLocation;
-var normalAttributeLocation;
-var uvAttributeLocation;
-var textLocation;
-var matrixLocation;
-var nMatrixLocation;
+var positionAttributeLocation = new Array();
+var normalAttributeLocation = new Array();
+var uvAttributeLocation = new Array();
+var textLocation = new Array();
+var matrixLocation = new Array();
+var nMatrixLocation = new Array();
+var pMatrixLocation = new Array();
 
-var ambientLightColorHandle;
-var ambientMaterialHandle;
-var materialDiffColorHandle;
-var specularColorHandle;
-var shineSpecularHandle;
-var emissionColorHandle;    
-var lightDirectionHandleA;
-var lightColorHandleA;
-var lightDirectionHandleB;
-var lightColorHandleB;
+var ambientLightColorHandle = new Array();
+var ambientMaterialHandle = new Array();
+var materialDiffColorHandle = new Array();
+var specularColorHandle = new Array();
+var shineSpecularHandle = new Array();
+var emissionColorHandle = new Array();
+var lightDirectionHandleA = new Array();
+var lightColorHandleA = new Array();
+var lightDirectionHandleB = new Array();
+var lightColorHandleB = new Array();
 
 var aspect;
 var perspectiveMatrix;
