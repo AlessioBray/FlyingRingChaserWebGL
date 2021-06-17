@@ -185,7 +185,7 @@ async function loadShaders() {
 
 async function loadMeshes() {
 
-    ringMesh = await utils.loadMesh(modelsDir + "ring.obj");
+    ringMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
     allMeshes = [ringMesh
         //,ringMesh
     ];
