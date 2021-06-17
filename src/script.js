@@ -73,10 +73,11 @@ function updateWorldMatrix(){
 
     SetMatrices();
   
-    matricesArray =  matricesArrays[0]; 
-    matricesArray[0] = utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    matricesArray[1] = utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    matricesArray[2] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
+    starshipArray = matricesArrays[0]; 
+    ringsArray = matricesArrays[1];
+    ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    ringsArray[1]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    starshipArray[0] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
 
 }
 
@@ -154,6 +155,7 @@ function drawScene() {
     // add each mesh / object with its world matrix
     
     for (var i = 0; i < allMeshes.length; i++) { //for each type of object
+        let matricesArray = matricesArrays[i];
         for(var j = 0; j < matricesArray.length; j++){  // for each instance of that type
             drawElement(i,j);
         }
@@ -176,12 +178,14 @@ function addMeshToScene(i) {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertices), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(positionAttributeLocation);
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
-
-    var uvBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(uvAttributeLocation);
-    gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0); 
+    if (i == 0){ //if starship
+        var uvBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
+            gl.enableVertexAttribArray(uvAttributeLocation);
+            gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+    }
+     
 
     var normalBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
@@ -210,7 +214,10 @@ async function loadShaders() {
 async function loadMeshes() {
 
     x_wingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
-    allMeshes = [x_wingMesh
+    ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
+    
+    allMeshes = [x_wingMesh,ringMesh
+            
                //,ringMesh
     ];
 }
@@ -235,4 +242,4 @@ async function init(){
 }
 
 window.onload = init;
-window.onresize = main;
+window.onresize = main; //(?)
