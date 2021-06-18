@@ -5,25 +5,25 @@ function keyDownFunction(e){
   
      case "ArrowLeft" :
      case "a" :  
-       Rz -= delta;
+       camera_yaw -= delta;
 
        break;
      
      case "ArrowRight":
      case "d":   
-       Rz += delta;
+       camera_yaw += delta;
 
        break;
 
      case "ArrowUp":
      case "w": 
-       camera_y += delta;
+       camera_pitch += delta;
 
        break;
 
      case "ArrowDown":
      case "s": 
-       camera_y -= delta;
+       camera_pitch -= delta;
 
        break;
 
