@@ -85,3 +85,33 @@ dirLightAlphaBSlider.addEventListener("input",updateLight,false);
 dirLightBetaBSlider.addEventListener("input",updateLight,false);
 directionalLightColorASlider.addEventListener("input",updateLight,false);
 directionalLightColorBSlider.addEventListener("input",updateLight,false);
+
+canvas.addEventListener("mousedown", doMouseDown, false);
+canvas.addEventListener("mouseup", doMouseUp, false);
+canvas.addEventListener("mousemove", doMouseMove, false);
+
+var mouseState = false;
+var lastMouseX = -100, lastMouseY = -100;
+function doMouseDown(event) {
+	lastMouseX = event.pageX;
+	lastMouseY = event.pageY;
+	mouseState = true;
+}
+function doMouseUp(event) {
+	lastMouseX = -100;
+	lastMouseY = -100;
+	mouseState = false;
+}
+function doMouseMove(event) {
+	if(mouseState) {
+		var dx = event.pageX - lastMouseX;
+		var dy = lastMouseY - event.pageY;
+		lastMouseX = event.pageX;
+		lastMouseY = event.pageY;
+		
+		if((dx != 0) || (dy != 0)) {
+			Rx = Rx - 0.5 * dx; /// ruota attorno a Rx e Rz dell'oggetto, invece deve essere assoluto => vedi come fa lui negli esempi
+			Rz = Rz - 0.5 * dy;
+		}
+	}
+}

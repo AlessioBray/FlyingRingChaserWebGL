@@ -115,7 +115,7 @@ function main() {
 function animate(){
    
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
-    Rx = Rx + 0.5;
+    //Rx = Rx + 0.5;
     
 }
 

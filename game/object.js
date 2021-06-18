@@ -73,7 +73,7 @@ var specShine = 0.4*64;
 // World matrix
 var Rx = 0.0;
 var Ry = 0.0;
-var Rz = 90.0;
+var Rz = 0.0;
 var S  = 1.0;
 
 
@@ -81,7 +81,7 @@ var matricesArrays= [
     //starship
     [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, 0.5)],
     //rings
-    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)],
+    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz+90, 0.5)],
     //asteroids
     [utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)]
     //other objects .... [],[]...
