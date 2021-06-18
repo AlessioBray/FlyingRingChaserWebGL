@@ -1,9 +1,33 @@
 //start the game!!
 function game(){
+
+  //if(gameOn){ //if you press tab while playing game ends and rings disappear
+    matricesArrays[0] = [];
+  //}
+
   HideShowElement(lightController);
   HideShowElement(moveController);
   HideShowElement(objSelect);
+  gameOn = !gameOn; 
+  
   //gameOver();
+}
+
+function makeNewRing(){
+
+  ringsArrays = matricesArrays[0];
+  let Tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
+  let Ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
+  ringsArrays.push(utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz+90, S));
+  lastNewRingTime = Date.now();
+}
+
+function move(){
+  ringsArrays = matricesArrays[0];
+  for(var i=0;i<ringsArrays.length;i++){
+     let oldMatrix = ringsArrays[i];
+     ringsArrays[i] = utils.multiplyMatrices(oldMatrix,utils.MakeTranslateMatrix(0,SPEED,0.0));
+  }
 }
 
 //game over
@@ -16,6 +40,11 @@ function gameOver(){
   HideShowElement(lightController);  
   HideShowElement(moveController);
 
+}
+
+function spawn(){
+  console.log("Spawn!!");
+  
 }
 
 function HideShowElement(x){ // takes an element and hides/shows it
