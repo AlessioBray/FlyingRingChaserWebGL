@@ -219,7 +219,7 @@ function drawScene() {
 
     loadTexture();
 
-    //DrawSkybox();
+    DrawSkybox();
 
     window.requestAnimationFrame(drawScene);
 }
@@ -255,35 +255,42 @@ function addMeshToScene(i) {
     
 }
 
-async function loadShaders() {
+async function LoadShaders() {
 
     //MultipleShaders
-  await utils.loadFiles([shaderDir + 'vs_starship.glsl', shaderDir + 'fs_starship.glsl'], function (shaderText) {
-    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+    await utils.loadFiles([shaderDir + 'xwing_vs.glsl', shaderDir + 'xwing_fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-    programs[0] = utils.createProgram(gl, vertexShader, fragmentShader);
+        programs[0] = utils.createProgram(gl, vertexShader, fragmentShader);
   });
   
-  /*
-  await utils.loadFiles([shaderDir + 'vs_ring.glsl', shaderDir + 'fs_ring.glsl'], function (shaderText) {
-    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-    programs[1] = utils.createProgram(gl, vertexShader, fragmentShader);
-  });
+    await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+        
+        programs[1] = utils.createProgram(gl, vertexShader, fragmentShader);
+    });
   
-    await utils.loadFiles([shaderDir + 'vs_asteroid.glsl', shaderDir + 'fs_asteroid.glsl'], function (shaderText) {
-    var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-    var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+    await utils.loadFiles([shaderDir + 'asteroid_vs.glsl', shaderDir + 'asteroid_fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-    programs[2] = utils.createProgram(gl, vertexShader, fragmentShader);
-  }); */
+        programs[2] = utils.createProgram(gl, vertexShader, fragmentShader);
+    });
 
-    //gl.useProgram(program);
+    await utils.loadFiles([shaderDir + 'skybox_vs.glsl', shaderDir + 'skybox_fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+        programs[3] = utils.createProgram(gl, vertexShader, fragmentShader);
+    });
+
+    //gl.useProgram(programs[0]);
 }
 
-async function loadMeshes() {
+async function LoadMeshes() {
 
     x_wingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
@@ -304,12 +311,11 @@ async function init(){
     }
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    await loadShaders();
+    await LoadShaders();
 
-    await loadMeshes();
+    await LoadMeshes();
 
-
-    //LoadEnvironment();
+    LoadEnvironment();
     
     main();
 }

@@ -96,8 +96,15 @@ function LoadEnvironment(){
 }
 
 function DrawSkybox(){
+
+    skyboxProgram = programs[3];
+
+    //Uniforms
+    skyboxTexHandle = gl.getUniformLocation(skyboxProgram, "u_texture"); 
+    inverseViewProjMatrixHandle = gl.getUniformLocation(skyboxProgram, "inverseViewProjMatrix"); 
+    skyboxVertPosAttr = gl.getAttribLocation(skyboxProgram, "in_position");
     
-    //gl.useProgram(skyboxProgram);
+    gl.useProgram(skyboxProgram);
     
     gl.activeTexture(gl.TEXTURE0 + 3);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);

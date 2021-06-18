@@ -14,7 +14,7 @@ function keyDownFunction(e){
        Rz += delta;
 
        break;
-/*
+
      case "ArrowUp":
      case "w": 
        camera_y += delta;
@@ -26,7 +26,7 @@ function keyDownFunction(e){
        camera_y -= delta;
 
        break;
-*/
+
      default:
        break;  
     }
