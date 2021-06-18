@@ -143,7 +143,7 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    //ClearBits();  // multiple draw of objects doesn't work with this here
+    ////// WORLD SPACE ////////////////////
 
     normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
     MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
@@ -152,15 +152,8 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
     gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
-
-    
-    let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
-    let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
-
-    gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
-    
-        
+    //////////////////////////////////////////////////////////////////////////
+  
     gl.uniform3fv(materialDiffColorHandle[i], materialColor);
     gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
     gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
