@@ -77,16 +77,13 @@ var Rz = 0.0;
 var S  = 1.0;
 
 
-//initial position of world matrices
 var matricesArrays= [
     //starship
-    [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S)],
+    [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, 0.5)],
     //rings
-    //[utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz+90, 0.5)],
-    [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S)],
+    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz+90, 0.5)],
     //asteroids
-    //[utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)]
-    [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S)]
+    [utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)]
     //other objects .... [],[]...
     //
 ];  
@@ -110,16 +107,31 @@ var page = path.split("/").pop();
 var baseDir = window.location.href.replace(page, '');
 var shaderDir = baseDir + "shaders/";
 var modelsDir = baseDir + "assets/models/";
-var textureDir = baseDir + "assets/textures/";
+var textureDir = baseDir + "assets/textures/"
 
 
 var allMeshes;
-var x_wingMesh;
+var moonMesh;
 var ringMesh;
-var asteroidMesh;
-var idx; // idx for object
-var matrixArray; // world matrix of object indexed by idx
-
 var vaos;
 var vao;
 
+
+function onDropdownChange(value){
+    
+    console.log("Drop-down value changed to "+ value);
+
+    switch (value) {
+        case 'x-wing':
+            allMeshes = [x_wingMesh];
+            break;
+        case 'ring':
+            allMeshes = [ringMesh];
+            break;
+        case 'asteroid':
+            allMeshes = [asteroidMesh];
+            break;
+      }
+    
+      main();
+}

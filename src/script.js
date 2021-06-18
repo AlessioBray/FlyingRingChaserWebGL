@@ -20,13 +20,13 @@ function GetAttributesAndUniforms(){
 
     //Uniforms
     positionAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_position");  
-    matrixLocation[0] = gl.getUniformLocation(programs[0], "matrix");
     normalAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_normal");
+    uvAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_UV");
+    textLocation[0] = gl.getUniformLocation(programs[0], "in_texture");
+    matrixLocation[0] = gl.getUniformLocation(programs[0], "matrix");  
     nMatrixLocation[0] = gl.getUniformLocation(programs[0], "nMatrix");
     pMatrixLocation[0] = gl.getUniformLocation(programs[0], "pMatrix");
 
-    uvAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_UV");
-    textLocation[0] = gl.getUniformLocation(programs[0], "in_texture");
     ambientLightColorHandle[0] = gl.getUniformLocation(programs[0], "ambientLightCol");
     ambientMaterialHandle[0] = gl.getUniformLocation(programs[0], "ambientMat");
     materialDiffColorHandle[0] = gl.getUniformLocation(programs[0], 'mDiffColor');
@@ -42,17 +42,16 @@ function GetAttributesAndUniforms(){
 
     //skyboxTexHandle[0] = gl.getUniformLocation(programs[0], "u_texture"); // uniform
     //skyboxVertPosAttr[0] = gl.getAttribLocation(programs[0], "in_skybox_position"); // attribute
-    
+    /*
     //Uniforms
     positionAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_position");  
-   // normalAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_normal");
-    //uvAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_UV");
-    //textLocation[1] = gl.getUniformLocation(programs[1], "in_texture");
+    normalAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_normal");
+    uvAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_UV");
+    textLocation[1] = gl.getUniformLocation(programs[1], "in_texture");
     matrixLocation[1] = gl.getUniformLocation(programs[1], "matrix");  
-    //nMatrixLocation[1] = gl.getUniformLocation(programs[1], "nMatrix");
-    //pMatrixLocation[1] = gl.getUniformLocation(programs[1], "pMatrix");
+    nMatrixLocation[1] = gl.getUniformLocation(programs[1], "nMatrix");
+    pMatrixLocation[1] = gl.getUniformLocation(programs[1], "pMatrix");
 
-    /*
     ambientLightColorHandle[1] = gl.getUniformLocation(programs[1], "ambientLightCol");
     ambientMaterialHandle[1] = gl.getUniformLocation(programs[1], "ambientMat");
     materialDiffColorHandle[1] = gl.getUniformLocation(programs[1], 'mDiffColor');
@@ -62,22 +61,21 @@ function GetAttributesAndUniforms(){
     lightDirectionHandleA[1] = gl.getUniformLocation(programs[1], 'lightDirectionA');
     lightColorHandleA[1] = gl.getUniformLocation(programs[1], 'lightColorA');
     lightDirectionHandleB[1] = gl.getUniformLocation(programs[1], 'lightDirectionB');
-    lightColorHandleB[1] = gl.getUniformLocation(programs[1], 'lightColorB'); */
-    
+    lightColorHandleB[1] = gl.getUniformLocation(programs[1], 'lightColorB');
+
     //skybox
     //skyboxTexHandle[1] = gl.getUniformLocation(program[1], "u_texture"); // uniform
     //skyboxVertPosAttr[1] = gl.getAttribLocation(program[1], "in_skybox_position"); // attribute
-   
+
     //Uniforms
     positionAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_position");  
-   // normalAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_normal");
-    //uvAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_UV");
-    //textLocation[2] = gl.getUniformLocation(programs[2], "in_texture");
+    normalAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_normal");
+    uvAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_UV");
+    textLocation[2] = gl.getUniformLocation(programs[2], "in_texture");
     matrixLocation[2] = gl.getUniformLocation(programs[2], "matrix");  
-   // nMatrixLocation[2] = gl.getUniformLocation(programs[2], "nMatrix");
-    //pMatrixLocation[2] = gl.getUniformLocation(programs[2], "pMatrix");
+    nMatrixLocation[2] = gl.getUniformLocation(programs[2], "nMatrix");
+    pMatrixLocation[2] = gl.getUniformLocation(programs[2], "pMatrix");
 
-    /*
     ambientLightColorHandle[2] = gl.getUniformLocation(programs[2], "ambientLightCol");
     ambientMaterialHandle[2] = gl.getUniformLocation(programs[2], "ambientMat");
     materialDiffColorHandle[2] = gl.getUniformLocation(programs[2], 'mDiffColor');
@@ -88,11 +86,11 @@ function GetAttributesAndUniforms(){
     lightColorHandleA[2] = gl.getUniformLocation(programs[2], 'lightColorA');
     lightDirectionHandleB[2] = gl.getUniformLocation(programs[2], 'lightDirectionB');
     lightColorHandleB[2] = gl.getUniformLocation(programs[2], 'lightColorB');
-    */
+
     //skybox
     //skyboxTexHandle[2] = gl.getUniformLocation(program[2], "u_texture"); // uniform
     //skyboxVertPosAttr[2] = gl.getAttribLocation(program[2], "in_skybox_position"); // attribute
-    
+    */
 
 }
 
@@ -126,14 +124,19 @@ function updateWorldMatrix(){
 
     SetMatrices();
     
-    matrixArray = matricesArrays[idx]; 
-    matrixArray[0] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
+    starshipArray = matricesArrays[0]; 
+    /*
+    ringsArray = matricesArrays[1];
+    asteroidsArray = matricesArrays[2];
+    ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+    */
+    starshipArray[0] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
      
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
-    //console.log("i: " + i);
-    //console.log("j: " + j);
+
     gl.useProgram(programs[i]);
     let matricesArray = matricesArrays[i]; 
     let worldMatrix = matricesArray[j];
@@ -201,13 +204,12 @@ function drawScene() {
 
     // add each mesh / object with its world matrix
     
-    //for (var i = 0; i < allMeshes.length; i++) { //for each type of object
-        let matricesArray = matricesArrays[idx];
-        //console.log(matricesArray);
+    for (var i = 0; i < allMeshes.length; i++) { //for each type of object
+        let matricesArray = matricesArrays[i];
         for(var j = 0; j < matricesArray.length; j++){  // for each instance of that type
-            drawElement(idx,j);
+            drawElement(i,j);
         }
-    //}
+    }
 
     loadTexture();
 
@@ -279,6 +281,7 @@ async function LoadShaders() {
         programs[3] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
+    //gl.useProgram(programs[0]);
 }
 
 async function LoadMeshes() {
@@ -286,10 +289,11 @@ async function LoadMeshes() {
     x_wingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
-    allMeshes = [x_wingMesh,ringMesh,asteroidMesh    
+
+    allMeshes = [x_wingMesh//x_wingMesh,ringMesh,asteroidMesh
+            
                //,ringMesh
     ];
-    idx = 0; //starship
 }
 
 async function init(){
