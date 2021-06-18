@@ -90,20 +90,18 @@ canvas.addEventListener("mousemove", doMouseMove, false);
 
 var mouseState = false;
 var lastMouseX = -100, lastMouseY = -100;
-
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
 	lastMouseY = event.pageY;
 	mouseState = true;
 }
-
 function doMouseUp(event) {
 	lastMouseX = -100;
 	lastMouseY = -100;
 	mouseState = false;
 }
-
 function doMouseMove(event) {
+<<<<<<< HEAD
     if(mouseState) {
     var dx = event.pageX - lastMouseX;
     var dy = lastMouseY - event.pageY;
@@ -132,4 +130,17 @@ function onDropdownChange(value){
             break;
     }
     main();
+=======
+	if(mouseState) {
+		var dx = event.pageX - lastMouseX;
+		var dy = lastMouseY - event.pageY;
+		lastMouseX = event.pageX;
+		lastMouseY = event.pageY;
+		
+		if((dx != 0) || (dy != 0)) {
+			Rx = Rx - 0.5 * dx; /// ruota attorno a Rx e Rz dell'oggetto, invece deve essere assoluto => vedi come fa lui negli esempi
+			Rz = Rz - 0.5 * dy;
+		}
+	}
+>>>>>>> parent of f5ad0de (trying to add multiple shaders)
 }
