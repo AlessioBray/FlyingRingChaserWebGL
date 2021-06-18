@@ -113,5 +113,4 @@ function doMouseMove(event) {
 			Rz = Rz - 0.5 * dy;
 		}
 	}
-
 }
