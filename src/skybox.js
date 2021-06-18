@@ -55,11 +55,11 @@ function LoadEnvironment(){
         },
         {
             target: gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 
-            url: envTexDir+'back.png',
+            url: envTexDir+'front.png',
         },
         {
             target: gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 
-            url: envTexDir+'front.png',
+            url: envTexDir+'back.png',
         },
     ];
 

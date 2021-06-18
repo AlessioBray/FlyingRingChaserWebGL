@@ -13,7 +13,7 @@ function SetMatrices(){
     // Compute the camera matrix
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-  	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
+    viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
 }
 
 function GetAttributesAndUniforms(){
@@ -115,7 +115,7 @@ function main() {
 }
 
 function animate(){
-   
+
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
     //Rx = Rx + 0.5;
     
@@ -151,15 +151,15 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
 
     
     if(i==0){    
-    gl.uniform3fv(materialDiffColorHandle[i], materialColor);
-    gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
-    gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
-    gl.uniform3fv(lightColorHandleB[i], directionalLightColorB);
-    gl.uniform3fv(lightDirectionHandleB[i], directionalLightB);
-    gl.uniform3fv(ambientLightColorHandle[i], ambientLight);
-    gl.uniform3fv(ambientMaterialHandle[i], ambientMat);
-    gl.uniform3fv(specularColorHandle[i], specularColor);
-    gl.uniform1f(shineSpecularHandle[i], specShine);
+        gl.uniform3fv(materialDiffColorHandle[i], materialColor);
+        gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
+        gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
+        gl.uniform3fv(lightColorHandleB[i], directionalLightColorB);
+        gl.uniform3fv(lightDirectionHandleB[i], directionalLightB);
+        gl.uniform3fv(ambientLightColorHandle[i], ambientLight);
+        gl.uniform3fv(ambientMaterialHandle[i], ambientMat);
+        gl.uniform3fv(specularColorHandle[i], specularColor);
+        gl.uniform1f(shineSpecularHandle[i], specShine);
     }
 
     gl.bindVertexArray(vaos[i]);
