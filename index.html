@@ -14,63 +14,60 @@
 
 
 <body>
-  <canvas id="c">
-    Ops ... Your browser does not support the HTML5 canvas element.
-  </canvas>
+    <canvas id="c">
+        Ops ... Your browser does not support the HTML5 canvas element.
+    </canvas>
 
-  <div id="scoringtab"> Score : <br> </br> </div>
+    <div id="scoringtab"> Score : <br> </br> </div>
 
-  <!--  light controller   -->
-
-  <div id = "lightcontroller">
-    <div id="LC51">Alpha angle of 1st Directional Light</div>
-    <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightAlphaA" value="20"></div>
-    <div id="LC51">Beta angle of 1st Directional Light</div>
-    <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightBetaA" value="32"></div>
-    <div id="LC51">Alpha angle of 2nd directional Light</div>
-    <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightAlphaB" value="55"></div>
-    <div id="LC51">Beta angle of 2nd Directional Light</div>
-    <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightBetaB" value="95"></div>
-    <div id="LC51">Color of 1st Directional Light</div>
-    <div id="LA14"><input type="color" id="LAlightColor" value="#BF9938"></div>
-    <div>
-      <h2> </h2>
+    <!--  light controller   -->
+    <div id = "lightcontroller">
+        <div id="LC51">Alpha angle of 1st Directional Light</div>
+        <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightAlphaA" value="20"></div>
+        <div id="LC51">Beta angle of 1st Directional Light</div>
+        <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightBetaA" value="32"></div>
+        <div id="LC51">Alpha angle of 2nd directional Light</div>
+        <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightAlphaB" value="55"></div>
+        <div id="LC51">Beta angle of 2nd Directional Light</div>
+        <div id="ThetaValue"><input type="range" min="0" max="180" id="dirLightBetaB" value="95"></div>
+        <div id="LC51">Color of 1st Directional Light</div>
+        <div id="LA14"><input type="color" id="LAlightColor" value="#BF9938"></div>
+        <div>
+            <h2> </h2>
+        </div>
+        <div id="LC51">Color of 2nd Directional Light</div>
+        <div id="LA15"><input type="color" id="LBlightColor" value="#5e5e5e"></div>   
     </div>
-    <div id="LC51">Color of 2nd Directional Light</div>
-    <div id="LA15"><input type="color" id="LBlightColor" value="#5e5e5e"></div>   
-  </div>
 
-<!-- obj selector-->
-  <div id = 'obj'>
-    <p><b>OBJ</b></p>
-    <select id="drop-down" name="" onchange="onDropdownChange(this.value);">
-      <option value="x-wing" selected>x-wing</option>
-      <option value="ring">ring</option>
-      <option value="asteroid">asteroid</option>
-    </select>
-  </div>
-  
-<!--  move controller   -->
+    <!-- obj selector-->
+    <div id = 'obj'>
+        <p><b>OBJ</b></p>
+        <select id="drop-down" name="" onchange="onDropdownChange(this.value);">
+            <option value="x-wing" selected>x-wing</option>
+            <option value="ring">ring</option>
+            <option value="asteroid">asteroid</option>
+        </select>
+    </div>
 
-<div id ="movecontroller">
-    <ul id="gameControls" style="color: #000000; list-style-type: none; padding-left: 25px; ">
-      <li style="font-size: 30px">COMMANDS</li>
-      <li style="font-size: 15px">START GAME:  SPACEBAR</li>
-      <li style="font-size: 15px">MOVE LEFT:  A | 🡰</li>
-      <li style="font-size: 15px">MOVE RIGHT:  A | 🡲</li>
-      <li style="font-size: 15px">MOVE UP:  W | 🡱</li>
-      <li style="font-size: 15px">MOVE DOWN:  s | 🡳</li>
-    </ul>
-  </div>
+    <!--  move controller   -->
 
-  <script type="text/javascript" src="game/object.js"></script>
-  <script type="text/javascript" src="game/game.js"></script>
-  <script type="text/javascript" src="game/events.js"></script>
-  <script type="text/javascript" src="src/script.js"></script>
-  <script type="text/javascript" src="src/skybox.js"></script>
-  <script type="text/javascript" src="src/node.js"></script>
+    <div id ="movecontroller">
+        <ul id="gameControls" style="color: #000000; list-style-type: none; padding-left: 25px; ">
+            <li style="font-size: 30px">COMMANDS</li>
+            <li style="font-size: 15px">START GAME:  SPACEBAR</li>
+            <li style="font-size: 15px">MOVE LEFT:  A | 🡰</li>
+            <li style="font-size: 15px">MOVE RIGHT:  A | 🡲</li>
+            <li style="font-size: 15px">MOVE UP:  W | 🡱</li>
+            <li style="font-size: 15px">MOVE DOWN:  s | 🡳</li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="game/object.js"></script>
+    <script type="text/javascript" src="game/game.js"></script>
+    <script type="text/javascript" src="game/events.js"></script>
+    <script type="text/javascript" src="src/script.js"></script>
+    <script type="text/javascript" src="src/skybox.js"></script>
+    <script type="text/javascript" src="src/node.js"></script>
 
 </body>
-</body>
-
 </html>
