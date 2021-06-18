@@ -2,6 +2,7 @@
 function game(){
   HideShowElement(lightController);
   HideShowElement(moveController);
+  HideShowElement(objSelect);
   //gameOver();
 }
 

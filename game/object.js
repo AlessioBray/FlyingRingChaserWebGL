@@ -11,6 +11,8 @@ var score = document.getElementById('scoringtab');
 var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
+var objSelect = document.getElementById("obj");
+
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
 var dirLightBetaASlider = document.getElementById("dirLightBetaA"); //32
 var dirLightAlphaBSlider = document.getElementById("dirLightAlphaB");
