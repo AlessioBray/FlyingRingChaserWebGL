@@ -101,36 +101,7 @@ function doMouseUp(event) {
 	mouseState = false;
 }
 function doMouseMove(event) {
-<<<<<<< HEAD
-    if(mouseState) {
-    var dx = event.pageX - lastMouseX;
-    var dy = lastMouseY - event.pageY;
-    lastMouseX = event.pageX;
-    lastMouseY = event.pageY;
 
-    if((dx != 0) || (dy != 0)) {
-      Rx = Rx - 0.5 * dx; /// ruota attorno a Rx e Rz dell'oggetto, invece deve essere assoluto => vedi come fa lui negli esempi
-      Rz = Rz - 0.5 * dy;
-    }
-    }
-}
-
-function onDropdownChange(value){
-  //console.log("Drop-down value changed to "+ value);
-
-    switch (value) {
-        case 'x-wing':
-            idx = 0 //allMeshes[0];
-            break;
-        case 'ring':
-            idx = 1 //allMeshes[1];
-            break;
-        case 'asteroid':
-            idx = 2 //allMeshes[2];
-            break;
-    }
-    main();
-=======
 	if(mouseState) {
 		var dx = event.pageX - lastMouseX;
 		var dy = lastMouseY - event.pageY;
@@ -142,5 +113,27 @@ function onDropdownChange(value){
 			Rz = Rz - 0.5 * dy;
 		}
 	}
->>>>>>> parent of f5ad0de (trying to add multiple shaders)
+
+}
+
+
+
+function onDropdownChange(value){
+    
+    console.log("Drop-down value changed to "+ value);
+
+    switch (value) {
+        case 'x-wing':
+            allMeshes = [x_wingMesh];
+            break;
+        case 'ring':
+            allMeshes = [ringMesh];
+            break;
+        case 'asteroid':
+            allMeshes = [asteroidMesh];
+            break;
+
+    }
+    main();
+
 }

@@ -143,12 +143,12 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-<<<<<<< HEAD
+
     /////////// WORLD SPACE /////////////
-=======
+
     //ClearBits();  // multiple draw of objects doesn't work with this here
 
->>>>>>> parent of f5ad0de (trying to add multiple shaders)
+
     normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
     MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
     Projection = utils.multiplyMatrices(perspectiveMatrix, MV);
@@ -156,8 +156,6 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
     gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
-
-<<<<<<< HEAD
     
     if(i==0){    
         gl.uniform3fv(materialDiffColorHandle[i], materialColor);
@@ -170,25 +168,13 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
         gl.uniform3fv(specularColorHandle[i], specularColor);
         gl.uniform1f(shineSpecularHandle[i], specShine);
     }
-=======
+
     
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
     gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
-    
-        
-    gl.uniform3fv(materialDiffColorHandle[i], materialColor);
-    gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
-    gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
-    gl.uniform3fv(lightColorHandleB[i], directionalLightColorB);
-    gl.uniform3fv(lightDirectionHandleB[i], directionalLightB);
-    gl.uniform3fv(ambientLightColorHandle[i], ambientLight);
-    gl.uniform3fv(ambientMaterialHandle[i], ambientMat);
-    gl.uniform3fv(specularColorHandle[i], specularColor);
-    gl.uniform1f(shineSpecularHandle[i], specShine);
->>>>>>> parent of f5ad0de (trying to add multiple shaders)
 
     gl.bindVertexArray(vaos[i]);
     gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
