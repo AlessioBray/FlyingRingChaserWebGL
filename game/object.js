@@ -131,4 +131,5 @@ function onDropdownChange(value){
             break;
       }
     
+      main();
 }
