@@ -122,15 +122,31 @@ function main() {
 function animate(){
 
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
-    //Rx = Rx + 0.5;
+    //Rx = Rx + 0.1;
+    //Tz = Tz + 0.1;
+
+    if(gameOn){
     
+    if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
+        makeNewRing();
+       }
+    }
+
+    else{
+        Rx = Rx + 0.1;
+    }
 }
 
 
+//x  [-6,6] y[0,4]
 function updateWorldMatrix(){
 
     SetMatrices();
-    
+
+    if(gameOn){
+    move();
+    }
+    else{
     starshipArray = matricesArrays[0]; 
     /*
     ringsArray = matricesArrays[1];
@@ -138,8 +154,9 @@ function updateWorldMatrix(){
     ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
     asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
     */
-    starshipArray[0] = utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, S);
-     
+    starshipArray[0] = utils.MakeWorld(0.0,0.0, Tz, Rx, Ry, Rz+90, S);
+    }
+
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
@@ -309,7 +326,17 @@ async function LoadMeshes() {
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
 
-    allMeshes = [x_wingMesh, ringMesh, asteroidMesh];
+
+    //allMeshes = [x_wingMesh, ringMesh, asteroidMesh];
+
+    
+    if(gameOn){
+    allMeshes = [ringMesh];
+    }
+    else{
+        allMeshes = [x_wingMesh];
+    }
+
 }
 
 async function init(){

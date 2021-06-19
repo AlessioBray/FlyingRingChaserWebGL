@@ -76,10 +76,15 @@ var Ry = 0.0;
 var Rz = 0.0;
 var S  = 1.0;
 
+var Tz = 0.0;
+
 
 var matricesArrays= [
     //starship
-    [utils.MakeWorld(0.0, 0.0, -3.0, Rx, Ry, Rz, 0.5)],
+    [//utils.MakeWorld(10.0, 0.0, -3.0, Rx, Ry+90, Rz, 0.5),
+        //utils.MakeWorld(-3.0, 0.0, -3.0, Rx, Ry+90, Rz, 0.5),
+        //utils.MakeWorld( 0.0, 0.0, -1.5, Rx, Ry+90, Rz, 0.5)
+    ],
     //rings
     [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz+90, 0.5)],
     //asteroids
@@ -116,5 +121,32 @@ var ringMesh;
 var vaos;
 var vao;
 
-// showcase index
-var showcaseId = 0;
+
+function onDropdownChange(value){
+    
+    console.log("Drop-down value changed to "+ value);
+
+    switch (value) {
+        case 'x-wing':
+            allMeshes = [x_wingMesh];
+            break;
+        case 'ring':
+            allMeshes = [ringMesh];
+            break;
+        case 'asteroid':
+            allMeshes = [asteroidMesh];
+            break;
+      }
+    
+      main();
+}
+
+// ring spawn
+var lastNewRingTime = Date.now();
+var SPAWNTIME = 1000;
+var SPEED = 0.1;
+var MAX_X = 10;
+var MIN_X =  5; //negative
+var MAX_Y = 3;
+var MIN_Y = 1; //negative
+var gameOn = false;
