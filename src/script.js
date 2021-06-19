@@ -26,7 +26,7 @@ function getAttributesAndUniforms(){
         normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_normal");
         uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
         
-        textLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
+        textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
         matrixLocation[i] = gl.getUniformLocation(programs[i], "matrix");  
         nMatrixLocation[i] = gl.getUniformLocation(programs[i], "nMatrix");
         pMatrixLocation[i] = gl.getUniformLocation(programs[i], "pMatrix");
@@ -70,7 +70,7 @@ function createSceneGraph(){
         case RING_INDEX:
             showcaseNode.drawInfo = {
                 type: RING_INDEX,
-                materialColor: [1.0, 1.0, 1.0],
+                materialColor: [0.75164, 0.60648, 0.22648],
                 programInfo: programs[RING_INDEX],
                 bufferLength: allMeshes[RING_INDEX].indices.length,
                 vertexArray: vaos[RING_INDEX],
@@ -80,7 +80,7 @@ function createSceneGraph(){
         case ASTEROID_INDEX:
             showcaseNode.drawInfo = {
                 type: ASTEROID_INDEX,
-                materialColor: [1.0, 1.0, 1.0],
+                materialColor: [139.0/255,69.0/255,19.0/255],
                 programInfo: programs[ASTEROID_INDEX],
                 bufferLength: allMeshes[ASTEROID_INDEX].indices.length,
                 vertexArray: vaos[ASTEROID_INDEX],
@@ -90,6 +90,30 @@ function createSceneGraph(){
 
     objects = [showcaseNode];
     
+}
+
+function loadTexture(){
+    
+    // Create a texture.
+    texture = gl.createTexture();
+    // use texture unit 0
+    gl.activeTexture(gl.TEXTURE0);
+    // bind to the TEXTURE_2D bind point of texture unit 0
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    // Asynchronously load an image
+    var image = new Image();
+    image.src = textureDir + "X-Wing-textures.png";
+    image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
 }
 
 function main() {
@@ -103,6 +127,7 @@ function main() {
     for (let i in allMeshes){
         vaos[i] = gl.createVertexArray(); 
         createMeshVAO(i);
+        loadTexture();
     }
 
     createSceneGraph();
@@ -220,11 +245,17 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, obj.worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
+    if (obj.drawInfo.type == XWING_INDEX){
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.uniform1i(textureLocation[obj.drawInfo.type], 0);
+    }
+
     gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
     gl.uniformMatrix4fv(nMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
-    gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], materialColor);
+    gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], obj.drawInfo.materialColor);
     gl.uniform3fv(lightColorHandleA[obj.drawInfo.type], directionalLightColorA);
     gl.uniform3fv(lightDirectionHandleA[obj.drawInfo.type], directionalLightA);
     gl.uniform3fv(lightColorHandleB[obj.drawInfo.type], directionalLightColorB);
@@ -240,30 +271,6 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.bindVertexArray(obj.drawInfo.vertexArray);
     gl.drawElements(gl.TRIANGLES, obj.drawInfo.bufferLength, gl.UNSIGNED_SHORT, 0 );
 
-}
-
-function loadTexture(){
-    
-    // Create a texture.
-    var texture = gl.createTexture();
-    // use texture unit 0
-    gl.activeTexture(gl.TEXTURE0);
-    // bind to the TEXTURE_2D bind point of texture unit 0
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-
-    // Asynchronously load an image
-    var image = new Image();
-    image.src = textureDir + "X-Wing-textures.png";
-    image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-                
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-    };
 }
     
 function drawScene() {    
@@ -287,10 +294,7 @@ function drawScene() {
     for (var i = 0; i < objects.length; i++){
         drawObject(objects[i]);
 
-        //if (objects[i].drawInfo.type == XWING_INDEX){
-            
-            loadTexture();
-        //}
+        
         
     }
     
@@ -330,6 +334,10 @@ function createMeshVAO(i) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
 
+    //if (objects[i].drawInfo.type == XWING_INDEX){
+            
+     ///////////////////////////////////////// ATTENZIONE se viene messa in un punto (e.g. in main) in cui è chiamata una sola volta non funziona e da degli artefatti bianchi.
+    //}
 }
 
 async function loadShaders() {

@@ -5,7 +5,10 @@ function keyDownFunction(e){
         case "ArrowLeft" :
             case "a" :  
             //camera_yaw -= delta;
-            //selectedObjId = (selectedObjId - 1) % 3;
+            selectedObjId = (selectedObjId - 1) % 3;
+            if (selectedObjId < 0){
+                selectedObjId = selectedObjId + 3;
+            }
             onSelectedObjChange(selectedObjId);
             break;
         

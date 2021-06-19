@@ -85,5 +85,5 @@ void main() {
   vec4 sampleDir = matrix * vec4(skybox_position, 1.0);
   //vec4 rgba = texture(u_texture, normalize(sampleDir.xyz / sampleDir.w));
   
-  outColor = color;// * texture(in_texture, fsUV); // vec4(rgba.rgb, 1.0);
+  outColor = color * texture(in_texture, fsUV); // vec4(rgba.rgb, 1.0);
 }
