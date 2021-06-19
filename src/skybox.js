@@ -10,7 +10,7 @@ var skyboxTexHandle;
 var skyboxProgram;
 
 
-function LoadEnvironment(){
+function loadEnvironment(){
     skyboxVertPos = new Float32Array(
     [
       -1, -1, 1.0,

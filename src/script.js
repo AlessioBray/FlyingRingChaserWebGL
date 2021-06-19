@@ -1,22 +1,22 @@
-function ClearBits(){
+function clearBits(){
     gl.clearColor(0.0, 0.0, 0.0, 0.0); 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 }
 
-function SetViewportAndCanvas(){
+function setViewportAndCanvas(){
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.enable(gl.DEPTH_TEST);
-    ClearBits();
+    clearBits();
 }
 
-function SetMatrices(){
+function setMatrices(){
     // Compute the camera matrix
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
     viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_pitch, camera_yaw);
 }
 
-function GetAttributesAndUniforms(){
+function getAttributesAndUniforms(){
 
     //Uniforms
     positionAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_position");  
@@ -106,9 +106,9 @@ function createSceneGraph(){
 function main() {
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
-    SetViewportAndCanvas();
+    setViewportAndCanvas();
 
-    GetAttributesAndUniforms(); 
+    getAttributesAndUniforms(); 
 
     vaos = new Array(allMeshes.length); 
 
@@ -138,7 +138,7 @@ function animate(){
 //x  [-6,6] y[0,4]
 function updateWorldMatrix(){
 
-    SetMatrices();
+    setMatrices();
 
     if(gameOn){
         move();
@@ -167,7 +167,7 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
 
     /////////// WORLD SPACE /////////////
 
-    //ClearBits();  // multiple draw of objects doesn't work with this here
+    //clearBits();  // multiple draw of objects doesn't work with this here
 
 
     normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
@@ -233,7 +233,7 @@ function drawScene() {
 
     updateWorldMatrix(); // to update rings world matrices
 
-    ClearBits();
+    clearBits();
 
     // add each mesh / object with its world matrix
     
@@ -248,7 +248,7 @@ function drawScene() {
 
     DrawSkybox();
 
-    window.requestAnimationFrame(drawScene);
+    requestAnimationId = window.requestAnimationFrame(drawScene);
 }
 
 function createMeshVAO(i) {
@@ -349,10 +349,15 @@ async function init(){
 
     await LoadMeshes();
 
-    LoadEnvironment();
+    loadEnvironment();
     
     main();
 }
 
 window.onload = init;
-window.onresize = main; //(?)
+window.onresize = changeRender; //(?)
+
+function changeRender(){
+    window.cancelAnimationFrame(requestAnimationId);
+    main();
+}

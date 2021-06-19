@@ -144,7 +144,7 @@ function onSelectedObjChange(value){
             break;
       }
     
-      main();
+      changeRender();
 }
 
 function onDropdownChange(value){
@@ -163,7 +163,7 @@ function onDropdownChange(value){
             break;
       }
     
-      main();
+      changeRender();
 }
 
 // ring spawn
@@ -175,3 +175,7 @@ var MIN_X =  5; //negative
 var MAX_Y = 3;
 var MIN_Y = 1; //negative
 var gameOn = false;
+
+
+// to reduce lag when we call main to change the object showed
+var requestAnimationId;
