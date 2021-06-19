@@ -20,78 +20,32 @@ function getAttributesAndUniforms(){
 
     //Uniforms
     
-    positionAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_position");  
-    normalAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_normal");
-    uvAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_UV");
-    textLocation[0] = gl.getUniformLocation(programs[0], "in_texture");
-    matrixLocation[0] = gl.getUniformLocation(programs[0], "matrix");  
-    nMatrixLocation[0] = gl.getUniformLocation(programs[0], "nMatrix");
-    pMatrixLocation[0] = gl.getUniformLocation(programs[0], "pMatrix");
+    for (var i = 0; i < programs.length - 1; i++){
 
-    ambientLightColorHandle[0] = gl.getUniformLocation(programs[0], "ambientLightCol");
-    ambientMaterialHandle[0] = gl.getUniformLocation(programs[0], "ambientMat");
-    materialDiffColorHandle[0] = gl.getUniformLocation(programs[0], 'mDiffColor');
-    specularColorHandle[0] = gl.getUniformLocation(programs[0], "specularColor");
-    shineSpecularHandle[0] = gl.getUniformLocation(programs[0], "specShine");
-    emissionColorHandle[0] = gl.getUniformLocation(programs[0], "emit");    
-    lightDirectionHandleA[0] = gl.getUniformLocation(programs[0], 'lightDirectionA');
-    lightColorHandleA[0] = gl.getUniformLocation(programs[0], 'lightColorA');
-    lightDirectionHandleB[0] = gl.getUniformLocation(programs[0], 'lightDirectionB');
-    lightColorHandleB[0] = gl.getUniformLocation(programs[0], 'lightColorB');
+        positionAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_position");
+        normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_normal");
+        uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
+        
+        textLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
+        matrixLocation[i] = gl.getUniformLocation(programs[i], "matrix");  
+        nMatrixLocation[i] = gl.getUniformLocation(programs[i], "nMatrix");
+        pMatrixLocation[i] = gl.getUniformLocation(programs[i], "pMatrix");
 
-    //skybox
-
-    //skyboxTexHandle[0] = gl.getUniformLocation(programs[0], "u_texture"); // uniform
-    //skyboxVertPosAttr[0] = gl.getAttribLocation(programs[0], "in_skybox_position"); // attribute
-    /*
-    //Uniforms
-    positionAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_position");  
-    normalAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_normal");
-    uvAttributeLocation[1] = gl.getAttribLocation(programs[1], "in_UV");
-    textLocation[1] = gl.getUniformLocation(programs[1], "in_texture");
-    matrixLocation[1] = gl.getUniformLocation(programs[1], "matrix");  
-    nMatrixLocation[1] = gl.getUniformLocation(programs[1], "nMatrix");
-    pMatrixLocation[1] = gl.getUniformLocation(programs[1], "pMatrix");
-
-    ambientLightColorHandle[1] = gl.getUniformLocation(programs[1], "ambientLightCol");
-    ambientMaterialHandle[1] = gl.getUniformLocation(programs[1], "ambientMat");
-    materialDiffColorHandle[1] = gl.getUniformLocation(programs[1], 'mDiffColor');
-    specularColorHandle[1] = gl.getUniformLocation(programs[1], "specularColor");
-    shineSpecularHandle[1] = gl.getUniformLocation(programs[1], "specShine");
-    emissionColorHandle[1] = gl.getUniformLocation(programs[1], "emit");    
-    lightDirectionHandleA[1] = gl.getUniformLocation(programs[1], 'lightDirectionA');
-    lightColorHandleA[1] = gl.getUniformLocation(programs[1], 'lightColorA');
-    lightDirectionHandleB[1] = gl.getUniformLocation(programs[1], 'lightDirectionB');
-    lightColorHandleB[1] = gl.getUniformLocation(programs[1], 'lightColorB');
+        ambientLightColorHandle[i] = gl.getUniformLocation(programs[i], "ambientLightCol");
+        ambientMaterialHandle[i] = gl.getUniformLocation(programs[i], "ambientMat");
+        materialDiffColorHandle[i] = gl.getUniformLocation(programs[i], 'mDiffColor');
+        specularColorHandle[i] = gl.getUniformLocation(programs[i], "specularColor");
+        shineSpecularHandle[i] = gl.getUniformLocation(programs[i], "specShine");
+        emissionColorHandle[i] = gl.getUniformLocation(programs[i], "emit");    
+        lightDirectionHandleA[i] = gl.getUniformLocation(programs[i], 'lightDirectionA');
+        lightColorHandleA[i] = gl.getUniformLocation(programs[i], 'lightColorA');
+        lightDirectionHandleB[i] = gl.getUniformLocation(programs[i], 'lightDirectionB');
+        lightColorHandleB[i] = gl.getUniformLocation(programs[i], 'lightColorB');
+    }
 
     //skybox
-    //skyboxTexHandle[1] = gl.getUniformLocation(program[1], "u_texture"); // uniform
-    //skyboxVertPosAttr[1] = gl.getAttribLocation(program[1], "in_skybox_position"); // attribute
-
-    //Uniforms
-    positionAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_position");  
-    normalAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_normal");
-    uvAttributeLocation[2] = gl.getAttribLocation(programs[2], "in_UV");
-    textLocation[2] = gl.getUniformLocation(programs[2], "in_texture");
-    matrixLocation[2] = gl.getUniformLocation(programs[2], "matrix");  
-    nMatrixLocation[2] = gl.getUniformLocation(programs[2], "nMatrix");
-    pMatrixLocation[2] = gl.getUniformLocation(programs[2], "pMatrix");
-
-    ambientLightColorHandle[2] = gl.getUniformLocation(programs[2], "ambientLightCol");
-    ambientMaterialHandle[2] = gl.getUniformLocation(programs[2], "ambientMat");
-    materialDiffColorHandle[2] = gl.getUniformLocation(programs[2], 'mDiffColor');
-    specularColorHandle[2] = gl.getUniformLocation(programs[2], "specularColor");
-    shineSpecularHandle[2] = gl.getUniformLocation(programs[2], "specShine");
-    emissionColorHandle[2] = gl.getUniformLocation(programs[2], "emit");    
-    lightDirectionHandleA[2] = gl.getUniformLocation(programs[2], 'lightDirectionA');
-    lightColorHandleA[2] = gl.getUniformLocation(programs[2], 'lightColorA');
-    lightDirectionHandleB[2] = gl.getUniformLocation(programs[2], 'lightDirectionB');
-    lightColorHandleB[2] = gl.getUniformLocation(programs[2], 'lightColorB');
-
-    //skybox
-    //skyboxTexHandle[2] = gl.getUniformLocation(program[2], "u_texture"); // uniform
-    //skyboxVertPosAttr[2] = gl.getAttribLocation(program[2], "in_skybox_position"); // attribute
-    */
+    skyboxTexHandle = gl.getUniformLocation(programs[SKYBOX_INDEX], "u_texture"); 
+    skyboxVertPosAttr = gl.getAttribLocation(programs[SKYBOX_INDEX], "in_skybox_position");
 
 }
 
@@ -99,7 +53,7 @@ function createSceneGraph(){
 
     showcaseNode = new Node();
     showcaseNode.localMatrix = utils.identityMatrix();
-    showcaseNode.worldMatrix = utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz + 90, 0.5);
+    showcaseNode.worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz + 90, 0.5);
 
     switch(selectedObjId){
 
@@ -202,9 +156,10 @@ function updateWorldMatrix(){
         ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
         asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
         */
-        starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz+90, S);
+        starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S);
     }
 
+    objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S); ///////////////// just to make it work (do it iteratively or similarly)
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
@@ -219,7 +174,6 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     /////////// WORLD SPACE /////////////
 
     //clearBits();  // multiple draw of objects doesn't work with this here
-
 
     normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
     MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
@@ -266,25 +220,22 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, obj.worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
-    gl.uniformMatrix4fv(matrixLocation[0], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation[0], gl.FALSE, utils.transposeMatrix(normalMatrix));
-    gl.uniformMatrix4fv(pMatrixLocation[0], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
-    
-    //if(obj.drawInfo.type == XWING_INDEX){
+    gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(nMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
+    gl.uniformMatrix4fv(pMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
-        gl.uniform3fv(materialDiffColorHandle[0], materialColor);
-        gl.uniform3fv(lightColorHandleA[0], directionalLightColorA);
-        gl.uniform3fv(lightDirectionHandleA[0], directionalLightA);
-        gl.uniform3fv(lightColorHandleB[0], directionalLightColorB);
-        gl.uniform3fv(lightDirectionHandleB[0], directionalLightB);
-        gl.uniform3fv(ambientLightColorHandle[0], ambientLight);
-        gl.uniform3fv(ambientMaterialHandle[0], ambientMat);
-        gl.uniform3fv(specularColorHandle[0], specularColor);
-        gl.uniform1f(shineSpecularHandle[0], specShine);
-    //}
+    gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], materialColor);
+    gl.uniform3fv(lightColorHandleA[obj.drawInfo.type], directionalLightColorA);
+    gl.uniform3fv(lightDirectionHandleA[obj.drawInfo.type], directionalLightA);
+    gl.uniform3fv(lightColorHandleB[obj.drawInfo.type], directionalLightColorB);
+    gl.uniform3fv(lightDirectionHandleB[obj.drawInfo.type], directionalLightB);
+    gl.uniform3fv(ambientLightColorHandle[obj.drawInfo.type], ambientLight);
+    gl.uniform3fv(ambientMaterialHandle[obj.drawInfo.type], ambientMat);
+    gl.uniform3fv(specularColorHandle[obj.drawInfo.type], specularColor);
+    gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
 
-    gl.uniformMatrix4fv(matrixLocation[0], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation[0], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
+    gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(nMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.bindVertexArray(obj.drawInfo.vertexArray);
     gl.drawElements(gl.TRIANGLES, obj.drawInfo.bufferLength, gl.UNSIGNED_SHORT, 0 );
@@ -334,10 +285,12 @@ function drawScene() {
     */
 
     for (var i = 0; i < objects.length; i++){
-        if (objects[i].drawInfo.type == XWING_INDEX){
-            drawObject(objects[i]);
+        drawObject(objects[i]);
+
+        //if (objects[i].drawInfo.type == XWING_INDEX){
+            
             loadTexture();
-        }
+        //}
         
     }
     
@@ -354,24 +307,24 @@ function createMeshVAO(i) {
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertices), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(positionAttributeLocation);
-    gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(positionAttributeLocation[i]);
+    gl.vertexAttribPointer(positionAttributeLocation[i], 3, gl.FLOAT, false, 0, 0);
 
-    if (i == XWING_INDEX){ //if starship
+    if (i == XWING_INDEX){
 
         var uvBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
-        gl.enableVertexAttribArray(uvAttributeLocation);
-        gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(uvAttributeLocation[i]);
+        gl.vertexAttribPointer(uvAttributeLocation[i], 2, gl.FLOAT, false, 0, 0);
 
     }
 
     var normalBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertexNormals), gl.STATIC_DRAW);
-    gl.enableVertexAttribArray(normalAttributeLocation);
-    gl.vertexAttribPointer(normalAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(normalAttributeLocation[i]);
+    gl.vertexAttribPointer(normalAttributeLocation[i], 3, gl.FLOAT, false, 0, 0);
 
     var indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
