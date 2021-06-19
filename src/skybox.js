@@ -95,9 +95,9 @@ function loadEnvironment(){
     
 }
 
-function DrawSkybox(){
+function drawSkybox(){
 
-    skyboxProgram = programs[3];
+    skyboxProgram = programs[SKYBOX_INDEX];
 
     //Uniforms
     skyboxTexHandle = gl.getUniformLocation(skyboxProgram, "u_texture"); 
@@ -117,4 +117,5 @@ function DrawSkybox(){
     gl.bindVertexArray(skyboxVao);
     gl.depthFunc(gl.LEQUAL);
     gl.drawArrays(gl.TRIANGLES, 0, 1*6);
+
 }

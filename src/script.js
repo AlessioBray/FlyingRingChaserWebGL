@@ -19,6 +19,7 @@ function setMatrices(){
 function getAttributesAndUniforms(){
 
     //Uniforms
+    
     positionAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_position");  
     normalAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_normal");
     uvAttributeLocation[0] = gl.getAttribLocation(programs[0], "in_UV");
@@ -96,11 +97,45 @@ function getAttributesAndUniforms(){
 
 function createSceneGraph(){
 
-    for (let i in allMeshes){
-        vaos[i] = gl.createVertexArray(); 
-        createMeshVAO(i);
+    showcaseNode = new Node();
+    showcaseNode.localMatrix = utils.identityMatrix();
+    showcaseNode.worldMatrix = utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz + 90, 0.5);
+
+    switch(selectedObjId){
+
+        case XWING_INDEX:
+            showcaseNode.drawInfo = {
+                type: XWING_INDEX,
+                materialColor: [1.0, 1.0, 1.0],
+                programInfo: programs[XWING_INDEX],
+                bufferLength: allMeshes[XWING_INDEX].indices.length,
+                vertexArray: vaos[XWING_INDEX],
+              };
+            break;
+
+        case RING_INDEX:
+            showcaseNode.drawInfo = {
+                type: RING_INDEX,
+                materialColor: [1.0, 1.0, 1.0],
+                programInfo: programs[RING_INDEX],
+                bufferLength: allMeshes[RING_INDEX].indices.length,
+                vertexArray: vaos[RING_INDEX],
+              };
+            break;
+
+        case ASTEROID_INDEX:
+            showcaseNode.drawInfo = {
+                type: ASTEROID_INDEX,
+                materialColor: [1.0, 1.0, 1.0],
+                programInfo: programs[ASTEROID_INDEX],
+                bufferLength: allMeshes[ASTEROID_INDEX].indices.length,
+                vertexArray: vaos[ASTEROID_INDEX],
+            };
+            break;
     }
 
+    objects = [showcaseNode];
+    
 }
 
 function main() {
@@ -110,11 +145,27 @@ function main() {
 
     getAttributesAndUniforms(); 
 
-    vaos = new Array(allMeshes.length); 
+    vaos = new Array(allMeshes.length);
+    for (let i in allMeshes){
+        vaos[i] = gl.createVertexArray(); 
+        createMeshVAO(i);
+    }
 
     createSceneGraph();
 
-    updateLight();
+    updateLights();
+
+    drawScene();
+}
+
+function render(){
+    utils.resizeCanvasToDisplaySize(gl.canvas);
+    setViewportAndCanvas();
+
+    createSceneGraph();
+
+    updateLights();
+
     drawScene();
 }
 
@@ -151,7 +202,7 @@ function updateWorldMatrix(){
         ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
         asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
         */
-        starshipArray[0] = utils.MakeWorld(0.0,0.0, Tz, Rx, Ry, Rz+90, S);
+        starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz+90, S);
     }
 
 }
@@ -203,6 +254,43 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
 
 }
 
+function drawObject(obj){ // obj is the node that represent the object to draw
+
+    gl.useProgram(obj.drawInfo.programInfo);
+
+    utils.resizeCanvasToDisplaySize(gl.canvas);
+
+    /////////// WORLD SPACE /////////////
+
+    let normalMatrix = utils.invertMatrix(utils.transposeMatrix(obj.worldMatrix));
+    let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, obj.worldMatrix);
+    let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+
+    gl.uniformMatrix4fv(matrixLocation[0], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(nMatrixLocation[0], gl.FALSE, utils.transposeMatrix(normalMatrix));
+    gl.uniformMatrix4fv(pMatrixLocation[0], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
+    
+    //if(obj.drawInfo.type == XWING_INDEX){
+
+        gl.uniform3fv(materialDiffColorHandle[0], materialColor);
+        gl.uniform3fv(lightColorHandleA[0], directionalLightColorA);
+        gl.uniform3fv(lightDirectionHandleA[0], directionalLightA);
+        gl.uniform3fv(lightColorHandleB[0], directionalLightColorB);
+        gl.uniform3fv(lightDirectionHandleB[0], directionalLightB);
+        gl.uniform3fv(ambientLightColorHandle[0], ambientLight);
+        gl.uniform3fv(ambientMaterialHandle[0], ambientMat);
+        gl.uniform3fv(specularColorHandle[0], specularColor);
+        gl.uniform1f(shineSpecularHandle[0], specShine);
+    //}
+
+    gl.uniformMatrix4fv(matrixLocation[0], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(nMatrixLocation[0], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
+
+    gl.bindVertexArray(obj.drawInfo.vertexArray);
+    gl.drawElements(gl.TRIANGLES, obj.drawInfo.bufferLength, gl.UNSIGNED_SHORT, 0 );
+
+}
+
 function loadTexture(){
     
     // Create a texture.
@@ -236,17 +324,24 @@ function drawScene() {
     clearBits();
 
     // add each mesh / object with its world matrix
-    
+    /*
     for (var i = 0; i < allMeshes.length; i++) { //for each type of object
         let matricesArray = matricesArrays[i];
         for(var j = 0; j < matricesArray.length; j++){  // for each instance of that type
             drawElement(i,j);
         }
     }
+    */
 
-    loadTexture();
-
-    DrawSkybox();
+    for (var i = 0; i < objects.length; i++){
+        if (objects[i].drawInfo.type == XWING_INDEX){
+            drawObject(objects[i]);
+            loadTexture();
+        }
+        
+    }
+    
+    drawSkybox();
 
     requestAnimationId = window.requestAnimationFrame(drawScene);
 }
@@ -262,12 +357,14 @@ function createMeshVAO(i) {
     gl.enableVertexAttribArray(positionAttributeLocation);
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
 
-    if (i == 0){ //if starship
+    if (i == XWING_INDEX){ //if starship
+
         var uvBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
         gl.enableVertexAttribArray(uvAttributeLocation);
         gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+
     }
 
     var normalBuffer = gl.createBuffer();
@@ -282,57 +379,45 @@ function createMeshVAO(i) {
 
 }
 
-async function LoadShaders() {
+async function loadShaders() {
 
-    //MultipleShaders
+    await utils.loadFiles([shaderDir + 'skybox_vs.glsl', shaderDir + 'skybox_fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+
+        programs[SKYBOX_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
+    });
 
     await utils.loadFiles([shaderDir + 'xwing_vs.glsl', shaderDir + 'xwing_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-        programs[0] = utils.createProgram(gl, vertexShader, fragmentShader);
+        programs[XWING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
-  
 
     await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
         
-        programs[1] = utils.createProgram(gl, vertexShader, fragmentShader);
+        programs[RING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
   
     await utils.loadFiles([shaderDir + 'asteroid_vs.glsl', shaderDir + 'asteroid_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
-        programs[2] = utils.createProgram(gl, vertexShader, fragmentShader);
-    });
-
-    await utils.loadFiles([shaderDir + 'skybox_vs.glsl', shaderDir + 'skybox_fs.glsl'], function (shaderText) {
-        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
-        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
-
-        programs[3] = utils.createProgram(gl, vertexShader, fragmentShader);
+        programs[ASTEROID_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
 }
 
-async function LoadMeshes() {
+async function loadMeshes() {
 
-    x_wingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
+    xwingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
 
-
-    //allMeshes = [x_wingMesh, ringMesh, asteroidMesh];
-
-    
-    if(gameOn){
-    allMeshes = [ringMesh];
-    }
-    else{
-        allMeshes = [x_wingMesh];
-    }
+    allMeshes = [xwingMesh, ringMesh, asteroidMesh];
 
 }
 
@@ -345,9 +430,9 @@ async function init(){
     }
     utils.resizeCanvasToDisplaySize(gl.canvas);
 
-    await LoadShaders();
+    await loadShaders();
 
-    await LoadMeshes();
+    await loadMeshes();
 
     loadEnvironment();
     
@@ -355,9 +440,9 @@ async function init(){
 }
 
 window.onload = init;
-window.onresize = changeRender; //(?)
+window.onresize = changeRender; 
 
 function changeRender(){
     window.cancelAnimationFrame(requestAnimationId);
-    main();
+    render();
 }

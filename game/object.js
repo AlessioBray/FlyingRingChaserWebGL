@@ -52,6 +52,8 @@ var perspectiveMatrix;
 var viewMatrix;
 var worldmatrix;
 
+var projectionMatrix;
+
 var inverseViewProjMatrix; //used in skybox
 
 
@@ -114,7 +116,7 @@ var page = path.split("/").pop();
 var baseDir = window.location.href.replace(page, '');
 var shaderDir = baseDir + "shaders/";
 var modelsDir = baseDir + "assets/models/";
-var textureDir = baseDir + "assets/textures/"
+var textureDir = baseDir + "assets/textures/";
 
 
 var allMeshes;
@@ -132,34 +134,15 @@ function onSelectedObjChange(value){
     switch (value) {
         case 0:
             objSelected.textContent = "X-Wing";
-            allMeshes = [x_wingMesh];
+            selectedObjId = XWING_INDEX;
             break;
         case 1:
             objSelected.textContent = "Ring";
-            allMeshes = [ringMesh];
+            selectedObjId = RING_INDEX;
             break;
         case 2:
             objSelected.textContent = "Asteroid";
-            allMeshes = [asteroidMesh];
-            break;
-      }
-    
-      changeRender();
-}
-
-function onDropdownChange(value){
-    
-    console.log("Drop-down value changed to "+ value);
-
-    switch (value) {
-        case 'x-wing':
-            allMeshes = [x_wingMesh];
-            break;
-        case 'ring':
-            allMeshes = [ringMesh];
-            break;
-        case 'asteroid':
-            allMeshes = [asteroidMesh];
+            selectedObjId = ASTEROID_INDEX;
             break;
       }
     
@@ -179,3 +162,15 @@ var gameOn = false;
 
 // to reduce lag when we call main to change the object showed
 var requestAnimationId;
+
+var XWING_INDEX = 0;
+var RING_INDEX = 1;
+var ASTEROID_INDEX = 2;
+
+var SKYBOX_INDEX = 3;
+
+
+// scene graph variables
+var objects = [];
+
+var showcaseNode;

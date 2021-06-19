@@ -42,7 +42,7 @@ function keyUpFunction(e){
 
 }
 
-function updateLight(){
+function updateLights(){
 
     var dirLightAlphaA = utils.degToRad(dirLightAlphaASlider.value);//20
     var dirLightBetaA = utils.degToRad(dirLightBetaASlider.value);//32
@@ -78,12 +78,12 @@ function fromHexToRGBVec(hex) {
 createScore(); 
 window.addEventListener("keydown", keyDownFunction, false);
 window.addEventListener("keyup", keyUpFunction, false);
-dirLightAlphaASlider.addEventListener("input",updateLight,false);
-dirLightBetaASlider.addEventListener("input",updateLight,false);
-dirLightAlphaBSlider.addEventListener("input",updateLight,false);
-dirLightBetaBSlider.addEventListener("input",updateLight,false);
-directionalLightColorASlider.addEventListener("input",updateLight,false);
-directionalLightColorBSlider.addEventListener("input",updateLight,false);
+dirLightAlphaASlider.addEventListener("input",updateLights,false);
+dirLightBetaASlider.addEventListener("input",updateLights,false);
+dirLightAlphaBSlider.addEventListener("input",updateLights,false);
+dirLightBetaBSlider.addEventListener("input",updateLights,false);
+directionalLightColorASlider.addEventListener("input",updateLights,false);
+directionalLightColorBSlider.addEventListener("input",updateLights,false);
 
 canvas.addEventListener("mousedown", doMouseDown, false);
 canvas.addEventListener("mouseup", doMouseUp, false);
@@ -116,23 +116,3 @@ function doMouseMove(event) {
 	}
 
 }
-/*
-function onDropdownChange(value){
-    
-    console.log("Drop-down value changed to "+ value);
-
-    switch (value) {
-        case 'x-wing':
-            showcaseId = 0;
-            break;
-        case 'ring':
-            showcaseId = 1;
-            break;
-        case 'asteroid':
-            showcaseId = 2;
-            break;
-    }
-    //main();
-
-}
-*/
