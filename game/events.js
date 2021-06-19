@@ -4,14 +4,16 @@ function keyDownFunction(e){
   
         case "ArrowLeft" :
             case "a" :  
-            camera_yaw -= delta;
-
+            //camera_yaw -= delta;
+            //selectedObjId = (selectedObjId - 1) % 3;
+            onSelectedObjChange(selectedObjId);
             break;
         
         case "ArrowRight":
             case "d":   
-            camera_yaw += delta;
-
+            //camera_yaw += delta;
+            selectedObjId = (selectedObjId + 1) % 3;
+            onSelectedObjChange(selectedObjId);
             break;
 
         case "ArrowUp":
@@ -114,7 +116,7 @@ function doMouseMove(event) {
 	}
 
 }
-
+/*
 function onDropdownChange(value){
     
     console.log("Drop-down value changed to "+ value);
@@ -133,3 +135,4 @@ function onDropdownChange(value){
     //main();
 
 }
+*/

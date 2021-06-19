@@ -101,7 +101,6 @@ function createSceneGraph(){
         createMeshVAO(i);
     }
 
-    
 }
 
 function main() {
@@ -126,14 +125,12 @@ function animate(){
     //Tz = Tz + 0.1;
 
     if(gameOn){
-    
-    if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
-        makeNewRing();
-       }
+        if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
+            makeNewRing();
+        }
     }
-
     else{
-        Rx = Rx + 0.1;
+        Rx = Rx + 0.5;
     }
 }
 
@@ -144,17 +141,17 @@ function updateWorldMatrix(){
     SetMatrices();
 
     if(gameOn){
-    move();
+        move();
     }
     else{
-    starshipArray = matricesArrays[0]; 
-    /*
-    ringsArray = matricesArrays[1];
-    asteroidsArray = matricesArrays[2];
-    ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-    */
-    starshipArray[0] = utils.MakeWorld(0.0,0.0, Tz, Rx, Ry, Rz+90, S);
+        starshipArray = matricesArrays[0]; 
+        /*
+        ringsArray = matricesArrays[1];
+        asteroidsArray = matricesArrays[2];
+        ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+        asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
+        */
+        starshipArray[0] = utils.MakeWorld(0.0,0.0, Tz, Rx, Ry, Rz+90, S);
     }
 
 }

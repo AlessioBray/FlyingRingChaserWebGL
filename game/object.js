@@ -11,7 +11,9 @@ var score = document.getElementById('scoringtab');
 var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
-var objSelect = document.getElementById("obj");
+
+var objSelected = document.getElementById("objSelected");
+var objDiv = document.getElementById("obj")
 
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
 var dirLightBetaASlider = document.getElementById("dirLightBetaA"); //32
@@ -121,6 +123,29 @@ var ringMesh;
 var vaos;
 var vao;
 
+var selectedObjId = 0;
+
+function onSelectedObjChange(value){
+    
+    console.log("Selected obj changed to "+ value);
+
+    switch (value) {
+        case 0:
+            objSelected.textContent = "X-Wing";
+            allMeshes = [x_wingMesh];
+            break;
+        case 1:
+            objSelected.textContent = "Ring";
+            allMeshes = [ringMesh];
+            break;
+        case 2:
+            objSelected.textContent = "Asteroid";
+            allMeshes = [asteroidMesh];
+            break;
+      }
+    
+      main();
+}
 
 function onDropdownChange(value){
     
