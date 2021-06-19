@@ -94,19 +94,26 @@ function GetAttributesAndUniforms(){
 
 }
 
+function createSceneGraph(){
+
+    for (let i in allMeshes){
+        vaos[i] = gl.createVertexArray(); 
+        createMeshVAO(i);
+    }
+
+    
+}
+
 function main() {
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
     SetViewportAndCanvas();
 
-    GetAttributesAndUniforms();
+    GetAttributesAndUniforms(); 
 
     vaos = new Array(allMeshes.length); 
 
-    for (let i in allMeshes){
-        vaos[i] = gl.createVertexArray(); 
-        addMeshToScene(i);
-    }      
+    createSceneGraph();
 
     updateLight();
     drawScene();
@@ -157,7 +164,8 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
     
-    if(i==0){    
+    if(i==0){
+
         gl.uniform3fv(materialDiffColorHandle[i], materialColor);
         gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
         gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
@@ -229,7 +237,7 @@ function drawScene() {
     window.requestAnimationFrame(drawScene);
 }
 
-function addMeshToScene(i) {
+function createMeshVAO(i) {
 
     let mesh = allMeshes[i];
     gl.bindVertexArray(vaos[i]);
@@ -239,14 +247,14 @@ function addMeshToScene(i) {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.vertices), gl.STATIC_DRAW);
     gl.enableVertexAttribArray(positionAttributeLocation);
     gl.vertexAttribPointer(positionAttributeLocation, 3, gl.FLOAT, false, 0, 0);
+
     if (i == 0){ //if starship
         var uvBuffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
-            gl.enableVertexAttribArray(uvAttributeLocation);
-            gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mesh.textures), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(uvAttributeLocation);
+        gl.vertexAttribPointer(uvAttributeLocation, 2, gl.FLOAT, false, 0, 0);
     }
-     
 
     var normalBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
@@ -257,18 +265,19 @@ function addMeshToScene(i) {
     var indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
-    
+
 }
 
 async function LoadShaders() {
 
     //MultipleShaders
+
     await utils.loadFiles([shaderDir + 'xwing_vs.glsl', shaderDir + 'xwing_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
         programs[0] = utils.createProgram(gl, vertexShader, fragmentShader);
-  });
+    });
   
 
     await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs.glsl'], function (shaderText) {
@@ -292,7 +301,6 @@ async function LoadShaders() {
         programs[3] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
-    //gl.useProgram(programs[0]);
 }
 
 async function LoadMeshes() {
@@ -301,10 +309,7 @@ async function LoadMeshes() {
     ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
 
-    allMeshes = [x_wingMesh//x_wingMesh,ringMesh,asteroidMesh
-            
-               //,ringMesh
-    ];
+    allMeshes = [x_wingMesh, ringMesh, asteroidMesh];
 }
 
 async function init(){

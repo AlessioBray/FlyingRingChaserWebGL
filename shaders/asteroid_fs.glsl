@@ -32,7 +32,7 @@ out vec4 outColor;
 
 //computes the lambert diffuse
 vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
-    vec3 diffL = lightCol * clamp(dot(normalVec, lightDir),0.0,1.0);
+    vec3 diffL = lightCol * clamp(dot(normalVec, lightDir), 0.0, 1.0);
     return diffL;
 }
 

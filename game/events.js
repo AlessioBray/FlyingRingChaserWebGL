@@ -32,7 +32,6 @@ function keyDownFunction(e){
 
 }
 
-
 function keyUpFunction(e){
 
     if (e.keyCode == 32) {  // spacebar
@@ -116,24 +115,21 @@ function doMouseMove(event) {
 
 }
 
-
-
 function onDropdownChange(value){
     
     console.log("Drop-down value changed to "+ value);
 
     switch (value) {
         case 'x-wing':
-            allMeshes = [x_wingMesh];
+            showcaseId = 0;
             break;
         case 'ring':
-            allMeshes = [ringMesh];
+            showcaseId = 1;
             break;
         case 'asteroid':
-            allMeshes = [asteroidMesh];
+            showcaseId = 2;
             break;
-
     }
-    main();
+    //main();
 
 }

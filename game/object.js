@@ -116,22 +116,5 @@ var ringMesh;
 var vaos;
 var vao;
 
-
-function onDropdownChange(value){
-    
-    console.log("Drop-down value changed to "+ value);
-
-    switch (value) {
-        case 'x-wing':
-            allMeshes = [x_wingMesh];
-            break;
-        case 'ring':
-            allMeshes = [ringMesh];
-            break;
-        case 'asteroid':
-            allMeshes = [asteroidMesh];
-            break;
-      }
-    
-      main();
-}
+// showcase index
+var showcaseId = 0;
