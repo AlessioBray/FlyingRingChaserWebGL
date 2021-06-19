@@ -41,7 +41,7 @@ Node.prototype.updateWorldMatrix = function(matrix) {
 var objects = []; //contiene i nodi
 
 var xwingNode = new Node();
-var rigNode = new Node();
+var ringNode = new Node();
 
 //xwingNode.localMatrix = utils.MakeWorld
 //ringNode.localMatrix = utils.MakeWorld
@@ -56,4 +56,49 @@ sunNode.drawInfo = {
     vertexArray: vao,
   };
 */
+
+
+function createSceneGraph(){ //scene graph show case
+
+    showcaseNode = new Node();
+    showcaseNode.localMatrix = utils.identityMatrix();
+    showcaseNode.worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz + 90, 0.5);
+
+    switch(selectedObjId){
+
+        case XWING_INDEX:
+            showcaseNode.drawInfo = {
+                type: XWING_INDEX,
+                materialColor: [1.0, 1.0, 1.0],
+                programInfo: programs[XWING_INDEX],
+                bufferLength: allMeshes[XWING_INDEX].indices.length,
+                vertexArray: vaos[XWING_INDEX],
+              };
+            break;
+
+        case RING_INDEX:
+            showcaseNode.drawInfo = {
+                type: RING_INDEX,
+                materialColor: [1.0, 1.0, 1.0],
+                programInfo: programs[RING_INDEX],
+                bufferLength: allMeshes[RING_INDEX].indices.length,
+                vertexArray: vaos[RING_INDEX],
+              };
+            break;
+
+        case ASTEROID_INDEX:
+            showcaseNode.drawInfo = {
+                type: ASTEROID_INDEX,
+                materialColor: [1.0, 1.0, 1.0],
+                programInfo: programs[ASTEROID_INDEX],
+                bufferLength: allMeshes[ASTEROID_INDEX].indices.length,
+                vertexArray: vaos[ASTEROID_INDEX],
+            };
+            break;
+    }
+
+    objects = [showcaseNode];
+    
+}
+
 

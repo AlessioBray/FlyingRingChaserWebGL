@@ -87,7 +87,6 @@ dirLightAlphaBSlider.addEventListener("input",updateLights,false);
 dirLightBetaBSlider.addEventListener("input",updateLights,false);
 directionalLightColorASlider.addEventListener("input",updateLights,false);
 directionalLightColorBSlider.addEventListener("input",updateLights,false);
-
 canvas.addEventListener("mousedown", doMouseDown, false);
 canvas.addEventListener("mouseup", doMouseUp, false);
 canvas.addEventListener("mousemove", doMouseMove, false);
@@ -118,4 +117,27 @@ function doMouseMove(event) {
 		}
 	}
 
+}
+
+
+function onSelectedObjChange(value){
+    
+    console.log("Selected obj changed to "+ value);
+
+    switch (value) {
+        case 0:
+            objSelected.textContent = "X-Wing";
+            selectedObjId = XWING_INDEX;
+            break;
+        case 1:
+            objSelected.textContent = "Ring";
+            selectedObjId = RING_INDEX;
+            break;
+        case 2:
+            objSelected.textContent = "Asteroid";
+            selectedObjId = ASTEROID_INDEX;
+            break;
+      }
+    
+      changeRender();
 }

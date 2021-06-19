@@ -36,7 +36,6 @@ var textureLocation = new Array();
 var matrixLocation = new Array();
 var nMatrixLocation = new Array();
 var pMatrixLocation = new Array();
-
 var ambientLightColorHandle = new Array();
 var ambientMaterialHandle = new Array();
 var materialDiffColorHandle = new Array();
@@ -52,9 +51,7 @@ var aspect;
 var perspectiveMatrix;
 var viewMatrix;
 var worldmatrix;
-
 var projectionMatrix;
-
 var inverseViewProjMatrix; //used in skybox
 
 
@@ -119,45 +116,23 @@ var shaderDir = baseDir + "shaders/";
 var modelsDir = baseDir + "assets/models/";
 var textureDir = baseDir + "assets/textures/";
 
-
 var allMeshes;
 var moonMesh;
 var ringMesh;
 var vaos;
 var vao;
 
+// id showcase obj
 var selectedObjId = 0;
-
-function onSelectedObjChange(value){
-    
-    console.log("Selected obj changed to "+ value);
-
-    switch (value) {
-        case 0:
-            objSelected.textContent = "X-Wing";
-            selectedObjId = XWING_INDEX;
-            break;
-        case 1:
-            objSelected.textContent = "Ring";
-            selectedObjId = RING_INDEX;
-            break;
-        case 2:
-            objSelected.textContent = "Asteroid";
-            selectedObjId = ASTEROID_INDEX;
-            break;
-      }
-    
-      changeRender();
-}
 
 // ring spawn
 var lastNewRingTime = Date.now();
 var SPAWNTIME = 1000;
 var SPEED = 0.1;
 var MAX_X = 10;
-var MIN_X =  5; //negative
+var MIN_X =  5; 
 var MAX_Y = 3;
-var MIN_Y = 1; //negative
+var MIN_Y = 1; 
 var gameOn = false;
 
 

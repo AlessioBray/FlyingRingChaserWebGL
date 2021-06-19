@@ -43,9 +43,6 @@ function gameOver(){
 
 }
 
-function spawn(){
-    console.log("Spawn!!");
-}
 
 function HideShowElement(x){ // takes an element and hides/shows it
     if (x.style.display === "none") {
