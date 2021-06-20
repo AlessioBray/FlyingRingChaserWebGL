@@ -197,8 +197,6 @@ function drawObject(obj){ // obj is the node that represent the object to draw
 
     gl.useProgram(obj.drawInfo.programInfo);
 
-    utils.resizeCanvasToDisplaySize(gl.canvas);
-
     /////////// WORLD SPACE /////////////
 
     let normalMatrix = utils.invertMatrix(utils.transposeMatrix(obj.worldMatrix));
