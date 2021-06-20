@@ -18,18 +18,28 @@ function setMatrices(){
 
 function getAttributesAndUniforms(){
 
-    //Uniforms
+    //XWING
+
+    //RING
+
+    //ASTEROID
     
     for (var i = 0; i < programs.length - 1; i++){
 
         positionAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_position");
         normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_normal");
-        uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
         
-        textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
+        if (i == XWING_INDEX){
+            uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
+        }
+        
         matrixLocation[i] = gl.getUniformLocation(programs[i], "matrix");  
         normalMatrixLocation[i] = gl.getUniformLocation(programs[i], "normalMatrix");
         pMatrixLocation[i] = gl.getUniformLocation(programs[i], "pMatrix");
+
+        if (i == XWING_INDEX){
+            textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
+        }
 
         ambientLightColorHandle[i] = gl.getUniformLocation(programs[i], "ambientLightCol");
         ambientMaterialHandle[i] = gl.getUniformLocation(programs[i], "ambientMat");
@@ -95,6 +105,7 @@ function main() {
 }
 
 function render(){
+
     utils.resizeCanvasToDisplaySize(gl.canvas);
     setViewportAndCanvas();
 

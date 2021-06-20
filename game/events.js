@@ -66,8 +66,8 @@ function updateLights(){
     var dirLightBetaA = utils.degToRad(dirLightBetaASlider.value);//32
 
     directionalLightA = [Math.cos(180 - dirLightAlphaA) * Math.cos(dirLightBetaA),
-                        Math.sin(180 - dirLightAlphaA),
-                        Math.cos(180 - dirLightAlphaA) * Math.sin(dirLightBetaA)
+                         Math.sin(180 - dirLightAlphaA),
+                         Math.cos(180 - dirLightAlphaA) * Math.sin(dirLightBetaA)
                         ];
 
     directionalLightColorA = fromHexToRGBVec(directionalLightColorASlider.value);//#4d4d4d

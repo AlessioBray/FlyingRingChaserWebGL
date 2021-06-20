@@ -154,3 +154,17 @@ var objects = [];
 var showcaseNode;
 var xwingNode;
 var ringNode;
+
+
+//skybox
+var skyboxTexture;
+
+var skyboxVertPos;
+var skyboxVertPosAttr;
+var skyboxMatrix;
+
+var skyboxVao;
+
+var skyboxTexHandle;
+
+var skyboxProgram;

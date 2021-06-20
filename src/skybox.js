@@ -1,16 +1,5 @@
-var skyboxTexture;
-
-var skyboxVertPos;
-var skyboxVertPosAttr;
-
-var skyboxVao;
-
-var skyboxTexHandle;
-
-var skyboxProgram;
-
-
 function loadEnvironment(){
+
     skyboxVertPos = new Float32Array(
     [
       -1, -1, 1.0,
@@ -92,6 +81,10 @@ function loadEnvironment(){
     });
     gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
     gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
     
 }
 
@@ -101,7 +94,7 @@ function drawSkybox(){
 
     //Uniforms
     skyboxTexHandle = gl.getUniformLocation(skyboxProgram, "u_texture"); 
-    inverseViewProjMatrixHandle = gl.getUniformLocation(skyboxProgram, "inverseViewProjMatrix"); 
+    inverseViewProjMatrixHandle = gl.getUniformLocation(skyboxProgram, "inverseViewProjMatrix");
     skyboxVertPosAttr = gl.getAttribLocation(skyboxProgram, "in_position");
     
     gl.useProgram(skyboxProgram);
