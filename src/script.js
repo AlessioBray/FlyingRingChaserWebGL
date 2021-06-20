@@ -28,7 +28,7 @@ function getAttributesAndUniforms(){
         
         textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
         matrixLocation[i] = gl.getUniformLocation(programs[i], "matrix");  
-        nMatrixLocation[i] = gl.getUniformLocation(programs[i], "nMatrix");
+        normalMatrixLocation[i] = gl.getUniformLocation(programs[i], "normalMatrix");
         pMatrixLocation[i] = gl.getUniformLocation(programs[i], "pMatrix");
 
         ambientLightColorHandle[i] = gl.getUniformLocation(programs[i], "ambientLightCol");
@@ -41,11 +41,8 @@ function getAttributesAndUniforms(){
         lightColorHandleA[i] = gl.getUniformLocation(programs[i], 'lightColorA');
         lightDirectionHandleB[i] = gl.getUniformLocation(programs[i], 'lightDirectionB');
         lightColorHandleB[i] = gl.getUniformLocation(programs[i], 'lightColorB');
-    }
 
-    //skybox
-    skyboxTexHandle = gl.getUniformLocation(programs[SKYBOX_INDEX], "u_texture"); 
-    skyboxVertPosAttr = gl.getAttribLocation(programs[SKYBOX_INDEX], "in_skybox_position");
+    }
 
 }
 
@@ -98,7 +95,6 @@ function main() {
 }
 
 function render(){
-    
     utils.resizeCanvasToDisplaySize(gl.canvas);
     setViewportAndCanvas();
 
@@ -169,7 +165,7 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     Projection = utils.multiplyMatrices(perspectiveMatrix, MV);
 
     gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
-    gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
+    gl.uniformMatrix4fv(normalMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
     
     if(i==0){
@@ -190,7 +186,7 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
+    gl.uniformMatrix4fv(normalMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
 
     gl.bindVertexArray(vaos[i]);
     gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
@@ -216,7 +212,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     }
 
     gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
+    gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(pMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], obj.drawInfo.materialColor);
@@ -230,7 +226,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
 
     gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(nMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
+    gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.bindVertexArray(obj.drawInfo.vertexArray);
     gl.drawElements(gl.TRIANGLES, obj.drawInfo.bufferLength, gl.UNSIGNED_SHORT, 0 );
@@ -295,10 +291,6 @@ function createMeshVAO(i) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mesh.indices), gl.STATIC_DRAW);
 
-    //if (objects[i].drawInfo.type == XWING_INDEX){
-            
-     ///////////////////////////////////////// ATTENZIONE se viene messa in un punto (e.g. in main) in cui è chiamata una sola volta non funziona e da degli artefatti bianchi.
-    //}
 }
 
 async function loadShaders() {
