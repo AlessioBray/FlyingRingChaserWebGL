@@ -99,8 +99,8 @@ var matricesArrays= [
 var camera_x = 0.0;
 var camera_y = 0.0;
 var camera_z = 50;
-var camera_yaw = 0;
-var camera_pitch = 0;
+var camera_elevation = 0;
+var camera_angle = 0;
 
 var delta = 5;
 

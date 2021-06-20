@@ -87,40 +87,28 @@ function updateLights(){
 
 function fromHexToRGBVec(hex) {
     col = hex.substring(1,7);
-    R = parseInt(col.substring(0,2) ,16) / 255;
-    G = parseInt(col.substring(2,4) ,16) / 255;
-    B = parseInt(col.substring(4,6) ,16) / 255;
+    R = parseInt(col.substring(0,2), 16) / 255;
+    G = parseInt(col.substring(2,4), 16) / 255;
+    B = parseInt(col.substring(4,6), 16) / 255;
     return [R,G,B]
 }
 
-createScore(); 
-window.addEventListener("keydown", keyDownFunction, false);
-window.addEventListener("keyup", keyUpFunction, false);
-
-dirLightAlphaASlider.addEventListener("input",updateLights,false);
-dirLightBetaASlider.addEventListener("input",updateLights,false);
-dirLightAlphaBSlider.addEventListener("input",updateLights,false);
-dirLightBetaBSlider.addEventListener("input",updateLights,false);
-directionalLightColorASlider.addEventListener("input",updateLights,false);
-directionalLightColorBSlider.addEventListener("input",updateLights,false);
-canvas.addEventListener("mousedown", doMouseDown, false);
-canvas.addEventListener("mouseup", doMouseUp, false);
-canvas.addEventListener("mousemove", doMouseMove, false);
-
 var mouseState = false;
-var lastMouseX = -100, lastMouseY = -100;
+var lastMouseX = -100, 
+    lastMouseY = -100;
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
 	lastMouseY = event.pageY;
 	mouseState = true;
 }
+
 function doMouseUp(event) {
 	lastMouseX = -100;
 	lastMouseY = -100;
 	mouseState = false;
 }
-function doMouseMove(event) {
 
+function doMouseMove(event) {
 	if(mouseState) {
 		var dx = event.pageX - lastMouseX;
 		var dy = lastMouseY - event.pageY;
@@ -128,11 +116,29 @@ function doMouseMove(event) {
 		lastMouseY = event.pageY;
 		
 		if((dx != 0) || (dy != 0)) {
-			Rx = Rx - 0.5 * dx; /// ruota attorno a Rx e Rz dell'oggetto, invece deve essere assoluto => vedi come fa lui negli esempi
-			Rz = Rz - 0.5 * dy;
+			camera_angle = camera_angle + 0.5 * dx;
+			camera_elevation = camera_elevation + 0.5 * dy;
 		}
+        camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+	    camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+	    camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
+	    viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
 	}
 
+}
+
+var lookRadius = 50; //same initialization as camera_z
+
+function doMouseWheel(event) {
+	var nLookRadius = lookRadius + event.wheelDelta / 100.0;
+	if((nLookRadius > 2.0) && (nLookRadius < 100.0)) {
+		lookRadius = nLookRadius;
+	}
+
+    camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+	camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+	camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
+	viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
 }
 
 function onSelectedObjChange(objectId){
@@ -156,3 +162,20 @@ function onSelectedObjChange(objectId){
     
       changeRender();
 }
+
+
+createScore(); 
+window.addEventListener("keydown", keyDownFunction, false);
+window.addEventListener("keyup", keyUpFunction, false);
+
+dirLightAlphaASlider.addEventListener("input",updateLights,false);
+dirLightBetaASlider.addEventListener("input",updateLights,false);
+dirLightAlphaBSlider.addEventListener("input",updateLights,false);
+dirLightBetaBSlider.addEventListener("input",updateLights,false);
+directionalLightColorASlider.addEventListener("input",updateLights,false);
+directionalLightColorBSlider.addEventListener("input",updateLights,false);
+
+canvas.addEventListener("mousedown", doMouseDown, false);
+canvas.addEventListener("mouseup", doMouseUp, false);
+canvas.addEventListener("mousemove", doMouseMove, false);
+canvas.addEventListener("mousewheel", doMouseWheel, false);
