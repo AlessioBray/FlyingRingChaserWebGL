@@ -76,7 +76,10 @@ function gameOver(){
     HideShowElement(moveController);
     HideShowElement(objDiv);
 
+    gameOn = !gameOn; 
+
     createShowcaseSceneGraph();
+    changeRender();
 }
 
 

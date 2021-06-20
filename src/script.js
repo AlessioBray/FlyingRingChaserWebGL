@@ -17,12 +17,6 @@ function setMatrices(){
 }
 
 function getAttributesAndUniforms(){
-
-    //XWING
-
-    //RING
-
-    //ASTEROID
     
     for (var i = 0; i < programs.length - 1; i++){
 
@@ -53,6 +47,12 @@ function getAttributesAndUniforms(){
         lightColorHandleB[i] = gl.getUniformLocation(programs[i], 'lightColorB');
 
     }
+
+    //XWING
+
+    //RING
+
+    //ASTEROID
 
 }
 
