@@ -135,7 +135,6 @@ var MAX_Y = 3;
 var MIN_Y = 1; 
 var gameOn = false;
 
-
 // to reduce lag when we call main to change the object showed
 var requestAnimationId;
 
