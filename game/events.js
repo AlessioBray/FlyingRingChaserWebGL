@@ -14,7 +14,7 @@ function keyDownFunction(e){
                 break;
             }
             else{
-
+                break;
             }
             
         case "ArrowRight":
@@ -26,9 +26,9 @@ function keyDownFunction(e){
                 break;
             }
             else{
-
+                break;
             }
-            
+
         case "ArrowUp":
         case "w": 
 
@@ -50,7 +50,7 @@ function keyDownFunction(e){
 function keyUpFunction(e){
 
     if (e.keyCode == 32) {  // spacebar
-        if (gameOn){
+        if (!gameOn){
             startGame();
         }
         else{

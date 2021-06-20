@@ -1,15 +1,16 @@
 function initializeGameSceneGraph(){
-    objects = [];
 
+    objects = [];
+/*
     cameraNode = new Node();
     cameraNode.localMatrix = utils.MakeTranslateMatrix(camera_x, camera_y, camera_z);
-    xwingNode.drawInfo = {
+    cameraNode.drawInfo = {
         type: CAMERA_INDEX,
         zNear: 0.1,
         zFar: 100,
         fieldOfViewDeg: 15,
     };
-    
+    */
     xwingNode = new Node();
     xwingNode.localMatrix = utils.identityMatrix();
     xwingNode.drawInfo = {
@@ -20,15 +21,17 @@ function initializeGameSceneGraph(){
         vertexArray: vaos[XWING_INDEX],
     };
 
-    xwingNode.setParent(cameraNode);
+    //xwingNode.setParent(cameraNode);
 
-    objects =[cameraNode, xwingNode];
+    objects =[xwingNode];
 }
 
 
 
 //start the game!!
 function startGame(){
+
+    //window.cancelAnimationFrame(requestAnimationId);
 
     //if(gameOn){ //if you press tab while playing game ends and rings disappear
     matricesArrays[0] = [];
@@ -38,7 +41,6 @@ function startGame(){
     HideShowElement(moveController);
     HideShowElement(objDiv);
     
-
     gameOn = !gameOn; 
   
     initializeGameSceneGraph();
