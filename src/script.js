@@ -98,6 +98,7 @@ function main() {
 }
 
 function render(){
+    
     utils.resizeCanvasToDisplaySize(gl.canvas);
     setViewportAndCanvas();
 
