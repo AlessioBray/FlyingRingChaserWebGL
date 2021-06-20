@@ -1,5 +1,34 @@
+function initializeGameSceneGraph(){
+    objects = [];
+
+    cameraNode = new Node();
+    cameraNode.localMatrix = utils.MakeTranslateMatrix(camera_x, camera_y, camera_z);
+    xwingNode.drawInfo = {
+        type: CAMERA_INDEX,
+        zNear: 0.1,
+        zFar: 100,
+        fieldOfViewDeg: 15,
+    };
+    
+    xwingNode = new Node();
+    xwingNode.localMatrix = utils.identityMatrix();
+    xwingNode.drawInfo = {
+        type: XWING_INDEX,
+        materialColor: [1.0, 1.0, 1.0],
+        programInfo: programs[XWING_INDEX],
+        bufferLength: allMeshes[XWING_INDEX].indices.length,
+        vertexArray: vaos[XWING_INDEX],
+    };
+
+    xwingNode.setParent(cameraNode);
+
+    objects =[cameraNode, xwingNode];
+}
+
+
+
 //start the game!!
-function game(){
+function startGame(){
 
     //if(gameOn){ //if you press tab while playing game ends and rings disappear
     matricesArrays[0] = [];
@@ -9,8 +38,11 @@ function game(){
     HideShowElement(moveController);
     HideShowElement(objDiv);
     
+
     gameOn = !gameOn; 
   
+    initializeGameSceneGraph();
+    
     //gameOver();
 }
 
@@ -34,13 +66,15 @@ function move(){
 //game over
 function gameOver(){
 
-    createPopup("gameover"); 
-    textScore.nodeValue = "0"; //reset current score
+    //createPopup("gameover"); 
+    //textScore.nodeValue = "0"; //reset current score
 
     // shows controllers 
     HideShowElement(lightController);  
     HideShowElement(moveController);
+    HideShowElement(objDiv);
 
+    createShowcaseSceneGraph();
 }
 
 

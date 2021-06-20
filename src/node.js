@@ -38,27 +38,7 @@ Node.prototype.updateWorldMatrix = function(matrix) {
 
 //Define the scene Graph
 
-var objects = []; //contiene i nodi
-
-var xwingNode = new Node();
-var ringNode = new Node();
-
-//xwingNode.localMatrix = utils.MakeWorld
-//ringNode.localMatrix = utils.MakeWorld
-
-
-/*
-sunNode.drawInfo = {
-    type: "objectname"
-    materialColor: [0.6, 0.6, 0.0],
-    programInfo: program,
-    bufferLength: indexData.length,
-    vertexArray: vao,
-  };
-*/
-
-
-function createSceneGraph(){ //scene graph show case
+function createShowcaseSceneGraph(){ //scene graph show case
 
     showcaseNode = new Node();
     showcaseNode.localMatrix = utils.identityMatrix();
@@ -100,5 +80,3 @@ function createSceneGraph(){ //scene graph show case
     objects = [showcaseNode];
     
 }
-
-

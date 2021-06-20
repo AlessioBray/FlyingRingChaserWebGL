@@ -99,9 +99,10 @@ var matricesArrays= [
 var camera_x = 0.0;
 var camera_y = 0.0;
 var camera_z = 50;
-var delta = 5;
 var camera_yaw = 0;
 var camera_pitch = 0;
+
+var delta = 5;
 
 // Perspective
 var zNear = 0.1;
@@ -144,8 +145,12 @@ var ASTEROID_INDEX = 2;
 
 var SKYBOX_INDEX = 3;
 
+var CAMERA_INDEX = -1;
+
 
 // scene graph variables
 var objects = [];
 
 var showcaseNode;
+var xwingNode;
+var ringNode;

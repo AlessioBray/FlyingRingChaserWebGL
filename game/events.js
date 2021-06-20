@@ -1,34 +1,44 @@
 function keyDownFunction(e){
-     
+
     switch(e.key){
   
-        case "ArrowLeft" :
-            case "a" :  
-            //camera_yaw -= delta;
-            selectedObjId = (selectedObjId - 1) % 3;
-            if (selectedObjId < 0){
-                selectedObjId = selectedObjId + 3;
+        case "ArrowLeft":
+        case "a":  
+            if (!gameOn){
+                //camera_yaw -= delta;
+                selectedObjId = (selectedObjId - 1) % 3;
+                if (selectedObjId < 0){
+                    selectedObjId = selectedObjId + 3;
+                }
+                onSelectedObjChange(selectedObjId);
+                break;
             }
-            onSelectedObjChange(selectedObjId);
-            break;
-        
+            else{
+
+            }
+            
         case "ArrowRight":
-            case "d":   
-            //camera_yaw += delta;
-            selectedObjId = (selectedObjId + 1) % 3;
-            onSelectedObjChange(selectedObjId);
-            break;
+        case "d":
+            if (!gameOn){
+                //camera_yaw += delta;
+                selectedObjId = (selectedObjId + 1) % 3;
+                onSelectedObjChange(selectedObjId);
+                break;
+            }
+            else{
 
+            }
+            
         case "ArrowUp":
-            case "w": 
-            camera_pitch += delta;
+        case "w": 
 
+            camera_pitch += delta;
             break;
 
         case "ArrowDown":
-            case "s": 
+        case "s": 
+            
             camera_pitch -= delta;
-
             break;
 
         default:
@@ -40,8 +50,13 @@ function keyDownFunction(e){
 function keyUpFunction(e){
 
     if (e.keyCode == 32) {  // spacebar
-        game();
-    } 
+        if (gameOn){
+            startGame();
+        }
+        else{
+            gameOver();
+        }    
+    }
 
 }
 
@@ -81,6 +96,7 @@ function fromHexToRGBVec(hex) {
 createScore(); 
 window.addEventListener("keydown", keyDownFunction, false);
 window.addEventListener("keyup", keyUpFunction, false);
+
 dirLightAlphaASlider.addEventListener("input",updateLights,false);
 dirLightBetaASlider.addEventListener("input",updateLights,false);
 dirLightAlphaBSlider.addEventListener("input",updateLights,false);
@@ -119,21 +135,20 @@ function doMouseMove(event) {
 
 }
 
-
-function onSelectedObjChange(value){
+function onSelectedObjChange(objectId){
     
-    console.log("Selected obj changed to "+ value);
+    console.log("Selected obj changed to "+ objectId);
 
-    switch (value) {
-        case 0:
+    switch (objectId) {
+        case XWING_INDEX:
             objSelected.textContent = "X-Wing";
             selectedObjId = XWING_INDEX;
             break;
-        case 1:
+        case RING_INDEX:
             objSelected.textContent = "Ring";
             selectedObjId = RING_INDEX;
             break;
-        case 2:
+        case ASTEROID_INDEX:
             objSelected.textContent = "Asteroid";
             selectedObjId = ASTEROID_INDEX;
             break;

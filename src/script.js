@@ -81,14 +81,16 @@ function main() {
     getAttributesAndUniforms(); 
 
     vaos = new Array(allMeshes.length);
-    loadTexture();
     for (let i in allMeshes){
         vaos[i] = gl.createVertexArray(); 
         createMeshVAO(i);
-        //if(i==2)
+
+        loadTexture(); ///idealmente dovrebbe stare sotto dove è commentata (in altri posti sfarfalla perchè crea continuamente la texture)
     }
 
-    createSceneGraph();
+    //loadTexture();
+
+    createShowcaseSceneGraph();
 
     updateLights();
 
@@ -99,7 +101,7 @@ function render(){
     utils.resizeCanvasToDisplaySize(gl.canvas);
     setViewportAndCanvas();
 
-    createSceneGraph();
+    createShowcaseSceneGraph();
 
     updateLights();
 
@@ -129,20 +131,23 @@ function updateWorldMatrix(){
     setMatrices();
 
     if(gameOn){
+        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S); ///////////////// just to make it work (do it iteratively or similarly)
         move();
     }
     else{
-        starshipArray = matricesArrays[0]; 
+        //starshipArray = matricesArrays[0]; 
         /*
         ringsArray = matricesArrays[1];
         asteroidsArray = matricesArrays[2];
         ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
         asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
         */
-        starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S);
-    }
+        //starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S);
 
-    objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S); ///////////////// just to make it work (do it iteratively or similarly)
+        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
+    }
+    //objects[0].worldMatrix = utils.MakeWorld(0.0, -1.0, 45.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
+
 }
 
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
@@ -251,12 +256,6 @@ function drawScene() {
 
     for (var i = 0; i < objects.length; i++){
         drawObject(objects[i]);
-
-        //if (objects[i].drawInfo.type == XWING_INDEX){
-            
-            //loadTexture();
-        //}
-        
     }
     
     drawSkybox();
