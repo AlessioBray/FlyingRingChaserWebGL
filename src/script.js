@@ -337,8 +337,8 @@ async function loadShaders() {
 async function loadMeshes() {
 
     xwingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
-    ringMesh = await utils.loadMesh(modelsDir + "ring.obj" );
-    asteroidMesh = await utils.loadMesh(modelsDir + "asteroid.obj" );
+    ringMesh = await utils.loadMesh(modelsDir + "ring3.obj" );
+    asteroidMesh = await utils.loadMesh(modelsDir + "sphere.obj" );
 
     allMeshes = [xwingMesh, ringMesh, asteroidMesh];
 

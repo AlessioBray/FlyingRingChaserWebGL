@@ -127,11 +127,9 @@ function doMouseMove(event) {
 
 }
 
-var lookRadius = 50; //same initialization as camera_z
-
 function doMouseWheel(event) {
 	var nLookRadius = lookRadius + event.wheelDelta / 100.0;
-	if((nLookRadius > 2.0) && (nLookRadius < 100.0)) {
+	if((nLookRadius > 2.0) && (nLookRadius < 70.0)) {
 		lookRadius = nLookRadius;
 	}
 
