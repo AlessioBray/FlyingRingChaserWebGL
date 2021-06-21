@@ -68,33 +68,15 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 }
 // ----------------------------------------------------------------------------
 
-
-//computes the lambert diffuse
-vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
-    vec3 diffL = lightCol * clamp(dot(normalVec, lightDir),0.0,1.0);
-    return diffL;
-}
-
-//computes the blinn specular
-vec3 blinnSpecular(vec3 lightDir, vec3 lightCol, vec3 normalVec, vec4 fsPosition, float specShine) {
-    // camera space implies eye position to be (0,0,0)
-    vec4 eyePosition = vec4(0.0, 0.0, 0.0, 0.0);   // what is eyePos in world space?? is the position of the camera that is already in world coordinates
-    vec3 eyeDir = vec3(normalize(eyePosition - fsPosition));
-    vec3 halfVec = normalize(eyeDir + lightDir);
-    vec3 specularBl = pow(max(dot(halfVec, normalVec), 0.0), specShine) * lightCol;
-
-    return specularBl;
-}
-
 void main() {
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
-    vec3 N = normalize(fsNormal);
+    vec3 N = -normalize(fsNormal);
     vec3 V = vec3(normalize(camPosition - fsPosition));
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
-    vec3 F0 = vec3(1.00, 0.71, 0.29); 
+    vec3 F0 = vec3(0.04); 
     F0 = mix(F0, albedo, metallic);
 
     // reflectance equation
@@ -176,8 +158,7 @@ void main() {
     
     // -------
     
-    // ambient lighting (note that the next IBL tutorial will replace 
-    // this ambient lighting with environment lighting).
+    // ambient lighting
     vec3 ambient = vec3(0.03) * albedo * ao;
 
     vec3 color = ambient + Lo;
