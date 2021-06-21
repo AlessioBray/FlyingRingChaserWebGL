@@ -137,7 +137,7 @@ function animate(){
         }
     }
     else{
-        Rx = Rx + 0.5;
+        Ry = Ry + 1;
     }
 }
 
@@ -147,7 +147,7 @@ function updateWorldMatrix(){
     setMatrices();
 
     if(gameOn){
-        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S); ///////////////// just to make it work (do it iteratively or similarly)
+        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
         move();
     }
     else{
@@ -160,7 +160,7 @@ function updateWorldMatrix(){
         */
         //starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S);
 
-        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
+        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
     }
     //objects[0].worldMatrix = utils.MakeWorld(0.0, -1.0, 45.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
 
@@ -266,6 +266,8 @@ function drawScene() {
     animate();
 
     updateWorldMatrix(); // to update rings world matrices
+
+    //console.log(Ry);
 
     clearBits();
 

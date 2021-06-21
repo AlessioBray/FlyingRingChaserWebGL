@@ -13,6 +13,7 @@ function keyDownFunction(e){
                 break;
             }
             else{
+
                 break;
             }
             
@@ -108,6 +109,7 @@ function fromHexToRGBVec(hex) {
 var mouseState = false;
 var lastMouseX = -100, 
     lastMouseY = -100;
+
 function doMouseDown(event) {
 	lastMouseX = event.pageX;
 	lastMouseY = event.pageY;

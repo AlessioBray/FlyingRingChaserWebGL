@@ -3,7 +3,7 @@ function initializeGameSceneGraph(){
     objects = [];
 
     xwingNode = new Node();
-    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0, Ry, Rz, S);
+    xwingNode.localMatrix = utils.MakeWorld(0.0, -1.5, 40.0, 0, 90, 0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
     xwingNode.drawInfo = {
         type: XWING_INDEX,
         materialColor: [1.0, 1.0, 1.0],
@@ -15,16 +15,151 @@ function initializeGameSceneGraph(){
     xwingNode.updateWorldMatrix();
 
     objects = [xwingNode];
+    
+}
 
-    drawGameScene();
+var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
+var GAME_XWING_POSITION = [0, -1.5, 40.0];
+var deltaX = 0;
+var deltaY = 0;
+var deltaZ = 0;
+var deltaRx = 0;
+var deltaRy = 0;
+var deltaRz = 0;
+var Z = 0;
+var Y = 0;
+
+var deltaLookRadius;
+var deltaCameraAngle;
+var deltaCameraElevation;
+
+var NUMBER_INITIALIZATION_FRAMES = 100;
+
+function computeDeltaGameInitializationMovements(){
+    
+    deltaZ = GAME_XWING_POSITION[2] / 100;
+    deltaY = -1.5 / NUMBER_INITIALIZATION_FRAMES;
+
+    if ((Ry % 360) >= 270 || (Ry % 360) <= 90){
+        if ((Ry % 360) >= 270){
+            deltaRy = -2.5; //((Ry % 360) - 270) / NUMBER_INITIALIZATION_FRAMES;
+        }
+        else{
+            deltaRy = -2.5; //(90 + (Ry % 360)) / NUMBER_INITIALIZATION_FRAMES;
+        }
+    }
+    else{ // if ((Ry % 360) < 270 && (Ry % 360) > 90)
+        
+        deltaRy = +2.5; //(270 - (Ry % 360)) / NUMBER_INITIALIZATION_FRAMES;
+
+    }
+    if (lookRadius > GAME_CAMERA_POSITION[3]){
+        deltaLookRadius = (GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
+    }
+    else{
+        deltaLookRadius = -(GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
+    }
+    
+    if (camera_elevation < 0){
+        deltaCameraElevation = 0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
+    }
+    else{
+        deltaCameraElevation = -0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
+    }
+    if (camera_angle < 0){
+        deltaCameraAngle = 0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
+    }
+    else{
+        deltaCameraAngle = -0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
+    }
+    
+}
+
+
+function animateGameInitialization(){
+
+    NUMBER_INITIALIZATION_FRAMES -= 1;
+
+    if (Z != GAME_XWING_POSITION[2]){
+        Z += deltaZ;
+    }
+    
+    if (Y != GAME_XWING_POSITION[1]){
+        Y += deltaY;
+    }
+
+    if ((Ry % 360) != 270){
+        console.log(Ry, (Ry % 360), 270 - (Ry % 360));
+        Ry = Ry + deltaRy;
+        if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){ // fai una cosa simile per gli altri
+            Ry = 270;
+        }
+
+    }
+    else{
+        Ry = 0;
+    }
+
+    var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
+    objects[0].updateWorldMatrix(deltaMatrix);
+    
+    if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
+        lookRadius = lookRadius + deltaLookRadius;
+    }
+    else{
+        lookRadius = GAME_CAMERA_POSITION[2];
+    }
+    if (camera_elevation != GAME_CAMERA_POSITION[3]){
+        camera_elevation = camera_elevation + deltaCameraElevation;
+    }
+    if (camera_angle != GAME_CAMERA_POSITION[4]){
+        camera_angle = camera_angle + deltaCameraAngle;
+    }
+
+    camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+    camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+    camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
+
+    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+    viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
+    
+}
+
+
+
+function drawGameInitializationScene(){
+    // rotate camera until it reaches the point along a circumference
+    // render xwing and move 
+    animateGameInitialization();
+
+    clearBits();
+
+    drawSkybox();
+
+    for (var i = 0; i < objects.length; i++){
+        drawObject(objects[i]);
+    }
+
+    if (NUMBER_INITIALIZATION_FRAMES == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
+        
+        NUMBER_INITIALIZATION_FRAMES = 100;
+        Z = 0;
+        Y = 0;
+        window.cancelAnimationFrame(requestAnimationId);
+        //drawGameScene();
+    }
+    else{ 
+        requestAnimationId = window.requestAnimationFrame(drawGameInitializationScene);
+    }
     
 }
 
 function drawGameScene() {    
 
-    //updateWorldMatrix(); // to update rings world matrices
-
     setGameMatrices();
+    
+    //updateWorldMatrix(); // to update rings world matrices
 
     clearBits();
     
@@ -34,8 +169,6 @@ function drawGameScene() {
         drawObject(objects[i]);
     }
     
-    
-
     requestAnimationId = window.requestAnimationFrame(drawGameScene);
 }
 
@@ -61,11 +194,17 @@ function startGame(){
     HideShowElement(moveController);
     HideShowElement(objDiv);
     
-    gameOn = !gameOn; 
+    gameOn = !gameOn;
   
     initializeGameSceneGraph();
 
-    game();
+    //computeDeltaGameInitializationMovements();
+
+    //drawGameInitializationScene();
+
+    drawGameScene();
+
+    //game(); // then is called once the initialization is finisced
 }
 
 function game(){
@@ -84,7 +223,7 @@ function makeNewRing(){
 
 function move(){
     ringsArrays = matricesArrays[0];
-    for(var i=0;i<ringsArrays.length;i++){
+    for(var i = 0; i < ringsArrays.length; i++){
         let oldMatrix = ringsArrays[i];
         ringsArrays[i] = utils.multiplyMatrices(oldMatrix,utils.MakeTranslateMatrix(0,SPEED,0.0));
     }
