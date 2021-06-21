@@ -1,18 +1,9 @@
 function initializeGameSceneGraph(){
 
     objects = [];
-/*
-    cameraNode = new Node();
-    cameraNode.localMatrix = utils.MakeTranslateMatrix(camera_x, camera_y, camera_z);
-    cameraNode.drawInfo = {
-        type: CAMERA_INDEX,
-        zNear: 0.1,
-        zFar: 100,
-        fieldOfViewDeg: 15,
-    };
-    */
+
     xwingNode = new Node();
-    xwingNode.localMatrix = utils.identityMatrix();
+    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0, Ry, Rz, S);
     xwingNode.drawInfo = {
         type: XWING_INDEX,
         materialColor: [1.0, 1.0, 1.0],
@@ -21,20 +12,49 @@ function initializeGameSceneGraph(){
         vertexArray: vaos[XWING_INDEX],
     };
 
-    //xwingNode.setParent(cameraNode);
+    xwingNode.updateWorldMatrix();
 
-    objects =[xwingNode];
+    objects = [xwingNode];
+
+    drawGameScene();
+    
 }
 
+function drawGameScene() {    
 
+    //updateWorldMatrix(); // to update rings world matrices
+
+    setGameMatrices();
+
+    clearBits();
+    
+    drawSkybox();
+
+    for (var i = 0; i < objects.length; i++){
+        drawObject(objects[i]);
+    }
+    
+    
+
+    requestAnimationId = window.requestAnimationFrame(drawGameScene);
+}
+
+function setGameMatrices(){
+
+    // Compute the camera matrix
+    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+    viewMatrix = utils.MakeView(0, 0, 50.0, 0, 0);
+}
 
 //start the game!!
 function startGame(){
 
-    //window.cancelAnimationFrame(requestAnimationId);
+    console.log("Cancelling animation: " + requestAnimationId);
+    window.cancelAnimationFrame(requestAnimationId);
 
     //if(gameOn){ //if you press tab while playing game ends and rings disappear
-    matricesArrays[0] = [];
+    //matricesArrays[0] = [];
     //}
 
     HideShowElement(lightController);
@@ -44,9 +64,14 @@ function startGame(){
     gameOn = !gameOn; 
   
     initializeGameSceneGraph();
-    
-    //gameOver();
+
+    game();
 }
+
+function game(){
+
+}
+
 
 function makeNewRing(){
 

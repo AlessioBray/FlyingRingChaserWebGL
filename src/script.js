@@ -141,7 +141,6 @@ function animate(){
     }
 }
 
-
 //x  [-6,6] y[0,4]
 function updateWorldMatrix(){
 
@@ -233,8 +232,6 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(worldMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
-    
-
     gl.uniform3fv(lightColorHandleA[obj.drawInfo.type], directionalLightColorA);
     gl.uniform3fv(lightDirectionHandleA[obj.drawInfo.type], directionalLightA);
     gl.uniform3fv(lightColorHandleB[obj.drawInfo.type], directionalLightColorB);
@@ -281,12 +278,12 @@ function drawScene() {
         }
     }
     */
+   
+    drawSkybox();
 
     for (var i = 0; i < objects.length; i++){
         drawObject(objects[i]);
     }
-    
-    drawSkybox();
 
     requestAnimationId = window.requestAnimationFrame(drawScene);
 }

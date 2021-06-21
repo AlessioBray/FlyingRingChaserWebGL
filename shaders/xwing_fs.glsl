@@ -22,9 +22,6 @@ uniform vec3 lightColorB;
 uniform vec3 ambientLightCol;
 uniform vec3 ambientMat;
 
-// inverseprojmatrix
-uniform mat4 matrix;
-
 //texture
 uniform sampler2D in_texture;
 

@@ -5,7 +5,6 @@ function keyDownFunction(e){
         case "ArrowLeft":
         case "a":  
             if (!gameOn){
-                //camera_yaw -= delta;
                 selectedObjId = (selectedObjId - 1) % 3;
                 if (selectedObjId < 0){
                     selectedObjId = selectedObjId + 3;
@@ -20,7 +19,6 @@ function keyDownFunction(e){
         case "ArrowRight":
         case "d":
             if (!gameOn){
-                //camera_yaw += delta;
                 selectedObjId = (selectedObjId + 1) % 3;
                 onSelectedObjChange(selectedObjId);
                 break;
@@ -55,9 +53,19 @@ function keyUpFunction(e){
 
     if (e.keyCode == 32) {  // spacebar
         if (!gameOn){
+            canvas.removeEventListener("mousedown", doMouseDown, false);
+            canvas.removeEventListener("mouseup", doMouseUp, false);
+            canvas.removeEventListener("mousemove", doMouseMove, false);
+            canvas.removeEventListener("mousewheel", doMouseWheel, false);
+            
             startGame();
         }
         else{
+            canvas.addEventListener("mousedown", doMouseDown, false);
+            canvas.addEventListener("mouseup", doMouseUp, false);
+            canvas.addEventListener("mousemove", doMouseMove, false);
+            canvas.addEventListener("mousewheel", doMouseWheel, false);
+
             gameOver();
         }    
     }
