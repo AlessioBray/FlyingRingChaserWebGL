@@ -31,14 +31,18 @@ function keyDownFunction(e){
 
         case "ArrowUp":
         case "w": 
+            if (gameOn){
 
-            camera_pitch += delta;
+            }
+            
             break;
 
         case "ArrowDown":
         case "s": 
             
-            camera_pitch -= delta;
+            if (gameOn){
+
+            }
             break;
 
         default:

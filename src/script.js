@@ -27,9 +27,9 @@ function getAttributesAndUniforms(){
             uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
         }
         
-        matrixLocation[i] = gl.getUniformLocation(programs[i], "matrix");  
+        worldViewProjectionMatrixLocation[i] = gl.getUniformLocation(programs[i], "worldViewProjectionMatrix");  
         normalMatrixLocation[i] = gl.getUniformLocation(programs[i], "normalMatrix");
-        pMatrixLocation[i] = gl.getUniformLocation(programs[i], "pMatrix");
+        worldMatrixLocation[i] = gl.getUniformLocation(programs[i], "worldMatrix");
 
         if (i == XWING_INDEX){
             textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
@@ -91,11 +91,9 @@ function main() {
     for (let i in allMeshes){
         vaos[i] = gl.createVertexArray(); 
         createMeshVAO(i);
-
-        loadTexture(); ///idealmente dovrebbe stare sotto dove è commentata (in altri posti sfarfalla perchè crea continuamente la texture)
     }
 
-    //loadTexture();
+    loadTexture();
 
     createShowcaseSceneGraph();
 
@@ -175,9 +173,9 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
     Projection = utils.multiplyMatrices(perspectiveMatrix, MV);
 
-    gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
+    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
     gl.uniformMatrix4fv(normalMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
-    gl.uniformMatrix4fv(pMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
+    gl.uniformMatrix4fv(worldMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
     
     if(i==0){
 
@@ -196,7 +194,7 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
-    gl.uniformMatrix4fv(matrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
     gl.uniformMatrix4fv(normalMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
 
     gl.bindVertexArray(vaos[i]);
@@ -220,9 +218,9 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         gl.uniform1i(textureLocation[obj.drawInfo.type], 0);
     }
 
-    gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
     gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
-    gl.uniformMatrix4fv(pMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
+    gl.uniformMatrix4fv(worldMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], obj.drawInfo.materialColor);
     gl.uniform3fv(lightColorHandleA[obj.drawInfo.type], directionalLightColorA);
@@ -234,7 +232,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniform3fv(specularColorHandle[obj.drawInfo.type], specularColor);
     gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
 
-    gl.uniformMatrix4fv(matrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
     gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.bindVertexArray(obj.drawInfo.vertexArray);
