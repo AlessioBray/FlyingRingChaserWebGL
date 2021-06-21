@@ -13,7 +13,7 @@ uniform mat4 worldMatrix;
 uniform mat4 normalMatrix; 
 
 void main() {
-    fsUV = vec2(in_UV.x, 1.0-in_UV.y);
+    fsUV = vec2(in_UV.x, 1.0 - in_UV.y);
     fsNormal = mat3(normalMatrix) * in_normal;
     fsPosition = (worldMatrix * vec4(in_position, 1.0)).xyzw; // coordinates in world space
     gl_Position = worldViewProjectionMatrix * vec4(in_position, 1.0);
