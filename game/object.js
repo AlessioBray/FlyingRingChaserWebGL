@@ -22,6 +22,14 @@ var dirLightBetaBSlider = document.getElementById("dirLightBetaB"); //32
 var directionalLightColorASlider = document.getElementById("LAlightColor"); //#4d4d4d
 var directionalLightColorBSlider = document.getElementById("LBlightColor"); //#4d4d4d
 
+
+//ring PBR uniforms
+var albedoLocation;
+var metalnessLocation;
+var roughnessLocation;
+var ambientOcclusionLocation;
+var cameraPositionLocation;
+
 var programs = new Array();
 var gl;
 var model;

@@ -35,6 +35,17 @@ function getAttributesAndUniforms(){
             textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
         }
 
+        if (i == RING_INDEX){
+            cameraPositionLocation = gl.getUniformLocation(programs[i], "cameraPosition");
+            albedoLocation = gl.getUniformLocation(programs[i], "albedo");
+            metalnessLocation = gl.getUniformLocation(programs[i], "metallic");
+            roughnessLocation = gl.getUniformLocation(programs[i], "roughness");
+            ambientOcclusionLocation = gl.getUniformLocation(programs[i], "ao");
+        }
+
+
+        // Light uniforms location COMMON to all objects
+
         ambientLightColorHandle[i] = gl.getUniformLocation(programs[i], "ambientLightCol");
         ambientMaterialHandle[i] = gl.getUniformLocation(programs[i], "ambientMat");
         materialDiffColorHandle[i] = gl.getUniformLocation(programs[i], 'mDiffColor');
@@ -155,7 +166,7 @@ function updateWorldMatrix(){
     //objects[0].worldMatrix = utils.MakeWorld(0.0, -1.0, 45.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
 
 }
-
+/*
 function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
 
     gl.useProgram(programs[i]);
@@ -201,7 +212,7 @@ function drawElement(i,j){ // i is the index for vaos, j is index for worldMatri
     gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
 
 }
-
+*/
 function drawObject(obj){ // obj is the node that represent the object to draw
 
     gl.useProgram(obj.drawInfo.programInfo);
@@ -222,18 +233,31 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(worldMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
-    gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], obj.drawInfo.materialColor);
+    
+
     gl.uniform3fv(lightColorHandleA[obj.drawInfo.type], directionalLightColorA);
     gl.uniform3fv(lightDirectionHandleA[obj.drawInfo.type], directionalLightA);
     gl.uniform3fv(lightColorHandleB[obj.drawInfo.type], directionalLightColorB);
     gl.uniform3fv(lightDirectionHandleB[obj.drawInfo.type], directionalLightB);
-    gl.uniform3fv(ambientLightColorHandle[obj.drawInfo.type], ambientLight);
-    gl.uniform3fv(ambientMaterialHandle[obj.drawInfo.type], ambientMat);
-    gl.uniform3fv(specularColorHandle[obj.drawInfo.type], specularColor);
-    gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
+    
+    if (obj.drawInfo.type == RING_INDEX){
+        gl.uniform4fv(cameraPositionLocation, [camera_x, camera_y, camera_z, 1]);
+        gl.uniform3fv(albedoLocation, [0.5, 0.0, 0.0]);
+        gl.uniform1f(metalnessLocation, 1.0);
+        gl.uniform1f(roughnessLocation, 0.35);
+        gl.uniform1f(ambientOcclusionLocation, 1.0);
+    }
+    else{
+        gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], obj.drawInfo.materialColor);
+        gl.uniform3fv(ambientLightColorHandle[obj.drawInfo.type], ambientLight);
+        gl.uniform3fv(ambientMaterialHandle[obj.drawInfo.type], ambientMat);
+        gl.uniform3fv(specularColorHandle[obj.drawInfo.type], specularColor);
+        gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
+    }
 
-    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
+    // I think this two calls are a duplication of the upper ones so they can be deleted
+    //gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    //gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.bindVertexArray(obj.drawInfo.vertexArray);
     gl.drawElements(gl.TRIANGLES, obj.drawInfo.bufferLength, gl.UNSIGNED_SHORT, 0 );
@@ -316,7 +340,7 @@ async function loadShaders() {
         programs[XWING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
-    await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs2.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
         

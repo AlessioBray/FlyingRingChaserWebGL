@@ -1,8 +1,9 @@
 #version 300 es
+
 precision highp float;
 
 const float PI = 3.14159265359;
-const float distance = 10.0; // At the moemnt lights are drectional ones 
+const float distance = 1.0; // At the moemnt lights are drectional ones 
 
 in vec3 fsNormal;
 in vec4 fsPosition;
@@ -22,7 +23,7 @@ uniform float roughness;
 uniform float ao;
 
 // Camera position
-uniform vec3 camPosition;
+uniform vec4 camPosition;
 
 out vec4 outColor;
 
@@ -103,7 +104,7 @@ void main() {
     // -------
     
     // calculate per-light radiance
-    vec3 L = lightDirectionA;
+    vec3 L = normalize(lightDirectionA);
     vec3 H = normalize(V + L);
     //float distance = 10.0;
     float attenuation = 1.0 / (distance * distance);
@@ -115,7 +116,7 @@ void main() {
     vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
            
     vec3 numerator    = NDF * G * F; 
-    float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+    float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
     vec3 specular = numerator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0
         
     // kS is equal to Fresnel
@@ -141,7 +142,7 @@ void main() {
     // -------
     
     // calculate per-light radiance
-    L = lightDirectionB;
+    L = normalize(lightDirectionB);
     H = normalize(V + L);
     //distance = 10.0;
     attenuation = 1.0 / (distance * distance);
@@ -153,7 +154,7 @@ void main() {
     F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
            
     numerator    = NDF * G * F; 
-    denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+    denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
     specular = numerator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0
         
     // kS is equal to Fresnel
