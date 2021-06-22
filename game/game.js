@@ -151,9 +151,9 @@ function drawGameInitializationScene(){
         window.addEventListener("keydown", keyDownFunction, false);
         window.addEventListener("keyup", keyUpFunction, false);
 
-        gameOn = !gameOn;
+        //gameOn = !gameOn;
         
-        game(); // then is called once the initialization is finisced
+        //game(); // then is called once the initialization is finisced
 
     }
     else{ 
