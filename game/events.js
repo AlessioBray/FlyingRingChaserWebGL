@@ -133,17 +133,19 @@ function doMouseMove(event) {
 			camera_angle = camera_angle + 0.5 * dx;
 			camera_elevation = camera_elevation + 0.5 * dy;
 		}
+        
         camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
 	    camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
 	    camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
 	    viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
-	}
+        console.log('elev: ' + camera_elevation, 'angle: ' + camera_angle, 'Z: ' + camera_z, 'Y: ' + camera_y);
+    }
 
 }
 
 function doMouseWheel(event) {
 	var nLookRadius = lookRadius + event.wheelDelta / 100.0;
-	if((nLookRadius > 2.0) && (nLookRadius < 70.0)) {
+	if((nLookRadius > 5.0) && (nLookRadius < 70.0)) {
 		lookRadius = nLookRadius;
 	}
 

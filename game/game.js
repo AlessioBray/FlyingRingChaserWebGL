@@ -48,27 +48,30 @@ function computeDeltaGameInitializationMovements(){
 
     }
 
-    //-------------------------------------------------------------------------------------------
-    if (lookRadius > GAME_CAMERA_POSITION[3]){
-        deltaLookRadius = (GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
-    }
-    else{
-        deltaLookRadius = -(GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
+    deltaLookRadius = (GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
+    
+    /*
+    if (camera_z > 0 && camera_y > 0 && camera_x > 0){
+        deltaCameraElevation = 0.5;
     }
     
-    if (camera_elevation < 0){
+    if (camera_x < 0){
         deltaCameraElevation = 0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
     }
-    else{
+    else if(camera_x > 0){
         deltaCameraElevation = -0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
     }
-    if (camera_angle < 0){
+
+    if (camera_y < 0){
         deltaCameraAngle = 0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
     }
-    else{
+    else if (camera_y > 0){
         deltaCameraAngle = -0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
     }
-    
+    */
+
+    camera_elevation = 0;
+    camera_angle = 0;
 }
 
 
@@ -101,22 +104,24 @@ function animateGameInitialization(){
     var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
     objects[0].updateWorldMatrix(deltaMatrix);
 
-/*    
+
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
         lookRadius = lookRadius + deltaLookRadius;
     }
     else{
         lookRadius = GAME_CAMERA_POSITION[2];
     }
-
-    if (camera_elevation != GAME_CAMERA_POSITION[3]){
-        camera_elevation = camera_elevation + deltaCameraElevation;
+/*
+    if (lookRadius = GAME_CAMERA_POSITION[2]){
+        if (camera_elevation != GAME_CAMERA_POSITION[3]){
+            camera_elevation = camera_elevation + deltaCameraElevation;
+        }
+    
+        if (camera_angle != GAME_CAMERA_POSITION[4]){
+            camera_angle = camera_angle + deltaCameraAngle;
+        }
     }
-
-    if (camera_angle != GAME_CAMERA_POSITION[4]){
-        camera_angle = camera_angle + deltaCameraAngle;
-    }
-
+*/
     camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
     camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
     camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
@@ -124,7 +129,7 @@ function animateGameInitialization(){
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
     viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
-*/    
+    
 }
 
 
