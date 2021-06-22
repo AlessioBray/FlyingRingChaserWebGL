@@ -204,14 +204,14 @@ function startGame(){
     HideShowElement(lightController);
     HideShowElement(moveController);
     HideShowElement(objDiv);
-    
-    gameOn = !gameOn;
   
     initializeGameSceneGraph();
 
     computeDeltaGameInitializationMovements();
 
     drawGameInitializationScene();
+
+    gameOn = !gameOn;
 
     //drawGameScene();
 

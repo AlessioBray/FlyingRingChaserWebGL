@@ -13,7 +13,8 @@ function keyDownFunction(e){
                 break;
             }
             else{
-
+                //camera_angle -= 5;
+                
                 break;
             }
             
@@ -25,6 +26,7 @@ function keyDownFunction(e){
                 break;
             }
             else{
+                //camera_angle += 5;
                 break;
             }
 
