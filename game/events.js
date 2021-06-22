@@ -60,6 +60,9 @@ function keyUpFunction(e){
             canvas.removeEventListener("mouseup", doMouseUp, false);
             canvas.removeEventListener("mousemove", doMouseMove, false);
             canvas.removeEventListener("mousewheel", doMouseWheel, false);
+
+            window.removeEventListener("keydown", keyDownFunction, false);
+            window.removeEventListener("keyup", keyUpFunction, false);
             
             startGame();
         }

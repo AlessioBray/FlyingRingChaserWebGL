@@ -53,22 +53,13 @@ function computeDeltaGameInitializationMovements(){
     deltaLookRadius = (GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
     
     /*
-    if (camera_z > 0 && camera_y > 0 && camera_x > 0){
-        deltaCameraElevation = 0.5;
+    if (camera_x > 0 && camera_y > 0 && camera_z > 0){
+        deltaCameraElevation = -0.5;
+        deltaCameraAngle = -0.5;
     }
-    
-    if (camera_x < 0){
-        deltaCameraElevation = 0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
-    }
-    else if(camera_x > 0){
-        deltaCameraElevation = -0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
-    }
-
-    if (camera_y < 0){
-        deltaCameraAngle = 0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
-    }
-    else if (camera_y > 0){
-        deltaCameraAngle = -0.5; //-camera_angle / NUMBER_INITIALIZATION_FRAMES;
+    else if (camera_x < 0 && camera_y > 0 && camera_z >0){
+        deltaCameraElevation = -0.5;
+        deltaCameraAngle = 0.5;
     }
     */
 
@@ -119,14 +110,12 @@ function animateGameInitialization(){
         lookRadius = GAME_CAMERA_POSITION[2];
     }
 /*
-    if (lookRadius = GAME_CAMERA_POSITION[2]){
-        if (camera_elevation != GAME_CAMERA_POSITION[3]){
-            camera_elevation = camera_elevation + deltaCameraElevation;
-        }
-    
-        if (camera_angle != GAME_CAMERA_POSITION[4]){
-            camera_angle = camera_angle + deltaCameraAngle;
-        }
+    if (camera_elevation != GAME_CAMERA_POSITION[3]){
+        camera_elevation = camera_elevation + p;
+    }
+
+    if (camera_angle != GAME_CAMERA_POSITION[4]){
+        camera_angle = camera_angle + deltaCameraAngle;
     }
 */
     camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
@@ -158,8 +147,13 @@ function drawGameInitializationScene(){
         Z = 0;
         Y = 0;
         window.cancelAnimationFrame(requestAnimationId);
+        
+        window.addEventListener("keydown", keyDownFunction, false);
+        window.addEventListener("keyup", keyUpFunction, false);
 
-        //game(); // then is called once the initialization is finisced
+        gameOn = !gameOn;
+        
+        game(); // then is called once the initialization is finisced
 
     }
     else{ 
@@ -168,11 +162,26 @@ function drawGameInitializationScene(){
     
 }
 
+function setGameMatrices(){
+
+    // Compute the camera matrix
+    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+    viewMatrix = utils.MakeView(GAME_CAMERA_POSITION[0], GAME_CAMERA_POSITION[1], GAME_CAMERA_POSITION[2], GAME_CAMERA_POSITION[3], GAME_CAMERA_POSITION[4]);
+
+}
+
+function updateGameMatrices(){
+    // world matrix che muove gli oggetti in scena
+    // aggiorna ricorsivamente la scena senza aggiornare la posizione della xwing che deve rimanere li 
+    // => update local matrix oggetti tranne xwing e chiamata objects[0].updateWorldMatrix();
+}
+
 function drawGameScene() {    
 
     setGameMatrices();
     
-    //updateWorldMatrix(); // to update rings world matrices
+    updateGameMatrices(); // to update rings world matrices
 
     clearBits();
     
@@ -183,15 +192,6 @@ function drawGameScene() {
     }
     
     requestAnimationId = window.requestAnimationFrame(drawGameScene);
-}
-
-function setGameMatrices(){
-
-    // Compute the camera matrix
-    aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-    viewMatrix = utils.MakeView(GAME_CAMERA_POSITION[0], GAME_CAMERA_POSITION[1], GAME_CAMERA_POSITION[2], GAME_CAMERA_POSITION[3], GAME_CAMERA_POSITION[4]);
-
 }
 
 //start the game!!
@@ -215,10 +215,18 @@ function startGame(){
     drawGameInitializationScene();
 
     gameOn = !gameOn;
+
 }
 
 function game(){
-    
+    // funzione di gestione del gioco (chiamata iterativamente):
+    // chiama le funzioni di creazione di ostacoli
+    // chiama la funzione di controllo delle collisioni
+
+    // per evitare che ogni volta che game viene eseguita occorre chiamare la drawGameScene un'unica volta all'inizio
+    // poi ci penserà la request animation a fare il lavoro.
+    // OPPURE
+    // la request animation frame si sposta sulla funzione game che conterrà la chiamata a drawGameScene 
 }
 
 
@@ -227,17 +235,20 @@ function makeNewRing(){
     ringsArrays = matricesArrays[0];
     let Tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
     let Ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
-    ringsArrays.push(utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz+90, S));
+    ringsArrays.push(utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz + 90, S));
     lastNewRingTime = Date.now();
 
 }
 
+//////////////////////////////////////// questo andrà in updateGameMatrices: fara un update delle local matrices degli ostacoli.
 function move(){
+    
     ringsArrays = matricesArrays[0];
     for(var i = 0; i < ringsArrays.length; i++){
         let oldMatrix = ringsArrays[i];
         ringsArrays[i] = utils.multiplyMatrices(oldMatrix,utils.MakeTranslateMatrix(0,SPEED,0.0));
     }
+
 }
 
 //game over
