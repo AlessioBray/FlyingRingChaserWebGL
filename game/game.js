@@ -29,11 +29,13 @@ var deltaRz = 0;
 var Z = 0;
 var Y = 0;
 
+
 var deltaLookRadius = 0;
 var deltaCameraAngle = 0;
 var deltaCameraElevation = 0;
 
 var NUMBER_INITIALIZATION_FRAMES = 100;
+var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
 
 function computeDeltaGameInitializationMovements(){
     
@@ -77,7 +79,7 @@ function computeDeltaGameInitializationMovements(){
 
 function animateGameInitialization(){
 
-    NUMBER_INITIALIZATION_FRAMES -= 1;
+    elapsedInitializationFrames -= 1;
 
     if (Z != GAME_XWING_POSITION[2]){
         Z += deltaZ;
@@ -137,8 +139,6 @@ function animateGameInitialization(){
     
 }
 
-
-
 function drawGameInitializationScene(){
     // rotate camera until it reaches the point along a circumference
     // render xwing and move 
@@ -152,13 +152,15 @@ function drawGameInitializationScene(){
         drawObject(objects[i]);
     }
 
-    if (NUMBER_INITIALIZATION_FRAMES == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
+    if (elapsedInitializationFrames == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
         
-        NUMBER_INITIALIZATION_FRAMES = 100;
+        elapsedInitializationFrames = 100;
         Z = 0;
         Y = 0;
         window.cancelAnimationFrame(requestAnimationId);
-        //drawGameScene();
+
+        //game(); // then is called once the initialization is finisced
+
     }
     else{ 
         requestAnimationId = window.requestAnimationFrame(drawGameInitializationScene);
@@ -188,7 +190,8 @@ function setGameMatrices(){
     // Compute the camera matrix
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-    viewMatrix = utils.MakeView(0, 0, 50.0, 0, 0);
+    viewMatrix = utils.MakeView(GAME_CAMERA_POSITION[0], GAME_CAMERA_POSITION[1], GAME_CAMERA_POSITION[2], GAME_CAMERA_POSITION[3], GAME_CAMERA_POSITION[4]);
+
 }
 
 //start the game!!
@@ -212,14 +215,10 @@ function startGame(){
     drawGameInitializationScene();
 
     gameOn = !gameOn;
-
-    //drawGameScene();
-
-    //game(); // then is called once the initialization is finisced
 }
 
 function game(){
-
+    
 }
 
 
@@ -230,6 +229,7 @@ function makeNewRing(){
     let Ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
     ringsArrays.push(utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz+90, S));
     lastNewRingTime = Date.now();
+
 }
 
 function move(){
@@ -255,6 +255,7 @@ function gameOver(){
 
     createShowcaseSceneGraph();
     changeRender();
+
 }
 
 
