@@ -3,7 +3,7 @@ function initializeGameSceneGraph(){
     objects = [];
 
     xwingNode = new Node();
-    xwingNode.localMatrix = utils.MakeWorld(0.0, -1.5, 40.0, 0, 90, 0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
+    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
     xwingNode.drawInfo = {
         type: XWING_INDEX,
         materialColor: [1.0, 1.0, 1.0],
@@ -29,30 +29,26 @@ var deltaRz = 0;
 var Z = 0;
 var Y = 0;
 
-var deltaLookRadius;
-var deltaCameraAngle;
-var deltaCameraElevation;
+var deltaLookRadius = 0;
+var deltaCameraAngle = 0;
+var deltaCameraElevation = 0;
 
 var NUMBER_INITIALIZATION_FRAMES = 100;
 
 function computeDeltaGameInitializationMovements(){
     
-    deltaZ = GAME_XWING_POSITION[2] / 100;
+    deltaZ = GAME_XWING_POSITION[2] / NUMBER_INITIALIZATION_FRAMES;
     deltaY = -1.5 / NUMBER_INITIALIZATION_FRAMES;
 
     if ((Ry % 360) >= 270 || (Ry % 360) <= 90){
-        if ((Ry % 360) >= 270){
-            deltaRy = -2.5; //((Ry % 360) - 270) / NUMBER_INITIALIZATION_FRAMES;
-        }
-        else{
-            deltaRy = -2.5; //(90 + (Ry % 360)) / NUMBER_INITIALIZATION_FRAMES;
-        }
+        deltaRy = -2.5; //((Ry % 360) - 270) / NUMBER_INITIALIZATION_FRAMES;
     }
     else{ // if ((Ry % 360) < 270 && (Ry % 360) > 90)
-        
         deltaRy = +2.5; //(270 - (Ry % 360)) / NUMBER_INITIALIZATION_FRAMES;
 
     }
+
+    //-------------------------------------------------------------------------------------------
     if (lookRadius > GAME_CAMERA_POSITION[3]){
         deltaLookRadius = (GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
     }
@@ -89,29 +85,34 @@ function animateGameInitialization(){
     }
 
     if ((Ry % 360) != 270){
-        console.log(Ry, (Ry % 360), 270 - (Ry % 360));
-        Ry = Ry + deltaRy;
-        if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){ // fai una cosa simile per gli altri
+
+        if ((Ry % 360) + deltaRy < 0){
+            Ry = 360 + (Ry % 360) + deltaRy;
+        }
+        else if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){ // fai una cosa simile per gli altri
             Ry = 270;
         }
-
-    }
-    else{
-        Ry = 0;
+        else{
+            Ry = (Ry % 360) + deltaRy;
+        }
+        
     }
 
     var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
     objects[0].updateWorldMatrix(deltaMatrix);
-    
+
+/*    
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
         lookRadius = lookRadius + deltaLookRadius;
     }
     else{
         lookRadius = GAME_CAMERA_POSITION[2];
     }
+
     if (camera_elevation != GAME_CAMERA_POSITION[3]){
         camera_elevation = camera_elevation + deltaCameraElevation;
     }
+
     if (camera_angle != GAME_CAMERA_POSITION[4]){
         camera_angle = camera_angle + deltaCameraAngle;
     }
@@ -123,7 +124,7 @@ function animateGameInitialization(){
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
     viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
-    
+*/    
 }
 
 
@@ -198,11 +199,11 @@ function startGame(){
   
     initializeGameSceneGraph();
 
-    //computeDeltaGameInitializationMovements();
+    computeDeltaGameInitializationMovements();
 
-    //drawGameInitializationScene();
+    drawGameInitializationScene();
 
-    drawGameScene();
+    //drawGameScene();
 
     //game(); // then is called once the initialization is finisced
 }
