@@ -87,20 +87,25 @@ function animateGameInitialization(){
         Y += deltaY;
     }
 
-    if ((Ry % 360) != 270){
-
-        if ((Ry % 360) + deltaRy < 0){
-            Ry = 360 + (Ry % 360) + deltaRy;
-        }
-        else if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){ // fai una cosa simile per gli altri
-            Ry = 270;
-        }
-        else{
-            Ry = (Ry % 360) + deltaRy;
-        }
-        
+    if (selectedObjId != XWING_INDEX){
+        Ry = 270;
     }
+    else{
+        if ((Ry % 360) != 270){
 
+            if ((Ry % 360) + deltaRy < 0){
+                Ry = 360 + (Ry % 360) + deltaRy;
+            }
+            else if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){ // fai una cosa simile per gli altri
+                Ry = 270;
+            }
+            else{
+                Ry = (Ry % 360) + deltaRy;
+            }
+            
+        }
+    }
+    
     var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
     objects[0].updateWorldMatrix(deltaMatrix);
 
