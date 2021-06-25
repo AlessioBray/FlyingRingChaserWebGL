@@ -67,20 +67,23 @@ function getAttributesAndUniforms(){
 
 }
 
-function loadTexture(){
+var images = [];
+var textures = [];
+
+function loadObjectsTextures(){
     
     // Create a texture.
-    texture = gl.createTexture();
-    // use texture unit 0
-    gl.activeTexture(gl.TEXTURE0);
-    // bind to the TEXTURE_2D bind point of texture unit 0
-    gl.bindTexture(gl.TEXTURE_2D, texture);
+    textures[0] = gl.createTexture();
+    // use texture unit 1
+    gl.activeTexture(gl.TEXTURE0 + 1);
+    // bind to the TEXTURE_2D bind point of texture unit 1
+    gl.bindTexture(gl.TEXTURE_2D, textures[0]);
 
     // Asynchronously load an image
     var image = new Image();
-    image.src = textureDir + "X-Wing-textures.png";
+    image.src = textureDir + "xwing/X-Wing-textures.png";
     image.onload = function() {
-        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
                 
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
@@ -89,7 +92,30 @@ function loadTexture(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
+/*
+    textures[1] = gl.createTexture();
+    // use texture unit 2
+    gl.activeTexture(gl.TEXTURE0 + 2);
+    // bind to the TEXTURE_2D bind point of texture unit 2
+    gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+
+    image = new Image();
+    image.src = textureDir + "ring/gold_albedo_1024.png";
+    
+    image.onload = function() {
+        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+                
+        //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        //gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    */
 }
+
+var textureRing;
 
 function main() {
 
@@ -104,7 +130,7 @@ function main() {
         createMeshVAO(i);
     }
 
-    loadTexture();
+    loadObjectsTextures();
 
     createShowcaseSceneGraph();
 
@@ -223,9 +249,9 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     if (obj.drawInfo.type == XWING_INDEX){
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.uniform1i(textureLocation[obj.drawInfo.type], 0);
+        gl.activeTexture(gl.TEXTURE0 + 1);
+        gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+        gl.uniform1i(textureLocation[obj.drawInfo.type], 1);
     }
 
     gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
@@ -267,8 +293,6 @@ function drawScene() {
     animate();
 
     updateWorldMatrix(); // to update rings world matrices
-
-    //console.log(Ry);
 
     clearBits();
 
@@ -359,9 +383,8 @@ async function loadShaders() {
 async function loadMeshes() {
 
     xwingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
-
     ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
-    asteroidMesh = await utils.loadMesh(modelsDir + "asteroid_triangulate.obj" );
+    asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj");
 
     allMeshes = [xwingMesh, ringMesh, asteroidMesh];
 

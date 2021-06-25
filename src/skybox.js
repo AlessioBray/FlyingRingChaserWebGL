@@ -71,37 +71,35 @@ function loadEnvironment(){
         image.src = url;
         image.addEventListener('load', function() {
             // Now that the image has loaded upload it to the texture.
-            gl.activeTexture(gl.TEXTURE0 + 3);
+            gl.activeTexture(gl.TEXTURE0);
             gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
             gl.texImage2D(target, level, internalFormat, format, type, image);
             gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
         });
     
-        
     });
-    gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+    
     
 }
 
 function drawSkybox(){
 
     skyboxProgram = programs[SKYBOX_INDEX];
+    gl.useProgram(skyboxProgram);
 
     //Uniforms
     skyboxTexHandle = gl.getUniformLocation(skyboxProgram, "u_texture"); 
     inverseViewProjMatrixHandle = gl.getUniformLocation(skyboxProgram, "inverseViewProjMatrix");
     skyboxVertPosAttr = gl.getAttribLocation(skyboxProgram, "in_position");
     
-    gl.useProgram(skyboxProgram);
-    
-    gl.activeTexture(gl.TEXTURE0 + 3);
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
-    gl.uniform1i(skyboxTexHandle, 3);
+    gl.uniform1i(skyboxTexHandle, 0); // active texture position
 
     var viewProjMat = utils.multiplyMatrices(perspectiveMatrix, viewMatrix);
     inverseViewProjMatrix = utils.invertMatrix(viewProjMat);

@@ -143,7 +143,6 @@ function doMouseMove(event) {
 	    camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
 	    camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
 	    viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
-        console.log('elev: ' + camera_elevation, 'angle: ' + camera_angle, 'Z: ' + camera_z, 'Y: ' + camera_y);
     }
 
 }

@@ -3,7 +3,6 @@
 in vec3 in_position; 
 in vec3 in_normal;
 
-
 out vec3 fsNormal; 
 out vec4 fsPosition;
 
