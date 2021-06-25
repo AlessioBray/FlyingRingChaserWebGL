@@ -35,6 +35,15 @@ body {
                 rgba(252, 186, 3, 0.05) 25px 25px;
 }
 
+#healthbar{
+   width: 350px;
+   height: 50px;
+   position: absolute; 
+   right: 40px; 
+   top: 30px; 
+
+}
+
 #obj{
    width: 150px;
    height: 100px;

@@ -11,9 +11,14 @@ var score = document.getElementById('scoringtab');
 var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
+var healthBar = document.getElementById("healthbar");
+
+healthBar.style.display = "none"; // initially is hidden
+
 
 var objSelected = document.getElementById("objSelected");
-var objDiv = document.getElementById("obj")
+var objDiv = document.getElementById("obj");
+
 
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
 var dirLightBetaASlider = document.getElementById("dirLightBetaA"); //32
@@ -178,3 +183,7 @@ var skyboxVao;
 var skyboxTexHandle;
 
 var skyboxProgram;
+
+// DAMAGE OF OBSTACLES
+
+var ASTEROID_DAMAGE = 30;
