@@ -33,6 +33,7 @@ var Y = 0;
 var deltaLookRadius = 0;
 var deltaCameraAngle = 0;
 var deltaCameraElevation = 0;
+var isCameraMoved = false;
 
 var NUMBER_INITIALIZATION_FRAMES = 100;
 var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
@@ -63,8 +64,12 @@ function computeDeltaGameInitializationMovements(){
     }
     */
 
+    if (camera_elevation != 0 || camera_angle != 0){
+        isCameraMoved = true;
+    }
     camera_elevation = 0;
     camera_angle = 0;
+    
 }
 
 
@@ -80,7 +85,7 @@ function animateGameInitialization(){
         Y += deltaY;
     }
 
-    if (selectedObjId != XWING_INDEX){
+    if (selectedObjId != XWING_INDEX || isCameraMoved){
         Ry = 270;
     }
     else{
