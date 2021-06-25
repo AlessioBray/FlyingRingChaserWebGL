@@ -7,6 +7,7 @@ const float distance = 2.0; // At the moement lights are directional ones
 
 in vec3 fsNormal;
 in vec4 fsPosition;
+in vec2 fsUV;
 
 //directional light A
 uniform vec3 lightDirectionA; 
@@ -18,10 +19,14 @@ uniform vec3 lightColorB;
 
 // material parameters
 uniform sampler2D albedoMap;
-uniform sampler2D normalMap;
-uniform sampler2D metallicMap; // always 1 so it can be a constant
-uniform sampler2D roughnessMap;
-uniform sampler2D aoMap;
+uniform float metallic;
+uniform float roughness;
+uniform float ao;
+
+//uniform sampler2D normalMap;
+//uniform sampler2D metallicMap; // always 1 so it can be a constant
+//uniform sampler2D roughnessMap;
+//uniform sampler2D aoMap;
 
 // Camera position
 uniform vec4 camPosition;
@@ -70,6 +75,8 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 // ----------------------------------------------------------------------------
 
 void main() {
+    
+    vec3 albedo = pow(texture(albedoMap, fsUV).rgb, vec3(2.2));
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = -normalize(fsNormal);
@@ -160,7 +167,7 @@ void main() {
     // -------
     
     // ambient lighting
-    vec3 ambient = vec3(0.08) * albedo * ao;
+    vec3 ambient = vec3(0.35) * albedo * ao;
 
     vec3 color = ambient + Lo;
 

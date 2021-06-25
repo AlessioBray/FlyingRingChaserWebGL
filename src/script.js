@@ -23,7 +23,7 @@ function getAttributesAndUniforms(){
         positionAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_position");
         normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_normal");
         
-        if (i == XWING_INDEX){
+        if (i == XWING_INDEX || i == RING_INDEX){
             uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
         }
         
@@ -36,8 +36,11 @@ function getAttributesAndUniforms(){
         }
 
         if (i == RING_INDEX){
+            albedoLocation =  gl.getUniformLocation(programs[i], "albedoMap");
+
             cameraPositionLocation = gl.getUniformLocation(programs[i], "cameraPosition");
-            albedoLocation = gl.getUniformLocation(programs[i], "albedo");
+            //albedoLocation = gl.getUniformLocation(programs[i], "albedo");
+            
             metalnessLocation = gl.getUniformLocation(programs[i], "metallic");
             roughnessLocation = gl.getUniformLocation(programs[i], "roughness");
             ambientOcclusionLocation = gl.getUniformLocation(programs[i], "ao");
@@ -77,14 +80,14 @@ function loadObjectsTextures(){
     
     // Create a texture.
     textures[0] = gl.createTexture();
-    // use texture unit 1
-    gl.activeTexture(gl.TEXTURE0 + 1);
-    // bind to the TEXTURE_2D bind point of texture unit 1
-    gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+    
 
     // Asynchronously load an image
     images[0] = new Image();
     images[0].onload = function() {
+        // use texture unit 1
+        gl.activeTexture(gl.TEXTURE0 + 1);
+        // bind to the TEXTURE_2D bind point of texture unit 1
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[0]);
                 
@@ -103,13 +106,13 @@ function loadObjectsTextures(){
 
     textures[1] = gl.createTexture();
     // use texture unit 2
-    gl.activeTexture(gl.TEXTURE0 + 2);
+    
     // bind to the TEXTURE_2D bind point of texture unit 2
-    gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+    //gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 
     images[1] = new Image();
-    
     images[1].onload = function() {
+        gl.activeTexture(gl.TEXTURE0 + 2);
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[1]);
                 
@@ -259,7 +262,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     if (obj.drawInfo.type == XWING_INDEX){
-        gl.activeTexture(gl.TEXTURE0 + 1);
+        //gl.activeTexture(gl.TEXTURE0 + 1);
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.uniform1i(textureLocation[obj.drawInfo.type], 1);
     }
@@ -276,9 +279,14 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     if (obj.drawInfo.type == RING_INDEX){
         gl.uniform4fv(cameraPositionLocation, [camera_x, camera_y, camera_z, 1]);
 
-        gl.uniform3fv(albedoLocation, [255.0/255, 255.0/255, 0.0/255]); //255.0/255, 234.0/255, 46.0/255
-        gl.uniform1f(metalnessLocation, 1.0);
-        gl.uniform1f(roughnessLocation, 0.5);
+        //gl.uniform3fv(albedoLocation, [255.0/255, 255.0/255, 0.0/255]); //255.0/255, 234.0/255, 46.0/255
+
+        //gl.activeTexture(gl.TEXTURE0 + 2); // commenting this it works, i don't know why
+        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+        gl.uniform1i(albedoLocation[obj.drawInfo.type], 2);
+
+        gl.uniform1f(metalnessLocation, 0.);
+        gl.uniform1f(roughnessLocation, 0.4);
         gl.uniform1f(ambientOcclusionLocation, 1.0);
     }
     else{
@@ -289,7 +297,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
     }
 
-    // I think this two calls are a duplication of the upper ones so they can be deleted
+    //I think this two calls are a duplication of the upper ones so they can be deleted
     //gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
     //gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
@@ -336,7 +344,7 @@ function createMeshVAO(i) {
     gl.enableVertexAttribArray(positionAttributeLocation[i]);
     gl.vertexAttribPointer(positionAttributeLocation[i], 3, gl.FLOAT, false, 0, 0);
 
-    if (i == XWING_INDEX){
+    if (i == XWING_INDEX || i == RING_INDEX){
 
         var uvBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
@@ -374,7 +382,7 @@ async function loadShaders() {
         programs[XWING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
-    await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs2.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'ring_vs3.glsl', shaderDir + 'ring_fs3.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
         
