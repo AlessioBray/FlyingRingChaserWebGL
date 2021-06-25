@@ -239,9 +239,9 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     
     if (obj.drawInfo.type == RING_INDEX){
         gl.uniform4fv(cameraPositionLocation, [camera_x, camera_y, camera_z, 1]);
-        gl.uniform3fv(albedoLocation, [255.0/255, 100.0/255, 0.0/255]); //255.0/255, 234.0/255, 46.0/255
-        gl.uniform1f(metalnessLocation, 0.9);
-        gl.uniform1f(roughnessLocation, 0.40);
+        gl.uniform3fv(albedoLocation, [255.0/255, 255.0/255, 0.0/255]); //255.0/255, 234.0/255, 46.0/255
+        gl.uniform1f(metalnessLocation, 1.0);
+        gl.uniform1f(roughnessLocation, 0.5);
         gl.uniform1f(ambientOcclusionLocation, 1.0);
     }
     else{
@@ -358,8 +358,8 @@ async function loadShaders() {
 async function loadMeshes() {
 
     xwingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
-    ringMesh = await utils.loadMesh(modelsDir + "ring3.obj" );
-    asteroidMesh = await utils.loadMesh(modelsDir + "sphere.obj" );
+    ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
+    asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj" );
 
     allMeshes = [xwingMesh, ringMesh, asteroidMesh];
 

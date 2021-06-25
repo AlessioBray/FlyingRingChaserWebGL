@@ -159,7 +159,7 @@ void main() {
     // -------
     
     // ambient lighting
-    vec3 ambient = vec3(0.03) * albedo * ao;
+    vec3 ambient = vec3(0.08) * albedo * ao;
 
     vec3 color = ambient + Lo;
 
