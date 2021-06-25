@@ -100,7 +100,7 @@ function animateGameInitialization(){
     }
     
     var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
-    objects[0].updateWorldMatrix(deltaMatrix);
+    objects[0].updateWorldMatrix(deltaMatrix); //world = world * delta
 
 
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
@@ -129,7 +129,7 @@ function animateGameInitialization(){
 }
 
 function drawGameInitializationScene(){
-    // rotate camera until it reaches the point along a circumference
+
     // render xwing and move 
     animateGameInitialization();
 
@@ -150,6 +150,8 @@ function drawGameInitializationScene(){
         
         window.addEventListener("keydown", keyDownFunction, false);
         window.addEventListener("keyup", keyUpFunction, false);
+
+        objects[0].localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
 
         //gameOn = !gameOn;
         
@@ -174,7 +176,7 @@ function setGameMatrices(){
 function updateGameMatrices(){
     // world matrix che muove gli oggetti in scena
     // aggiorna ricorsivamente la scena senza aggiornare la posizione della xwing che deve rimanere li 
-    // => update local matrix oggetti tranne xwing e chiamata objects[0].updateWorldMatrix();
+    // => update local matrix oggetti tranne xwing e chiamata objects[0].updateWorldMatrix(); //with identity matrix
 }
 
 function drawGameScene() {    
@@ -218,7 +220,7 @@ function startGame(){
 
 }
 
-function game(){
+function game(){ // function called for each frame of time
     // funzione di gestione del gioco (chiamata iterativamente):
     // chiama le funzioni di creazione di ostacoli
     // chiama la funzione di controllo delle collisioni
