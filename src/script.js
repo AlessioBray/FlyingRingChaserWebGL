@@ -361,7 +361,7 @@ async function loadMeshes() {
     xwingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
 
     ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
-    asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj" );
+    asteroidMesh = await utils.loadMesh(modelsDir + "asteroid_triangulate.obj" );
 
     allMeshes = [xwingMesh, ringMesh, asteroidMesh];
 
