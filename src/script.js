@@ -71,6 +71,9 @@ var images = [];
 var textures = [];
 
 function loadObjectsTextures(){
+
+    // X-wing textures
+    // ---------------
     
     // Create a texture.
     textures[0] = gl.createTexture();
@@ -80,11 +83,10 @@ function loadObjectsTextures(){
     gl.bindTexture(gl.TEXTURE_2D, textures[0]);
 
     // Asynchronously load an image
-    var image = new Image();
-    image.src = textureDir + "xwing/X-Wing-textures.png";
-    image.onload = function() {
+    images[0] = new Image();
+    images[0].onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[0]);
                 
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -92,27 +94,35 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-/*
+    images[0].src = textureDir + "xwing/X-Wing-textures.png";
+
+    // ---------------
+    
+    // Ring textures
+    // -------------
+
     textures[1] = gl.createTexture();
     // use texture unit 2
     gl.activeTexture(gl.TEXTURE0 + 2);
     // bind to the TEXTURE_2D bind point of texture unit 2
     gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 
-    image = new Image();
-    image.src = textureDir + "ring/gold_albedo_1024.png";
+    images[1] = new Image();
     
-    image.onload = function() {
+    images[1].onload = function() {
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[1]);
                 
-        //gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 
-        //gl.generateMipmap(gl.TEXTURE_2D);
+        gl.generateMipmap(gl.TEXTURE_2D);
     };
-    */
+    images[1].src = textureDir + "ring/gold_albedo_1024.png";
+    
+    // -------------
+    
 }
 
 var textureRing;
