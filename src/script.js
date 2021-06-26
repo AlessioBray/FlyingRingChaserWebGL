@@ -37,12 +37,13 @@ function getAttributesAndUniforms(){
 
         if (i == RING_INDEX){
             albedoLocation =  gl.getUniformLocation(programs[i], "albedoMap");
+            roughnessLocation = gl.getUniformLocation(programs[i], "roughnessMap");
 
             cameraPositionLocation = gl.getUniformLocation(programs[i], "cameraPosition");
             //albedoLocation = gl.getUniformLocation(programs[i], "albedo");
-            
+            //roughnessLocation = gl.getUniformLocation(programs[i], "roughness");
             metalnessLocation = gl.getUniformLocation(programs[i], "metallic");
-            roughnessLocation = gl.getUniformLocation(programs[i], "roughness");
+            
             ambientOcclusionLocation = gl.getUniformLocation(programs[i], "ao");
         }
 
@@ -86,7 +87,7 @@ function loadObjectsTextures(){
     images[0] = new Image();
     images[0].onload = function() {
         // use texture unit 1
-        gl.activeTexture(gl.TEXTURE0 + 1);
+        //gl.activeTexture(gl.TEXTURE0 + 1);
         // bind to the TEXTURE_2D bind point of texture unit 1
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[0]);
@@ -105,14 +106,10 @@ function loadObjectsTextures(){
     // -------------
 
     textures[1] = gl.createTexture();
-    // use texture unit 2
-    
-    // bind to the TEXTURE_2D bind point of texture unit 2
-    //gl.bindTexture(gl.TEXTURE_2D, textures[1]);
 
     images[1] = new Image();
     images[1].onload = function() {
-        gl.activeTexture(gl.TEXTURE0 + 2);
+        //gl.activeTexture(gl.TEXTURE0 + 2);
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[1]);
                 
@@ -122,7 +119,24 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    images[1].src = textureDir + "ring/gold_albedo_1024.png";
+    images[1].src = textureDir + "ring/gold_albedo.png";
+
+
+    textures[2] = gl.createTexture();
+
+    images[2] = new Image();
+    images[2].onload = function() {
+        //gl.activeTexture(gl.TEXTURE0 + 3);
+        gl.bindTexture(gl.TEXTURE_2D, textures[2]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[2]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[2].src = textureDir + "ring/gold_roughness.png";
     
     // -------------
     
@@ -262,7 +276,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     if (obj.drawInfo.type == XWING_INDEX){
-        //gl.activeTexture(gl.TEXTURE0 + 1);
+        gl.activeTexture(gl.TEXTURE0 + 1);
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.uniform1i(textureLocation[obj.drawInfo.type], 1);
     }
@@ -285,8 +299,12 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
         gl.uniform1i(albedoLocation[obj.drawInfo.type], 2);
 
+        //gl.activeTexture(gl.TEXTURE0 + 3);
+        gl.bindTexture(gl.TEXTURE_2D, textures[2]);
+        gl.uniform1i(roughnessLocation[obj.drawInfo.type], 3);
+
         gl.uniform1f(metalnessLocation, 0.);
-        gl.uniform1f(roughnessLocation, 0.4);
+        //gl.uniform1f(roughnessLocation, 0.4);
         gl.uniform1f(ambientOcclusionLocation, 1.0);
     }
     else{

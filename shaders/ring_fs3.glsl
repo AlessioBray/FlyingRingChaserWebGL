@@ -19,13 +19,13 @@ uniform vec3 lightColorB;
 
 // material parameters
 uniform sampler2D albedoMap;
+uniform sampler2D roughnessMap;
 uniform float metallic;
-uniform float roughness;
 uniform float ao;
 
 //uniform sampler2D normalMap;
 //uniform sampler2D metallicMap; // always 1 so it can be a constant
-//uniform sampler2D roughnessMap;
+
 //uniform sampler2D aoMap;
 
 // Camera position
@@ -77,6 +77,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 void main() {
     
     vec3 albedo = pow(texture(albedoMap, fsUV).rgb, vec3(2.2));
+    float roughness = texture(roughnessMap, fsUV).r;
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = -normalize(fsNormal);
