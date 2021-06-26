@@ -3,11 +3,12 @@
 precision highp float;
 
 const float PI = 3.14159265359;
-const float distance = 1.0; // At the moement lights are directional ones 
+const float distance = 0.5; // At the moement lights are directional ones 
 
 in vec3 fsNormal;
 in vec4 fsPosition;
 in vec2 fsUV;
+in vec4 fsCamera; // Camera position
 
 //directional light A
 uniform vec3 lightDirectionA; 
@@ -28,8 +29,8 @@ uniform float ao;
 
 //uniform sampler2D aoMap;
 
-// Camera position
-uniform vec4 cameraPosition;
+
+
 
 out vec4 outColor;
 
@@ -82,7 +83,7 @@ void main() {
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = normalize(fsNormal);
-    vec3 V = vec3(normalize(cameraPosition - fsPosition));
+    vec3 V = vec3(normalize(fsCamera - fsPosition));
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
