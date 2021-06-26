@@ -300,11 +300,11 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
         gl.uniform1i(albedoLocation[obj.drawInfo.type], 2);
 
-        //gl.activeTexture(gl.TEXTURE0 + 3);
+        gl.activeTexture(gl.TEXTURE0 + 3);
         gl.bindTexture(gl.TEXTURE_2D, textures[2]);
         gl.uniform1i(roughnessLocation[obj.drawInfo.type], 3);
 
-        gl.uniform1f(metalnessLocation, 0.);
+        gl.uniform1f(metalnessLocation, 1.0);
         //gl.uniform1f(roughnessLocation, 0.4);
         gl.uniform1f(ambientOcclusionLocation, 1.0);
     }

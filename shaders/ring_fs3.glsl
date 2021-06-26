@@ -78,6 +78,7 @@ void main() {
     
     vec3 albedo = pow(texture(albedoMap, fsUV).rgb, vec3(2.2));
     float roughness = texture(roughnessMap, fsUV).r;
+    //roughness = 0.5;
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = -normalize(fsNormal);
@@ -168,7 +169,7 @@ void main() {
     // -------
     
     // ambient lighting
-    vec3 ambient = vec3(0.35) * albedo * ao;
+    vec3 ambient = vec3(0.08) * albedo * ao;
 
     vec3 color = ambient + Lo;
 
