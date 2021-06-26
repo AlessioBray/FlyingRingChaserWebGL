@@ -3,7 +3,7 @@
 precision highp float;
 
 const float PI = 3.14159265359;
-const float distance = 2.0; // At the moement lights are directional ones 
+const float distance = 1.0; // At the moement lights are directional ones 
 
 in vec3 fsNormal;
 in vec4 fsPosition;
