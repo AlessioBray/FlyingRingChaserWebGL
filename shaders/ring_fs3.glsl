@@ -29,7 +29,7 @@ uniform float ao;
 //uniform sampler2D aoMap;
 
 // Camera position
-uniform vec4 camPosition;
+uniform vec4 cameraPosition;
 
 out vec4 outColor;
 
@@ -81,8 +81,8 @@ void main() {
     //roughness = 0.5;
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
-    vec3 N = -normalize(fsNormal);
-    vec3 V = vec3(normalize(camPosition - fsPosition));
+    vec3 N = normalize(fsNormal);
+    vec3 V = vec3(normalize(cameraPosition - fsPosition));
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
