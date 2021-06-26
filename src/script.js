@@ -183,11 +183,12 @@ function animate(){
     //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
     //Rx = Rx + 0.1;
     //Tz = Tz + 0.1;
-
+     
     if(gameOn){
+        
         if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
             makeNewRing();
-        }
+        } 
     }
     else{
         Ry = Ry + 1;

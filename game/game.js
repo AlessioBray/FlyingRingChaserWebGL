@@ -214,6 +214,9 @@ function startGame(){
     HideShowElement(lightController);
     HideShowElement(moveController);
     HideShowElement(objDiv);
+    HideShowElement(healthBar);
+
+    restoreMaxLife();
   
     initializeGameSceneGraph();
 
@@ -225,7 +228,10 @@ function startGame(){
 
 }
 
+
+
 function game(){ // function called for each frame of time
+    //alert("game!!");
     // funzione di gestione del gioco (chiamata iterativamente):
     // chiama le funzioni di creazione di ostacoli
     // chiama la funzione di controllo delle collisioni
@@ -236,6 +242,19 @@ function game(){ // function called for each frame of time
     // la request animation frame si sposta sulla funzione game che conterrà la chiamata a drawGameScene 
 }
 
+function restoreMaxLife(){
+    healthBar.value = healthBar.max;
+}
+
+function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
+    let newHealth = healthBar.value - damage;
+    if(newHealth < healthBar.min) newHealth = healthBar.min;
+    healthBar.value = newHealth;
+}
+
+function isGameOver(){
+    return !healthBar.value;
+}
 
 function makeNewRing(){
 
@@ -268,6 +287,7 @@ function gameOver(){
     HideShowElement(lightController);  
     HideShowElement(moveController);
     HideShowElement(objDiv);
+    HideShowElement(healthBar);
 
     gameOn = !gameOn; 
 
