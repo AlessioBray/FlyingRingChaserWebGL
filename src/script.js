@@ -36,7 +36,7 @@ function getAttributesAndUniforms(){
 
         if (i == XWING_INDEX){
             textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
-            //cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
+            cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
             normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
         }
 
@@ -320,7 +320,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniform3fv(lightColorHandleB[obj.drawInfo.type], directionalLightColorB);
     gl.uniform3fv(lightDirectionHandleB[obj.drawInfo.type], directionalLightB);
     
-    if (obj.drawInfo.type == RING_INDEX){ // (obj.drawInfo.type == XWING_INDEX || obj.drawInfo.type == RING_INDEX)
+    if (obj.drawInfo.type == XWING_INDEX || obj.drawInfo.type == RING_INDEX){
         gl.uniform4fv(cameraPositionLocation[obj.drawInfo.type], [camera_x, camera_y, camera_z, 1]);
     }
     else{
