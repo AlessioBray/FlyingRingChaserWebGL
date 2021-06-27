@@ -18,10 +18,10 @@ uniform vec4 cameraPosition;
 void main() {
 
     fsNormal = mat3(normalMatrix) * in_normal;
-    fsPosition = (worldMatrix * vec4(in_position, 1.0)).xyzw; // coordinates in world space
+    fsPosition = (worldMatrix * vec4(in_position, 1.0)); // coordinates in world space
     fsUV = in_UV;
 
-    fsCamera= cameraPosition; //(worldMatrix * cameraPosition).xyzw;
+    fsCamera = cameraPosition;
 
     gl_Position = worldViewProjectionMatrix * vec4(in_position, 1.0);
 

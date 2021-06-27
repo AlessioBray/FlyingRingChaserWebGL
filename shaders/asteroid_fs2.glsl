@@ -1,8 +1,6 @@
 #version 300 es
 precision highp float;
 
-in vec3 fsNormal; 
-in vec4 fsPosition;
 in vec2 fsUV;
 in vec3 fsTangentLightPos;
 in vec3 fsTangentViewPos;
@@ -32,59 +30,7 @@ uniform sampler2D depthMap;
 
 uniform float heightScale;
 
-//texture
-uniform sampler2D in_texture;
-
 out vec4 outColor;
-
-//computes the lambert diffuse
-vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
-    vec3 diffL = lightCol * clamp(dot(normalVec, lightDir), 0.0, 1.0);
-    return diffL;
-}
-
-//computes the blinn specular
-vec3 blinnSpecular(vec3 lightDir, vec3 lightCol, vec3 normalVec, vec4 fsPosition, float specShine) {
-    // camera space implies eye position to be (0,0,0)
-    vec4 eyePosition = vec4(0.0, 0.0, 0.0, 0.0);   // what is eyePos in world space??
-    vec3 eyeDir = vec3(normalize(eyePosition - fsPosition));
-    vec3 halfVec = normalize(eyeDir + lightDir);
-    vec3 specularBl = pow(max(dot(halfVec, normalVec), 0.0), specShine) * lightCol;
-
-    return specularBl;
-}
-
-void main() {
-  
-    //normalize fsNormal, it might not be in the normalized form coming from the vs
-    vec3 nNormal = normalize(fsNormal);
-    //light directions
-    vec3 lDirA = normalize(-lightDirectionA); 
-    vec3 lDirB = normalize(-lightDirectionB);
-
-    //computing Lambert diffuse color
-    //directional lights
-    vec3 diffA = lambertDiffuse(lDirA, lightColorA, nNormal);
-    vec3 diffB = lambertDiffuse(lDirB, lightColorB, nNormal);
-
-    //total lambert component
-    vec3 lambertDiff = clamp((mDiffColor*(diffA + diffB)), 0.0, 1.0);
-
-    //computing Blinn specular color
-    vec3 specA = blinnSpecular(lDirA, lightColorA, nNormal, fsPosition, specShine);
-    vec3 specB = blinnSpecular(lDirB, lightColorB, nNormal, fsPosition, specShine);
-    //total specular component
-    vec3 blinnSpec = specularColor * (specA + specB);
-
-    //computing ambient color
-    vec3 ambient = ambientLightCol * ambientMat;
-
-    //computing BRDF color
-    vec4 color = vec4(clamp(blinnSpec + lambertDiff + ambient + emit, 0.0, 1.0).rgb,1.0);
-
-    outColor = color;// * texture(in_texture, fsUV); // vec4(rgba.rgb, 1.0);
-
-}
 
 vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
 { 
@@ -128,13 +74,29 @@ vec2 ParallaxMapping(vec2 texCoords, vec3 viewDir)
     return finalTexCoords;
 }
 
+//computes the lambert diffuse
+vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
+    vec3 diffL = lightCol * clamp(dot(normalVec, lightDir), 0.0, 1.0);
+    return diffL;
+}
+
+//computes the blinn specular
+vec3 blinnSpecular(vec3 lightDir, vec3 lightCol, vec3 normalVec, vec4 fsPosition, float specShine) {
+    // camera space implies eye position to be (0,0,0)
+    vec4 eyePosition = vec4(0.0, 0.0, 0.0, 0.0);   // what is eyePos in world space??
+    vec3 eyeDir = vec3(normalize(eyePosition - fsPosition));
+    vec3 halfVec = normalize(eyeDir + lightDir);
+    vec3 specularBl = pow(max(dot(halfVec, normalVec), 0.0), specShine) * lightCol;
+
+    return specularBl;
+}
+
 void main()
 {           
     // offset texture coordinates with Parallax Mapping
     vec3 viewDir = normalize(fsTangentViewPos - fsTangentFragPos);
-    vec2 texCoords = fsUV;
     
-    texCoords = ParallaxMapping(fsUV,  viewDir);       
+    vec2 texCoords = ParallaxMapping(fsUV,  viewDir);       
     if(texCoords.x > 1.0 || texCoords.y > 1.0 || texCoords.x < 0.0 || texCoords.y < 0.0)
         discard;
 
@@ -146,17 +108,16 @@ void main()
     vec3 color = texture(diffuseMap, texCoords).rgb;
     // ambient
     vec3 ambient = 0.1 * color;
-
     
     // diffuse
-    vec3 lightDir = normalize(fs_in.TangentLightPos - fs_in.TangentFragPos);
+    vec3 lightDir = normalize(fsTangentLightPos - fsTangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
     vec3 diffuse = diff * color;
     // specular    
-    vec3 reflectDir = reflect(-lightDir, normal);
+    //vec3 reflectDir = reflect(-lightDir, normal);
     vec3 halfwayDir = normalize(lightDir + viewDir);  
     float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
 
     vec3 specular = vec3(0.2) * spec;
-    FragColor = vec4(ambient + diffuse + specular, 1.0);
+    outColor = vec4(ambient + diffuse + specular, 1.0);
 }

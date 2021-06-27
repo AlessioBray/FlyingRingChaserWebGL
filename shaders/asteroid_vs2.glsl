@@ -5,8 +5,6 @@ in vec3 in_normal;
 in vec2 in_UV;
 in vec3 in_tangent;
 
-out vec3 fsNormal; 
-out vec4 fsPosition;
 out vec2 fsUV;
 out vec3 fsTangentLightPos;
 out vec3 fsTangentViewPos;

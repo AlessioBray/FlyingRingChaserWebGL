@@ -3,7 +3,8 @@
 precision highp float;
 
 const float PI = 3.14159265359;
-const float distance = 0.5; // At the moement lights are directional ones 
+const float distance = 0.5; // lights are directional ones 
+
 
 in vec3 fsNormal;
 in vec4 fsPosition;
@@ -23,11 +24,6 @@ uniform sampler2D albedoMap;
 uniform sampler2D roughnessMap;
 uniform float metallic;
 uniform float ao;
-
-//uniform sampler2D normalMap;
-//uniform sampler2D metallicMap; // always 1 so it can be a constant
-
-//uniform sampler2D aoMap;
 
 out vec4 outColor;
 
@@ -95,7 +91,7 @@ void main() {
     // -------
     
     // calculate per-light radiance
-    vec3 L = normalize(lightDirectionA);
+    vec3 L = normalize(-lightDirectionA);
     vec3 H = normalize(V + L);
     //float distance = 10.0;
     float attenuation = 1.0 / (distance * distance);
@@ -133,7 +129,7 @@ void main() {
     // -------
     
     // calculate per-light radiance
-    L = normalize(lightDirectionB);
+    L = normalize(-lightDirectionB);
     H = normalize(V + L);
     //distance = 10.0;
     attenuation = 1.0 / (distance * distance);
