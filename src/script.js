@@ -34,6 +34,7 @@ function getAttributesAndUniforms(){
         if (i == XWING_INDEX){
             textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
             //cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
+            normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
         }
 
         if (i == RING_INDEX){
@@ -79,12 +80,11 @@ function loadObjectsTextures(){
     // Create a texture.
     textures[0] = gl.createTexture();
     
-
     // Asynchronously load an image
     images[0] = new Image();
     images[0].onload = function() {
         // use texture unit 1
-        //gl.activeTexture(gl.TEXTURE0 + 1);
+        gl.activeTexture(gl.TEXTURE1);
         // bind to the TEXTURE_2D bind point of texture unit 1
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[0]);
@@ -95,7 +95,28 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    images[0].src = textureDir + "xwing/X-Wing-textures.png";
+    images[0].src = textureDir + "xwing/XWing_Diffuse.png";
+
+    // ---
+
+    textures[1] = gl.createTexture();
+    
+    // Asynchronously load an image
+    images[1] = new Image();
+    images[1].onload = function() {
+        // use texture unit 1
+        gl.activeTexture(gl.TEXTURE2);
+        // bind to the TEXTURE_2D bind point of texture unit 1
+        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[1]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[1].src = textureDir + "xwing/XWing_Norm.png";
 
     // ---------------
 
@@ -273,9 +294,16 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     if (obj.drawInfo.type == XWING_INDEX){
-        gl.activeTexture(gl.TEXTURE0 + 1);
+
+        // Diffuse map
+        gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.uniform1i(textureLocation[obj.drawInfo.type], 1);
+        
+        // Normal map
+        gl.activeTexture(gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+        gl.uniform1i(normalMapLocation, 2);
     }
 
     gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
@@ -401,7 +429,7 @@ async function loadShaders() {
 
 async function loadMeshes() {
 
-    xwingMesh = await utils.loadMesh(modelsDir + "X-WING.obj");
+    xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter2.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj");
 

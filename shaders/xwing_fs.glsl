@@ -24,6 +24,7 @@ uniform vec3 ambientMat;
 
 //texture
 uniform sampler2D in_texture;
+uniform sampler2D normalMap;
 
 out vec4 outColor;
 
@@ -48,6 +49,11 @@ void main() {
   
     //normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 nNormal = normalize(fsNormal);
+
+    // obtain normal from normal map in range [0,1]
+    //vec3 nNormal = texture(normalMap, fsUV).rgb;
+    // transform normal vector to range [-1,1]
+    //nNormal = normalize(nNormal * 2.0 - 1.0);
     //light directions
     vec3 lDirA = normalize(-lightDirectionA); 
     vec3 lDirB = normalize(-lightDirectionB);

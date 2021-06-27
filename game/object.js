@@ -60,7 +60,8 @@ var lightColorHandleA = new Array();
 var lightDirectionHandleB = new Array();
 var lightColorHandleB = new Array();
 
-var cameraPositionLocation = new Array(); 
+var cameraPositionLocation = new Array();
+var normalMapLocation;
 
 var aspect;
 var perspectiveMatrix;
