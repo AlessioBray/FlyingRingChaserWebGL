@@ -5,14 +5,15 @@ const float PI = 3.14159265359;
 const float distance = 0.5; // lights are directional ones
 
 // material parameters
-const vec3 albedo = vec3(255.0/255.0, 240.0/255.0, 26.0/255.0);
-const float roughness = 0.4;
+const vec3 albedo = vec3(1.0, 1.0, 1.0);
+const float roughness = 0.5;
 const float metallic = 0.9;
 const float ao = 1.0;
 
 in vec3 fsNormal;
 in vec4 fsPosition;
 in vec4 fsCamera; // Camera position
+in vec2 fsUV;
 
 //directional light A
 uniform vec3 lightDirectionA; 
@@ -21,6 +22,9 @@ uniform vec3 lightColorA;
 //directional light B
 uniform vec3 lightDirectionB; 
 uniform vec3 lightColorB;
+
+//texture
+uniform sampler2D in_texture;
 
 out vec4 outColor;
 
@@ -165,6 +169,6 @@ void main() {
     // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
 
-    outColor = vec4(color, 1.0);
+    outColor = vec4(color, 1.0) * texture(in_texture, fsUV);
 
 }
