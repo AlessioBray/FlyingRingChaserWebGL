@@ -1,6 +1,8 @@
 #version 300 es
 precision highp float;
 
+const float heightScale = 1.0;
+
 in vec2 fsUV;
 in vec3 fsTangentLightPos;
 in vec3 fsTangentViewPos;
@@ -27,8 +29,6 @@ uniform vec3 ambientMat;
 uniform sampler2D diffuseMap;
 uniform sampler2D normalMap;
 uniform sampler2D depthMap;
-
-uniform float heightScale;
 
 out vec4 outColor;
 

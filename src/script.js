@@ -39,12 +39,21 @@ function getAttributesAndUniforms(){
             albedoLocation =  gl.getUniformLocation(programs[i], "albedoMap");
             roughnessLocation = gl.getUniformLocation(programs[i], "roughnessMap");
 
-            cameraPositionLocation = gl.getUniformLocation(programs[i], "cameraPosition");
+            cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
             //albedoLocation = gl.getUniformLocation(programs[i], "albedo");
             //roughnessLocation = gl.getUniformLocation(programs[i], "roughness");
             metalnessLocation = gl.getUniformLocation(programs[i], "metallic");
             
             ambientOcclusionLocation = gl.getUniformLocation(programs[i], "ao");
+
+        }
+
+        if (i == ASTEROID_INDEX){
+            //diffuseLocation = gl.getUniformLocation(programs[i], "diffuseMap");
+            //normalLocation = gl.getUniformLocation(programs[i], "normalMap");
+            //depthLocation = gl.getUniformLocation(programs[i], "depthMap");
+            tangentLocation = gl.getUniformLocation(programs[i], "in_tangent");
+            
         }
 
 
@@ -62,12 +71,6 @@ function getAttributesAndUniforms(){
         lightColorHandleB[i] = gl.getUniformLocation(programs[i], 'lightColorB');
 
     }
-
-    //XWING
-
-    //RING
-
-    //ASTEROID
 
 }
 
@@ -139,7 +142,44 @@ function loadObjectsTextures(){
     images[2].src = textureDir + "ring/gold_roughness.png";
     
     // -------------
+
+    // Asteroid textures
+    // -----------------
+
+    textures[3] = gl.createTexture();
+
+    images[3] = new Image();
+    images[3].onload = function() {
+        //gl.activeTexture(gl.TEXTURE0 + 3);
+        gl.bindTexture(gl.TEXTURE_2D, textures[3]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[3]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[3].src = textureDir + "asteroid/rock_diffuse.jpg";
+
+    textures[4] = gl.createTexture();
+
+    images[4] = new Image();
+    images[4].onload = function() {
+        //gl.activeTexture(gl.TEXTURE0 + 3);
+        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[4]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[4].src = textureDir + "asteroid/rock_normal.jpg";
     
+    // -----------------
+
 }
 
 function main() {
@@ -292,9 +332,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniform3fv(lightDirectionHandleB[obj.drawInfo.type], directionalLightB);
     
     if (obj.drawInfo.type == RING_INDEX){
-        gl.uniform4fv(cameraPositionLocation, [camera_x, camera_y, camera_z, 1]);
-
-        //gl.uniform3fv(albedoLocation, [255.0/255, 255.0/255, 0.0/255]); //255.0/255, 234.0/255, 46.0/255
+        gl.uniform4fv(cameraPositionLocation[obj.drawInfo.type], [camera_x, camera_y, camera_z, 1]);
 
         //gl.activeTexture(gl.TEXTURE0 + 2); // commenting this it works, i don't know why
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
@@ -401,7 +439,7 @@ async function loadShaders() {
         programs[XWING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
-    await utils.loadFiles([shaderDir + 'ring_vs3.glsl', shaderDir + 'ring_fs3.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'ring_vs.glsl', shaderDir + 'ring_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
         
