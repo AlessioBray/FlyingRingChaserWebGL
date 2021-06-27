@@ -404,7 +404,7 @@ async function loadShaders() {
         programs[SKYBOX_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
-    await utils.loadFiles([shaderDir + 'xwing_vs.glsl', shaderDir + 'xwing_fs.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'xwing_vs2.glsl', shaderDir + 'xwing_fs2.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
