@@ -190,3 +190,24 @@ var skyboxProgram;
 // DAMAGE OF OBSTACLES
 
 var ASTEROID_DAMAGE = 30;
+
+//game
+var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
+var GAME_XWING_POSITION = [0, -1.5, 40.0];
+var deltaX = 0;
+var deltaY = 0;
+var deltaZ = 0;
+var deltaRx = 0;
+var deltaRy = 0;
+var deltaRz = 0;
+var Z = 0;
+var Y = 0;
+
+
+var deltaLookRadius = 0;
+var deltaCameraAngle = 0;
+var deltaCameraElevation = 0;
+var isCameraMoved = false;
+
+var NUMBER_INITIALIZATION_FRAMES = 100;
+var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;

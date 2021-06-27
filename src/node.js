@@ -80,3 +80,52 @@ function createShowcaseSceneGraph(){ //scene graph show case
     objects = [showcaseNode];
     
 }
+
+
+function createGameSceneGraph(){ //scene graph show case
+
+    objects = [];
+
+    xwingNode = new Node();
+    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
+    xwingNode.drawInfo = {
+        type: XWING_INDEX,
+        materialColor: [1.0, 1.0, 1.0],
+        programInfo: programs[XWING_INDEX],
+        bufferLength: allMeshes[XWING_INDEX].indices.length,
+        vertexArray: vaos[XWING_INDEX],
+    };
+
+    xwingNode.updateWorldMatrix();
+
+    objects = [xwingNode];
+    
+}
+
+
+function addRingNode(){
+
+    // randomize position
+    let Tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
+    let Ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
+
+    // create new ring node
+    ringNode = new Node();
+    //ringNode.localMatrix = utils.identityMatrix();//utils.MakeRotateXMatrix(-90);
+    ringNode.localMatrix = utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz + 90, S);
+    ringNode.updateWorldMatrix();
+    ringNode.drawInfo = {
+        type: RING_INDEX,
+        materialColor: [1.0, 1.0, 1.0],
+        programInfo: programs[RING_INDEX],
+        bufferLength: allMeshes[RING_INDEX].indices.length,
+        vertexArray: vaos[RING_INDEX],
+    };
+
+    ringNode.setParent(xwingNode);
+    //ringNode.updateWorldMatrix(utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz + 90, S));
+    objects.push(ringNode);
+
+    lastNewRingTime = Date.now();
+}
+

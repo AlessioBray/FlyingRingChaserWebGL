@@ -1,43 +1,3 @@
-function initializeGameSceneGraph(){
-
-    objects = [];
-
-    xwingNode = new Node();
-    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
-    xwingNode.drawInfo = {
-        type: XWING_INDEX,
-        materialColor: [1.0, 1.0, 1.0],
-        programInfo: programs[XWING_INDEX],
-        bufferLength: allMeshes[XWING_INDEX].indices.length,
-        vertexArray: vaos[XWING_INDEX],
-    };
-
-    xwingNode.updateWorldMatrix();
-
-    objects = [xwingNode];
-    
-}
-
-var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
-var GAME_XWING_POSITION = [0, -1.5, 40.0];
-var deltaX = 0;
-var deltaY = 0;
-var deltaZ = 0;
-var deltaRx = 0;
-var deltaRy = 0;
-var deltaRz = 0;
-var Z = 0;
-var Y = 0;
-
-
-var deltaLookRadius = 0;
-var deltaCameraAngle = 0;
-var deltaCameraElevation = 0;
-var isCameraMoved = false;
-
-var NUMBER_INITIALIZATION_FRAMES = 100;
-var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
-
 function computeDeltaGameInitializationMovements(){
     
     deltaZ = GAME_XWING_POSITION[2] / NUMBER_INITIALIZATION_FRAMES;
@@ -142,12 +102,19 @@ function drawGameInitializationScene(){
 
     drawSkybox();
 
-    for (var i = 0; i < objects.length; i++){
+    drawObject(objects[0]);
+    
+    for (var i = 1; i < objects.length; i++){  //rings and asteroids
         drawObject(objects[i]);
+        //console.log(objects[i]);
     }
 
+    //addRingNode();
+    //drawObject(objects[1]);
+    
+
     if (elapsedInitializationFrames == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
-        
+        console.log("Hi");
         elapsedInitializationFrames = 100;
         Z = 0;
         Y = 0;
@@ -157,10 +124,8 @@ function drawGameInitializationScene(){
         window.addEventListener("keyup", keyUpFunction, false);
 
         objects[0].localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
-
-        //gameOn = !gameOn;
-        
-        //game(); // then is called once the initialization is finisced
+        lastNewRingTime = Date.now();
+        drawGameScene(); // when animation is finished starts spawning
 
     }
     else{ 
@@ -168,6 +133,7 @@ function drawGameInitializationScene(){
     }
     
 }
+
 
 function setGameMatrices(){
 
@@ -182,9 +148,25 @@ function updateGameMatrices(){
     // world matrix che muove gli oggetti in scena
     // aggiorna ricorsivamente la scena senza aggiornare la posizione della xwing che deve rimanere li 
     // => update local matrix oggetti tranne xwing e chiamata objects[0].updateWorldMatrix(); //with identity matrix
+    //objects[0].updateWorldMatrix();
+}
+
+function animateGame(){
+
+    if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
+        addRingNode();
+    }
+
+     //make Rings go ahead
+    //Rx = Rx + 0.1;
+    
+    Tz = Tz + 0.1;
+
 }
 
 function drawGameScene() {    
+
+    animateGame();
 
     setGameMatrices();
     
@@ -218,7 +200,7 @@ function startGame(){
 
     restoreMaxLife();
   
-    initializeGameSceneGraph();
+    createGameSceneGraph();
 
     computeDeltaGameInitializationMovements();
 
