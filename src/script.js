@@ -186,7 +186,8 @@ function animate(){
         
         if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
             makeNewRing();
-        } 
+        }
+
     }
     else{
         Ry = Ry + 1;
@@ -194,7 +195,7 @@ function animate(){
 }
 
 //x  [-6,6] y[0,4]
-function updateWorldMatrix(){
+function updateShowcaseWorldMatrix(){
 
     setMatrices();
 
@@ -212,7 +213,8 @@ function updateWorldMatrix(){
         */
         //starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S);
 
-        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
+        objects[0].updateWorldMatrix(utils.MakeRotateYMatrix(Ry));
+
     }
     //objects[0].worldMatrix = utils.MakeWorld(0.0, -1.0, 45.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
 
@@ -327,7 +329,7 @@ function drawScene() {
 
     animate();
 
-    updateWorldMatrix(); // to update rings world matrices
+    updateShowcaseWorldMatrix(); // to update rings world matrices
 
     clearBits();
 

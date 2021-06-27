@@ -63,7 +63,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 bufferLength: allMeshes[RING_INDEX].indices.length,
                 vertexArray: vaos[RING_INDEX],
             };
-            //showcaseNode.updateWorldMatrix(utils.MakeRotateXMatrix(-90));
+            showcaseNode.localMatrix = utils.MakeRotateXMatrix(-90);
             //console.log(showcaseNode.worldMatrix);
             break;
 
