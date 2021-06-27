@@ -64,7 +64,6 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 vertexArray: vaos[RING_INDEX],
             };
             showcaseNode.localMatrix = utils.MakeRotateXMatrix(-90);
-            //console.log(showcaseNode.worldMatrix);
             break;
 
         case ASTEROID_INDEX:
