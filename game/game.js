@@ -102,19 +102,14 @@ function drawGameInitializationScene(){
 
     drawSkybox();
 
-    drawObject(objects[0]);
+    drawObject(objects[0]);  // starship
     
     for (var i = 1; i < objects.length; i++){  //rings and asteroids
         drawObject(objects[i]);
-        //console.log(objects[i]);
     }
-
-    //addRingNode();
-    //drawObject(objects[1]);
     
 
     if (elapsedInitializationFrames == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
-        console.log("Hi");
         elapsedInitializationFrames = 100;
         Z = 0;
         Y = 0;
@@ -149,7 +144,15 @@ function updateGameMatrices(){
     // world matrix che muove gli oggetti in scena
     // aggiorna ricorsivamente la scena senza aggiornare la posizione della xwing che deve rimanere li 
     // => update local matrix oggetti tranne xwing e chiamata objects[0].updateWorldMatrix(); //with identity matrix
+
     //objects[0].updateWorldMatrix();
+    
+    for (var i = 1; i < objects.length; i++){
+        //drawObject(objects[i]);
+        objects[i].updateWorldMatrix(utils.MakeTranslateMatrix(0,SPEED,0));
+    }
+    
+
 }
 
 function animateGame(){
@@ -157,11 +160,8 @@ function animateGame(){
     if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
         addRingNode();
     }
-
-     //make Rings go ahead
-    //Rx = Rx + 0.1;
     
-    Tz = Tz + 0.1;
+    Tz = Tz + 0.1; //makes ring advance in game
 
 }
 
@@ -171,7 +171,7 @@ function drawGameScene() {
 
     setGameMatrices();
     
-    updateGameMatrices(); // to update rings world matrices
+    updateGameMatrices(); // to update rings/asteroids world matrices
 
     clearBits();
     
@@ -189,10 +189,6 @@ function startGame(){
 
     console.log("Cancelling animation: " + requestAnimationId);
     window.cancelAnimationFrame(requestAnimationId);
-
-    //if(gameOn){ //if you press tab while playing game ends and rings disappear
-    //matricesArrays[0] = [];
-    //}
 
     HideShowElement(lightController);
     HideShowElement(moveController);
@@ -237,16 +233,6 @@ function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
 
 function isGameOver(){
     return !healthBar.value;
-}
-
-function makeNewRing(){
-
-    ringsArrays = matricesArrays[0];
-    let Tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
-    let Ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
-    ringsArrays.push(utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz + 90, S));
-    lastNewRingTime = Date.now();
-
 }
 
 //////////////////////////////////////// questo andrà in updateGameMatrices: fara un update delle local matrices degli ostacoli.
