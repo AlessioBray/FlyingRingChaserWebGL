@@ -220,6 +220,7 @@ function updateShowcaseWorldMatrix(){
     if(gameOn){
         objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
         move();
+        //console.log("NEW SCENE GRAPH");
     }
     else{
         //starshipArray = matricesArrays[0]; 
