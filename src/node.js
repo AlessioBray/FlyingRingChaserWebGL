@@ -53,6 +53,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 bufferLength: allMeshes[XWING_INDEX].indices.length,
                 vertexArray: vaos[XWING_INDEX],
             };
+            
             break;
 
         case RING_INDEX:
@@ -87,7 +88,7 @@ function createGameSceneGraph(){ //scene graph show case
     objects = [];
 
     xwingNode = new Node();
-    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
+    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 270.0, 0.0, S); //(0.0, -1.5, 40.0, 0, -90, 0, S) // for initialization moverment should be all to 0 expcept S=1
     xwingNode.drawInfo = {
         type: XWING_INDEX,
         materialColor: [1.0, 1.0, 1.0],

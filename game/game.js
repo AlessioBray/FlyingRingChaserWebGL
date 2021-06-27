@@ -124,6 +124,7 @@ function drawGameInitializationScene(){
         window.addEventListener("keyup", keyUpFunction, false);
 
         objects[0].localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
+        
         lastNewRingTime = Date.now();
         drawGameScene(); // when animation is finished starts spawning
 
