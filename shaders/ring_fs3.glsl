@@ -29,9 +29,6 @@ uniform float ao;
 
 //uniform sampler2D aoMap;
 
-
-
-
 out vec4 outColor;
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)

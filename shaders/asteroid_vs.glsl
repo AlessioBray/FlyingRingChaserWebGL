@@ -13,8 +13,10 @@ uniform mat4 worldMatrix;
 uniform mat4 normalMatrix; 
 
 void main() {
+    
     fsUV = in_UV;
     fsNormal = mat3(normalMatrix) * in_normal;
     fsPosition = (worldMatrix * vec4(in_position, 1.0)).xyzw; // coordinates in world space
+
     gl_Position = worldViewProjectionMatrix * vec4(in_position, 1.0);
 }

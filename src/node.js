@@ -42,7 +42,6 @@ function createShowcaseSceneGraph(){ //scene graph show case
 
     showcaseNode = new Node();
     showcaseNode.localMatrix = utils.identityMatrix();
-    showcaseNode.worldMatrix = utils.MakeWorld(0.0, 0.0, 0.0, Rx, Ry, Rz + 90, 0.5);
 
     switch(selectedObjId){
 
@@ -53,7 +52,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 programInfo: programs[XWING_INDEX],
                 bufferLength: allMeshes[XWING_INDEX].indices.length,
                 vertexArray: vaos[XWING_INDEX],
-              };
+            };
             break;
 
         case RING_INDEX:
@@ -63,7 +62,9 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 programInfo: programs[RING_INDEX],
                 bufferLength: allMeshes[RING_INDEX].indices.length,
                 vertexArray: vaos[RING_INDEX],
-              };
+            };
+            //showcaseNode.updateWorldMatrix(utils.MakeRotateXMatrix(-90));
+            //console.log(showcaseNode.worldMatrix);
             break;
 
         case ASTEROID_INDEX:

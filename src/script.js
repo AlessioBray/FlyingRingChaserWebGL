@@ -142,8 +142,6 @@ function loadObjectsTextures(){
     
 }
 
-var textureRing;
-
 function main() {
 
     utils.resizeCanvasToDisplaySize(gl.canvas);
