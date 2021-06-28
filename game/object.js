@@ -68,8 +68,6 @@ var normalMap;
 var metalnessMapLocation;
 var heightMapLocation;
 
-var normalMapLocationXWING;
-
 var aspect;
 var perspectiveMatrix;
 var viewMatrix;
