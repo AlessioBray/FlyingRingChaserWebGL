@@ -23,7 +23,9 @@ Node.prototype.setParent = function(parent) {
 Node.prototype.updateWorldMatrix = function(matrix) {
     if (matrix) {
         // a matrix was passed in so do the math
+        console.log("Update pos");
         this.worldMatrix = utils.multiplyMatrices(matrix, this.localMatrix);
+        //this.localMatrix = this.worldMatrix;
     } else {
         // no matrix was passed in so just copy.
         utils.copy(this.localMatrix, this.worldMatrix);
@@ -114,7 +116,7 @@ function addRingNode(){
     ringNode = new Node();
     //ringNode.localMatrix = utils.identityMatrix();//utils.MakeRotateXMatrix(-90);
     ringNode.localMatrix = utils.MakeWorld(Tx, Ty, Tz, 90.0, Ry, Rz + 90, S);
-    ringNode.updateWorldMatrix();
+    ringNode.updateWorldMatrix(); //world = local
     ringNode.drawInfo = {
         type: RING_INDEX,
         materialColor: [1.0, 1.0, 1.0],

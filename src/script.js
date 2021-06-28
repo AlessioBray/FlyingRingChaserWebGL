@@ -196,98 +196,19 @@ function render(){
     drawScene();
 }
 
-function animate(){
+function animate(){ //animate for showCase
 
-    //**TODO**// Update score e.g. livesP.innerHTML = "LIVES: " + lives;
-    //Rx = Rx + 0.1;
-    //Tz = Tz + 0.1;
-     /*
-    if(gameOn){
-        
-        if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
-            makeNewRing();
-        }
-
-    }
-    else{
         Ry = Ry + 1;
-    }
-    */
+    
 }
 
-//x  [-6,6] y[0,4]
 function updateShowcaseWorldMatrix(){
 
     setMatrices();
-
-    if(gameOn){
-        objects[0].worldMatrix = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
-        move();
-        //console.log("NEW SCENE GRAPH");
-    }
-    else{
-        //starshipArray = matricesArrays[0]; 
-        /*
-        ringsArray = matricesArrays[1];
-        asteroidsArray = matricesArrays[2];
-        ringsArray[0]= utils.MakeWorld(-3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-        asteroidsArray[0]= utils.MakeWorld(3.0, 0.0, -1.5, Rx, Ry, Rz, S);
-        */
-        //starshipArray[0] = utils.MakeWorld(0.0, 0.0, Tz, Rx, Ry, Rz + 90, S);
-
-        objects[0].updateWorldMatrix(utils.MakeRotateYMatrix(Ry));
-
-    }
-    //objects[0].worldMatrix = utils.MakeWorld(0.0, -1.0, 45.0, Rx-90, Ry, Rz, S); ///////////////// just to make it work (do it iteratively or similarly)
+    objects[0].updateWorldMatrix(utils.MakeRotateYMatrix(Ry));
 
 }
-/*
-function drawElement(i,j){ // i is the index for vaos, j is index for worldMatrix
 
-    gl.useProgram(programs[i]);
-    let matricesArray = matricesArrays[i]; 
-    let worldMatrix = matricesArray[j];
-
-    utils.resizeCanvasToDisplaySize(gl.canvas);
-
-
-    /////////// WORLD SPACE /////////////
-
-    //clearBits();  // multiple draw of objects doesn't work with this here
-
-    normalMatrix = utils.invertMatrix(utils.transposeMatrix(worldMatrix));
-    MV = utils.multiplyMatrices(viewMatrix, worldMatrix);
-    Projection = utils.multiplyMatrices(perspectiveMatrix, MV);
-
-    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[i], gl.FALSE, utils.transposeMatrix(Projection));
-    gl.uniformMatrix4fv(normalMatrixLocation[i], gl.FALSE, utils.transposeMatrix(normalMatrix));
-    gl.uniformMatrix4fv(worldMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
-    
-    if(i==0){
-
-        gl.uniform3fv(materialDiffColorHandle[i], materialColor);
-        gl.uniform3fv(lightColorHandleA[i], directionalLightColorA);
-        gl.uniform3fv(lightDirectionHandleA[i], directionalLightA);
-        gl.uniform3fv(lightColorHandleB[i], directionalLightColorB);
-        gl.uniform3fv(lightDirectionHandleB[i], directionalLightB);
-        gl.uniform3fv(ambientLightColorHandle[i], ambientLight);
-        gl.uniform3fv(ambientMaterialHandle[i], ambientMat);
-        gl.uniform3fv(specularColorHandle[i], specularColor);
-        gl.uniform1f(shineSpecularHandle[i], specShine);
-    }
-
-    
-    let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, worldMatrix);
-    let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
-
-    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[i], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    gl.uniformMatrix4fv(normalMatrixLocation[i], gl.FALSE, utils.transposeMatrix(worldMatrix));
-
-    gl.bindVertexArray(vaos[i]);
-    gl.drawElements(gl.TRIANGLES, allMeshes[i].indices.length, gl.UNSIGNED_SHORT, 0 );
-
-}
-*/
 function drawObject(obj){ // obj is the node that represent the object to draw
 
     gl.useProgram(obj.drawInfo.programInfo);
@@ -347,16 +268,6 @@ function drawScene() {
     updateShowcaseWorldMatrix(); // to update rings world matrices
 
     clearBits();
-
-    // add each mesh / object with its world matrix
-    /*
-    for (var i = 0; i < allMeshes.length; i++) { //for each type of object
-        let matricesArray = matricesArrays[i];
-        for(var j = 0; j < matricesArray.length; j++){  // for each instance of that type
-            drawElement(i,j);
-        }
-    }
-    */
    
     drawSkybox();
 

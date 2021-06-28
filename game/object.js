@@ -94,22 +94,7 @@ var Ry = 0.0;
 var Rz = 0.0;
 var S  = 1.0;
 
-var Tz = 0.0;
-
-
-var matricesArrays= [
-    //starship
-    [//utils.MakeWorld(10.0, 0.0, -3.0, Rx, Ry+90, Rz, 0.5),
-        //utils.MakeWorld(-3.0, 0.0, -3.0, Rx, Ry+90, Rz, 0.5),
-        //utils.MakeWorld( 0.0, 0.0, -1.5, Rx, Ry+90, Rz, 0.5)
-    ],
-    //rings
-    [utils.MakeWorld( -3.0, 0.0, -1.5, Rx, Ry, Rz+90, 0.5)],
-    //asteroids
-    [utils.MakeWorld( 3.0, 0.0, -1.5, Rx, Ry, Rz, 0.5)]
-    //other objects .... [],[]...
-    //
-];  
+var Tz = 0.0; 
 
 // Camera
 var camera_x = 0.0;
@@ -146,7 +131,7 @@ var selectedObjId = 0;
 
 // ring spawn
 var lastNewRingTime = Date.now();
-var SPAWNTIME = 1000;
+var SPAWNTIME = 5000;
 var SPEED = 0.1;
 var MAX_X = 10;
 var MIN_X =  5; 
