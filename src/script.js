@@ -7,7 +7,7 @@ function setViewportAndCanvas(){
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
-    gl.enable(gl.LINE_SMOOTH);
+    //gl.enable(gl.LINE_SMOOTH);
     
     clearBits();
 }
@@ -29,6 +29,10 @@ function getAttributesAndUniforms(){
         if (i == XWING_INDEX){
             uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
         }
+
+        if (i == ASTEROID_INDEX){
+            uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
+        }
         
         worldViewProjectionMatrixLocation[i] = gl.getUniformLocation(programs[i], "worldViewProjectionMatrix");  
         normalMatrixLocation[i] = gl.getUniformLocation(programs[i], "normalMatrix");
@@ -37,7 +41,6 @@ function getAttributesAndUniforms(){
         if (i == XWING_INDEX){
             textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
             cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
-            normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
         }
 
         if (i == RING_INDEX){
@@ -47,10 +50,16 @@ function getAttributesAndUniforms(){
         }
 
         if (i == ASTEROID_INDEX){
+
+            cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
+            diffuseMapLocation = gl.getUniformLocation(programs[i], "diffuseMap");
+            roughnessMapLocation = gl.getUniformLocation(programs[i], "roughnessMap");
+            aoMapLocation = gl.getUniformLocation(programs[i], "aoMap");
+
             //diffuseLocation = gl.getUniformLocation(programs[i], "diffuseMap");
             //normalLocation = gl.getUniformLocation(programs[i], "normalMap");
             //depthLocation = gl.getUniformLocation(programs[i], "depthMap");
-            tangentLocation = gl.getUniformLocation(programs[i], "in_tangent");
+            //tangentLocation = gl.getUniformLocation(programs[i], "in_tangent");
             
         }
 
@@ -100,39 +109,50 @@ function loadObjectsTextures(){
     };
     images[0].src = textureDir + "xwing/XWing_Diffuse.png";
 
-    // ---
-
-    textures[1] = gl.createTexture();
-    
-    // Asynchronously load an image
-    images[1] = new Image();
-    images[1].onload = function() {
-        // use texture unit 1
-        gl.activeTexture(gl.TEXTURE2);
-        // bind to the TEXTURE_2D bind point of texture unit 1
-        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[1]);
-                
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-    };
-    images[1].src = textureDir + "xwing/XWing_Norm.png";
-
     // ---------------
 
     // Asteroid textures
     // -----------------
 
+    textures[1] = gl.createTexture();
+
+    images[1] = new Image();
+    images[1].onload = function() {
+        gl.activeTexture(gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[1]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[1].src = textureDir + "asteroid/rock_diffuse.jpg";
+
+    textures[2] = gl.createTexture();
+
+    images[2] = new Image();
+    images[2].onload = function() {
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, textures[2]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[2]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[2].src = textureDir + "asteroid/rock_roughness.jpg";
+
     textures[3] = gl.createTexture();
 
     images[3] = new Image();
     images[3].onload = function() {
-        //gl.activeTexture(gl.TEXTURE0 + 3);
+        gl.activeTexture(gl.TEXTURE4);
         gl.bindTexture(gl.TEXTURE_2D, textures[3]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[3]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[3]);
                 
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -140,23 +160,7 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    images[3].src = textureDir + "asteroid/rock_diffuse.jpg";
-
-    textures[4] = gl.createTexture();
-
-    images[4] = new Image();
-    images[4].onload = function() {
-        //gl.activeTexture(gl.TEXTURE0 + 3);
-        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[4]);
-                
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-
-        gl.generateMipmap(gl.TEXTURE_2D);
-    };
-    images[4].src = textureDir + "asteroid/rock_normal.jpg";
+    images[3].src = textureDir + "asteroid/rock_ao.jpg";
     
     // -----------------
 
@@ -210,9 +214,10 @@ function animate(){
 
     }
     else{
-        Ry = Ry + 1;
+        
     }
     */
+    Ry = Ry + 1;
 }
 
 //x  [-6,6] y[0,4]
@@ -305,10 +310,23 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
         gl.uniform1i(textureLocation[obj.drawInfo.type], 1);
         
-        // Normal map
+    }
+    if (obj.drawInfo.type == ASTEROID_INDEX){
+
+        // Diffuse map
         gl.activeTexture(gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-        gl.uniform1i(normalMapLocation, 2);
+        gl.uniform1i(diffuseMapLocation, 2);
+
+        // Roughness map
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, textures[2]);
+        gl.uniform1i(roughnessMapLocation, 3);
+
+        // Ambient Occlusion map
+        gl.activeTexture(gl.TEXTURE4);
+        gl.bindTexture(gl.TEXTURE_2D, textures[3]);
+        gl.uniform1i(aoMapLocation, 4);
     }
 
     gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
@@ -320,7 +338,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     gl.uniform3fv(lightColorHandleB[obj.drawInfo.type], directionalLightColorB);
     gl.uniform3fv(lightDirectionHandleB[obj.drawInfo.type], directionalLightB);
     
-    if (obj.drawInfo.type == XWING_INDEX || obj.drawInfo.type == RING_INDEX){
+    if (obj.drawInfo.type == XWING_INDEX || obj.drawInfo.type == RING_INDEX || obj.drawInfo.type == ASTEROID_INDEX){
         gl.uniform4fv(cameraPositionLocation[obj.drawInfo.type], [camera_x, camera_y, camera_z, 1]);
     }
     else{
@@ -378,7 +396,7 @@ function createMeshVAO(i) {
     gl.enableVertexAttribArray(positionAttributeLocation[i]);
     gl.vertexAttribPointer(positionAttributeLocation[i], 3, gl.FLOAT, false, 0, 0);
 
-    if (i == XWING_INDEX){
+    if (i == XWING_INDEX || i == ASTEROID_INDEX){
 
         var uvBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, uvBuffer);
@@ -423,7 +441,7 @@ async function loadShaders() {
         programs[RING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
   
-    await utils.loadFiles([shaderDir + 'asteroid_vs.glsl', shaderDir + 'asteroid_fs.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'asteroid_vs3.glsl', shaderDir + 'asteroid_fs3.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 

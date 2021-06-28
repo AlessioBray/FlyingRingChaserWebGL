@@ -1,7 +1,7 @@
 function computeDeltaGameInitializationMovements(){
     
     deltaZ = GAME_XWING_POSITION[2] / NUMBER_INITIALIZATION_FRAMES;
-    deltaY = -1.5 / NUMBER_INITIALIZATION_FRAMES;
+    deltaY = GAME_XWING_POSITION[1] / NUMBER_INITIALIZATION_FRAMES;
 
     if ((Ry % 360) >= 270 || (Ry % 360) <= 90){
         deltaRy = -2.5; //((Ry % 360) - 270) / NUMBER_INITIALIZATION_FRAMES;

@@ -21,7 +21,7 @@ void main() {
     fsPosition = (worldMatrix * vec4(in_position, 1.0)); // coordinates in world space
 
     fsCamera = cameraPosition;
-    fsUV = vec2(in_UV.x, 1.0 - in_UV.y);
+    fsUV = vec2(in_UV.x, in_UV.y);
 
     gl_Position = worldViewProjectionMatrix * vec4(in_position, 1.0);
 

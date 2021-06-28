@@ -62,6 +62,7 @@ var lightColorHandleB = new Array();
 
 var cameraPositionLocation = new Array();
 var normalMapLocation;
+var diffuseMap;
 
 var aspect;
 var perspectiveMatrix;
@@ -193,7 +194,7 @@ var ASTEROID_DAMAGE = 30;
 
 //game
 var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
-var GAME_XWING_POSITION = [0, -1.5, 40.0];
+var GAME_XWING_POSITION = [0, -0.85, 40.0];
 var deltaX = 0;
 var deltaY = 0;
 var deltaZ = 0;
