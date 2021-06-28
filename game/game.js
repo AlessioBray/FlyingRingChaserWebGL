@@ -149,7 +149,8 @@ function updateGameMatrices(){
     
     for (var i = 1; i < objects.length; i++){
         //drawObject(objects[i]);
-        objects[i].updateWorldMatrix(utils.MakeTranslateMatrix(0,SPEED,0));
+        let matrix = utils.MakeTranslateMatrix(0,0,SPEED);
+        objects[i].worldMatrix = utils.multiplyMatrices(matrix, objects[i].worldMatrix);
     }
     
 
@@ -160,8 +161,6 @@ function animateGame(){
     if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
         addRingNode();
     }
-    
-    Tz = Tz + 0.1; //makes ring advance in game
 
 }
 
@@ -233,17 +232,6 @@ function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
 
 function isGameOver(){
     return !healthBar.value;
-}
-
-//////////////////////////////////////// questo andrà in updateGameMatrices: fara un update delle local matrices degli ostacoli.
-function move(){
-    
-    ringsArrays = matricesArrays[0];
-    for(var i = 0; i < ringsArrays.length; i++){
-        let oldMatrix = ringsArrays[i];
-        ringsArrays[i] = utils.multiplyMatrices(oldMatrix,utils.MakeTranslateMatrix(0,SPEED,0.0));
-    }
-
 }
 
 //game over
