@@ -7,7 +7,7 @@ const float distance = 0.5; // lights are directional ones
 // material parameters
 //const vec3 albedo = vec3(1.0, 1.0, 1.0);
 //const float roughness = 0.9;
-const float metallic = 0.0;
+//const float metallic = 0.0;
 //const float ao = 1.0;
 
 in vec3 fsNormal;
@@ -27,8 +27,27 @@ uniform vec3 lightColorB;
 uniform sampler2D diffuseMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
+uniform sampler2D normalMap;
+uniform sampler2D metalnessMap;
 
 out vec4 outColor;
+
+vec3 getNormalFromMap()
+{
+    vec3 tangentNormal = texture(normalMap, fsUV).xyz * 2.0 - 1.0;
+
+    vec3 Q1  = vec3(dFdx(fsPosition));
+    vec3 Q2  = vec3(dFdy(fsPosition));
+    vec2 st1 = dFdx(fsUV);
+    vec2 st2 = dFdy(fsUV);
+
+    vec3 N   = normalize(fsNormal);
+    vec3 T   = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B   = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+
+    return normalize(TBN * tangentNormal);
+}
 
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -75,11 +94,13 @@ void main() {
 
     vec3 albedo = texture(diffuseMap, fsUV).rgb;
     //albedo = vec3(pow(albedo.r, 2.2), pow(albedo.g, 2.2), pow(albedo.b, 2.2));
+    float metallic  = texture(metalnessMap, fsUV).r;
     float roughness = texture(roughnessMap, fsUV).r;
     float ao =  texture(aoMap, fsUV).r;
+    
 
     //normalize fsNormal, it might not be in the normalized form coming from the vs
-    vec3 N = normalize(fsNormal);
+    vec3 N = getNormalFromMap();
     vec3 V = vec3(normalize(fsCamera - fsPosition));
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 

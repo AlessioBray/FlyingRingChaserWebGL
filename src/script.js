@@ -55,6 +55,8 @@ function getAttributesAndUniforms(){
             diffuseMapLocation = gl.getUniformLocation(programs[i], "diffuseMap");
             roughnessMapLocation = gl.getUniformLocation(programs[i], "roughnessMap");
             aoMapLocation = gl.getUniformLocation(programs[i], "aoMap");
+            normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
+            metalnessMapLocation = gl.getUniformLocation(programs[i], "metalnessMap");
 
             //diffuseLocation = gl.getUniformLocation(programs[i], "diffuseMap");
             //normalLocation = gl.getUniformLocation(programs[i], "normalMap");
@@ -128,7 +130,7 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    images[1].src = textureDir + "asteroid/rock_diffuse.jpg";
+    images[1].src = textureDir + "asteroid/copper-rock-alb.png";
 
     textures[2] = gl.createTexture();
 
@@ -144,7 +146,7 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    images[2].src = textureDir + "asteroid/rock_roughness.jpg";
+    images[2].src = textureDir + "asteroid/copper-rock-rough.png";
 
     textures[3] = gl.createTexture();
 
@@ -160,7 +162,55 @@ function loadObjectsTextures(){
 
         gl.generateMipmap(gl.TEXTURE_2D);
     };
-    images[3].src = textureDir + "asteroid/rock_ao.jpg";
+    images[3].src = textureDir + "asteroid/copper-rock-ao.png";
+
+    textures[4] = gl.createTexture();
+
+    images[4] = new Image();
+    images[4].onload = function() {
+        gl.activeTexture(gl.TEXTURE5);
+        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[4]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[4].src = textureDir + "asteroid/copper-rock-normal.png";
+
+    textures[5] = gl.createTexture();
+
+    images[5] = new Image();
+    images[5].onload = function() {
+        gl.activeTexture(gl.TEXTURE6);
+        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[5]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[5].src = textureDir + "asteroid/copper-rock-metal.png";
+
+    textures[6] = gl.createTexture();
+
+    images[6] = new Image();
+    images[6].onload = function() {
+        gl.activeTexture(gl.TEXTURE7);
+        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, images[6]);
+                
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+
+        gl.generateMipmap(gl.TEXTURE_2D);
+    };
+    images[6].src = textureDir + "asteroid/copper-rock-height.png";
     
     // -----------------
 
@@ -245,6 +295,16 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         gl.activeTexture(gl.TEXTURE4);
         gl.bindTexture(gl.TEXTURE_2D, textures[3]);
         gl.uniform1i(aoMapLocation, 4);
+    
+        // Normal map
+        gl.activeTexture(gl.TEXTURE5);
+        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
+        gl.uniform1i(normalMapLocation, 5);
+
+        // Metalness map
+        gl.activeTexture(gl.TEXTURE6);
+        gl.bindTexture(gl.TEXTURE_2D, textures[5]);
+        gl.uniform1i(metalnessMapLocation, 6);
     }
 
     gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));

@@ -63,6 +63,12 @@ var lightColorHandleB = new Array();
 var cameraPositionLocation = new Array();
 var normalMapLocation;
 var diffuseMap;
+var aoMapLocation;
+var normalMap;
+var metalnessMapLocation;
+var heightMapLocation;
+
+var normalMapLocationXWING;
 
 var aspect;
 var perspectiveMatrix;
