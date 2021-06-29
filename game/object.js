@@ -136,12 +136,17 @@ var selectedObjId = 0;
 
 // ring spawn
 var lastNewRingTime = Date.now();
-var SPAWNTIME = 5000;
-var SPEED = 0.1;
+var SPAWNTIME = 3500;
+var ASTEROIDSPAWNRATE = 0.5;
+var SPEED = 0.15;
+var ANGULARSPEED_X = 0.6;
+var ANGULARSPEED_Y = 0.6;
+var ANGULARSPEED_Z = 0.6;
 var MAX_X = 10;
 var MIN_X =  5; 
 var MAX_Y = 3;
 var MIN_Y = 1; 
+
 var gameOn = false;
 
 // to reduce lag when we call main to change the object showed

@@ -141,25 +141,22 @@ function setGameMatrices(){
 }
 
 function updateGameMatrices(){
-    // world matrix che muove gli oggetti in scena
-    // aggiorna ricorsivamente la scena senza aggiornare la posizione della xwing che deve rimanere li 
-    // => update local matrix oggetti tranne xwing e chiamata objects[0].updateWorldMatrix(); //with identity matrix
-
-    //objects[0].updateWorldMatrix();
     
+
     for (var i = 1; i < objects.length; i++){
-        //drawObject(objects[i]);
         let matrix = utils.MakeTranslateMatrix(0,0,SPEED);
-        objects[i].worldMatrix = utils.multiplyMatrices(matrix, objects[i].worldMatrix);
+        let newWorldMatrix = utils.multiplyMatrices(matrix, objects[i].worldMatrix);
+        objects[i].updateWorldMatrix(newWorldMatrix);
     }
     
 
 }
 
+
 function animateGame(){
 
     if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
-        addRingNode();
+        spawnNewObject();
     }
 
 }
