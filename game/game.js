@@ -116,6 +116,7 @@ function drawGameInitializationScene(){
         xwingNode.localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
         
         lastNewRingTime = Date.now();
+        createFreeNodes();
         drawGameScene(); // when animation is finished starts spawning
 
     }
@@ -148,6 +149,7 @@ function updateGameMatrices(){
         else{ // if ring
             child.localMatrix = utils.multiplyMatrices(matrix,child.localMatrix);
         }
+
     }
     
     xwingNode.updateWorldMatrix(); // update children world matrices
@@ -171,6 +173,8 @@ function drawGameScene() {
     
     updateGameMatrices(); // to update rings/asteroids world matrices
 
+    handleObjects(); // eliminates objects out of bounds
+
     clearBits();
     
     drawSkybox();
@@ -183,6 +187,16 @@ function drawGameScene() {
     }
     
     requestAnimationId = window.requestAnimationFrame(drawGameScene);
+}
+
+function handleObjects(){ //check if objects are out of bounds
+    let objects = xwingNode.children;
+    for (var i = 0; i < objects.length; i++){
+        if(objects[i].worldMatrix[11] > 60 ){
+               xwingNode.removeFirstChild();
+               break;
+        }
+    }
 }
 
 //start the game!!

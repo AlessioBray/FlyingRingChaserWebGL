@@ -164,6 +164,12 @@ var CAMERA_INDEX = -1;
 // scene graph variables
 var objects = [];
 
+//object pooling
+var NUM_OBJECTS_IN_SCENE = 3;
+var nodes = [];
+var freeslot = 0;
+//////
+
 var showcaseNode;
 var xwingNode;
 var ringNode;

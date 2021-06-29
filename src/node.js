@@ -4,7 +4,12 @@ var Node = function() {
     this.worldMatrix = utils.identityMatrix();
 };
 
-
+// NEW
+Node.prototype.removeFirstChild = function(){
+    //remove first child from father
+    this.children.shift();
+}
+//
   
 Node.prototype.setParent = function(parent) {
     // remove us from our parent
@@ -97,7 +102,6 @@ function createGameSceneGraph(){   // objects array not used in game
         bufferLength: allMeshes[XWING_INDEX].indices.length,
         vertexArray: vaos[XWING_INDEX],
     };
-
     xwingNode.updateWorldMatrix();
     
 }
@@ -113,7 +117,7 @@ function spawnNewObject(){
    
    if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
 
-   objectNode = new Node();
+   let objectNode = getFreeNode();
    objectNode.localMatrix = utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S);
    objectNode.drawInfo = {
         type: index,
@@ -127,3 +131,17 @@ function spawnNewObject(){
    lastNewRingTime = Date.now();
 
 }
+
+//implements a sort of object pooling 
+function createFreeNodes(){
+    for ( var i = 0; i< NUM_OBJECTS_IN_SCENE; i++)
+        nodes.push(new Node());
+}
+
+function getFreeNode(){
+    let node = nodes[freeslot];
+    freeslot = (freeslot + 1)%nodes.length;
+    return node;
+}
+
+
