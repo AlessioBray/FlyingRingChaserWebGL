@@ -65,7 +65,7 @@ function animateGameInitialization(){
     }
     
     var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
-    objects[0].updateWorldMatrix(deltaMatrix); //world = world * delta
+    xwingNode.updateWorldMatrix(deltaMatrix); //world = world * delta
 
 
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
@@ -102,12 +102,7 @@ function drawGameInitializationScene(){
 
     drawSkybox();
 
-    drawObject(objects[0]);  // starship
-    
-    for (var i = 1; i < objects.length; i++){  //rings and asteroids
-        drawObject(objects[i]);
-    }
-    
+    drawObject(xwingNode); 
 
     if (elapsedInitializationFrames == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
         elapsedInitializationFrames = 100;
@@ -118,7 +113,7 @@ function drawGameInitializationScene(){
         window.addEventListener("keydown", keyDownFunction, false);
         window.addEventListener("keyup", keyUpFunction, false);
 
-        objects[0].localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
+        xwingNode.localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
         
         lastNewRingTime = Date.now();
         drawGameScene(); // when animation is finished starts spawning
@@ -141,14 +136,21 @@ function setGameMatrices(){
 }
 
 function updateGameMatrices(){
-    
 
-    for (var i = 1; i < objects.length; i++){
-        let matrix = utils.MakeTranslateMatrix(0,0,SPEED);
-        let newWorldMatrix = utils.multiplyMatrices(matrix, objects[i].worldMatrix);
-        objects[i].updateWorldMatrix(newWorldMatrix);
+    for (var i = 0; i < xwingNode.children.length; i++){ // update children local matrices
+        let child = xwingNode.children[i];
+        let matrix = utils.MakeTranslateMatrix(0,0,-SPEED);
+        if(child.drawInfo["type"] == ASTEROID_INDEX){ //if asteroid
+            matrix = utils.multiplyMatrices(matrix,child.localMatrix);
+            let rot = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z,1);
+            child.localMatrix = utils.multiplyMatrices(matrix,rot);
+        }
+        else{ // if ring
+            child.localMatrix = utils.multiplyMatrices(matrix,child.localMatrix);
+        }
     }
     
+    xwingNode.updateWorldMatrix(); // update children world matrices
 
 }
 
@@ -173,6 +175,9 @@ function drawGameScene() {
     
     drawSkybox();
 
+    drawObject(xwingNode);
+
+    let objects = xwingNode.children;
     for (var i = 0; i < objects.length; i++){
         drawObject(objects[i]);
     }
