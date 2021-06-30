@@ -245,7 +245,7 @@ function handleObjects(){
 //start the game!!
 function startGame(){
 
-    console.log("Cancelling animation: " + requestAnimationId);
+    //console.log("Cancelling animation: " + requestAnimationId);
     window.cancelAnimationFrame(requestAnimationId);
 
     HideShowElement(lightController);
@@ -254,6 +254,7 @@ function startGame(){
     HideShowElement(healthBar);
 
     restoreMaxLife();
+    addScore();
   
     createGameSceneGraph();
 
@@ -336,9 +337,10 @@ function HideShowElement(x){ // takes an element and hides/shows it
 // initializes scores to zero
 function createScore(){
     textScore = document.createTextNode(0);
-    //bestScore = document.createTextNode(0);
+    bestScore = document.createTextNode(0);
     maxScore = 0;
     score.appendChild(textScore); 
+    bestscore.appendChild(bestScore);
 }
 
 //creates a score popup
@@ -346,7 +348,7 @@ function createScorePopup(){
     var scorePopup = document.createElement('div'); 
     var textScorePopup = document.createTextNode('Game Over!!');
     scorePopup.appendChild(textScorePopup);  
-    var currentScore=textScore.nodeValue;
+    var currentScore=parseInt(textScore.nodeValue);
     var textScorePopup = document.createTextNode('Your score is: ' +  currentScore);
     scorePopup.appendChild(textScorePopup);  
 
@@ -354,6 +356,7 @@ function createScorePopup(){
         var textScorePopup = document.createTextNode('New best score!!');
         scorePopup.appendChild(textScorePopup); 
         maxScore = currentScore;
+        bestScore.nodeValue = maxScore;
     }
 
     return scorePopup;

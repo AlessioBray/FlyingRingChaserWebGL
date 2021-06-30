@@ -7,7 +7,8 @@ POPUP_ID = 'popup';
 POPUP_CONTENT_ID= 'popupContent' ;
 CLOSE_BUTTON_ID= 'closeButton';
 
-var score = document.getElementById('scoringtab');
+var score = document.getElementById('score');
+var bestscore = document.getElementById('bestscore');
 var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
@@ -191,7 +192,7 @@ var skyboxProgram;
 
 // DAMAGE OF OBSTACLES
 
-var ASTEROID_DAMAGE = 30;
+var ASTEROID_DAMAGE = 100;
 
 //game
 var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
