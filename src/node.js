@@ -118,7 +118,7 @@ function spawnNewObject(){
    if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
 
    let objectNode = getFreeNode();
-   objectNode.localMatrix = utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S);
+   objectNode.localMatrix = utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index));
    objectNode.drawInfo = {
         type: index,
         materialColor: [1.0, 1.0, 1.0],

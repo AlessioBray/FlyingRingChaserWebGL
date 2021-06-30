@@ -168,6 +168,7 @@ var objects = [];
 var NUM_OBJECTS_IN_SCENE = 3;
 var nodes = [];
 var freeslot = 0;
+var collision_index = -1;
 //////
 
 var showcaseNode;
@@ -203,6 +204,9 @@ var deltaRy = 0;
 var deltaRz = 0;
 var Z = 0;
 var Y = 0;
+var COLLISION_RADIUS_ASTEROID = 1.5;
+var COLLISION_RADIUS_RING = 2.5;
+var SCORE_RING = 300;
 
 
 var deltaLookRadius = 0;

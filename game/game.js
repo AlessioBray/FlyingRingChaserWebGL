@@ -184,19 +184,62 @@ function drawGameScene() {
     let objects = xwingNode.children;
     for (var i = 0; i < objects.length; i++){
         drawObject(objects[i]);
+        detectCollision(i);
     }
-    
+
+    if(isGameOver()) {
+        gameOver();
+        window.cancelAnimationFrame(drawGameScene);
+    }
+    else{
     requestAnimationId = window.requestAnimationFrame(drawGameScene);
+    }
 }
 
-function handleObjects(){ //check if objects are out of bounds
-    let objects = xwingNode.children;
-    for (var i = 0; i < objects.length; i++){
-        if(objects[i].worldMatrix[11] > 60 ){
-               xwingNode.removeFirstChild();
-               break;
-        }
+function detectCollision(i){
+
+   let object = xwingNode.children[i];
+   let tx = object.localMatrix[3];
+   let ty = object.localMatrix[7];
+   let tz = object.localMatrix[11];
+   let distance = Math.sqrt(Math.pow(tx,2) + Math.pow(ty,2) + Math.pow(tz,2));
+   let type = object.drawInfo["type"];
+
+   switch(type){
+   case 1:
+   if(distance < COLLISION_RADIUS_RING && i!=collision_index){
+        collision_index = i;
+        addScore();
+   }
+   break;
+ 
+   case 2:
+   if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
+    collision_index = i;
+    takeDamage(ASTEROID_DAMAGE);
+   }
+   break;
     }
+}
+
+function handleObjects(){ 
+
+    let objects = xwingNode.children;   
+    for (var i = 0; i < objects.length; i++){
+
+
+        if(objects[i].worldMatrix[11] > 60 ){ //out of bounds
+               xwingNode.removeFirstChild();
+               if(i==collision_index) collision_index = -1; 
+        }
+
+        //detectCollision(i);
+
+    }
+
+    
+
+
 }
 
 //start the game!!
@@ -240,6 +283,12 @@ function restoreMaxLife(){
     healthBar.value = healthBar.max;
 }
 
+function addScore(){
+    currentScore = parseInt(textScore.nodeValue);
+    newScore = currentScore + SCORE_RING;
+    textScore.nodeValue = newScore;
+}
+
 function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
     let newHealth = healthBar.value - damage;
     if(newHealth < healthBar.min) newHealth = healthBar.min;
@@ -247,14 +296,19 @@ function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
 }
 
 function isGameOver(){
-    return !healthBar.value;
+    let gameOver = false;
+    if(healthBar.value == 0){
+        gameOver = true;
+    }
+    return gameOver;
 }
 
 //game over
 function gameOver(){
 
-    //createPopup("gameover"); 
-    //textScore.nodeValue = "0"; //reset current score
+    createPopup("gameover"); 
+    textScore.nodeValue = "0"; //reset current score
+    restoreMaxLife();
 
     // shows controllers 
     HideShowElement(lightController);  
@@ -282,6 +336,7 @@ function HideShowElement(x){ // takes an element and hides/shows it
 // initializes scores to zero
 function createScore(){
     textScore = document.createTextNode(0);
+    //bestScore = document.createTextNode(0);
     maxScore = 0;
     score.appendChild(textScore); 
 }
