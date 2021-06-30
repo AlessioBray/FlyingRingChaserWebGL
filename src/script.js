@@ -420,7 +420,7 @@ async function loadShaders() {
 
 async function loadMeshes() {
 
-    xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter2.obj");
+    xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter3.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj");
 
