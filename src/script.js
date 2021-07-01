@@ -7,13 +7,11 @@ function setViewportAndCanvas(){
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.enable(gl.DEPTH_TEST);
     gl.enable(gl.CULL_FACE);
-    //gl.enable(gl.LINE_SMOOTH);
-    
     clearBits();
 }
 
 function setMatrices(){
-    // Compute the camera matrix
+    // Compute the camera view matrix
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
     viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, camera_angle);
@@ -23,57 +21,39 @@ function getAttributesAndUniforms(){
     
     for (var i = 0; i < programs.length - 1; i++){
 
+        // Attributes locations
+
         positionAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_position");
         normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_normal");
         
-        if (i == XWING_INDEX){
-            uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
-        }
-
-        if (i == ASTEROID_INDEX){
+        if (i == XWING_INDEX || i == ASTEROID_INDEX){
             uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
         }
         
+        // Uniforms locations
+
         worldViewProjectionMatrixLocation[i] = gl.getUniformLocation(programs[i], "worldViewProjectionMatrix");  
         normalMatrixLocation[i] = gl.getUniformLocation(programs[i], "normalMatrix");
         worldMatrixLocation[i] = gl.getUniformLocation(programs[i], "worldMatrix");
+        cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
 
         if (i == XWING_INDEX){
             textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
-            cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
-        }
-
-        if (i == RING_INDEX){
-
-            cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
-
         }
 
         if (i == ASTEROID_INDEX){
 
-            cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
             diffuseMapLocation = gl.getUniformLocation(programs[i], "diffuseMap");
             roughnessMapLocation = gl.getUniformLocation(programs[i], "roughnessMap");
             aoMapLocation = gl.getUniformLocation(programs[i], "aoMap");
             normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
             metalnessMapLocation = gl.getUniformLocation(programs[i], "metalnessMap");
-
-            //diffuseLocation = gl.getUniformLocation(programs[i], "diffuseMap");
-            //normalLocation = gl.getUniformLocation(programs[i], "normalMap");
-            //depthLocation = gl.getUniformLocation(programs[i], "depthMap");
-            //tangentLocation = gl.getUniformLocation(programs[i], "in_tangent");
             
         }
 
 
         // Light uniforms location COMMON to all objects
-
-        ambientLightColorHandle[i] = gl.getUniformLocation(programs[i], "ambientLightCol");
-        ambientMaterialHandle[i] = gl.getUniformLocation(programs[i], "ambientMat");
-        materialDiffColorHandle[i] = gl.getUniformLocation(programs[i], 'mDiffColor');
-        specularColorHandle[i] = gl.getUniformLocation(programs[i], "specularColor");
-        shineSpecularHandle[i] = gl.getUniformLocation(programs[i], "specShine");
-        emissionColorHandle[i] = gl.getUniformLocation(programs[i], "emit");    
+            
         lightDirectionHandleA[i] = gl.getUniformLocation(programs[i], 'lightDirectionA');
         lightColorHandleA[i] = gl.getUniformLocation(programs[i], 'lightColorA');
         lightDirectionHandleB[i] = gl.getUniformLocation(programs[i], 'lightDirectionB');
@@ -82,9 +62,6 @@ function getAttributesAndUniforms(){
     }
 
 }
-
-var images = [];
-var textures = [];
 
 function loadObjectsTextures(){
 
@@ -395,7 +372,7 @@ async function loadShaders() {
         programs[SKYBOX_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
-    await utils.loadFiles([shaderDir + 'xwing_vs2.glsl', shaderDir + 'xwing_fs2.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'xwing_vs.glsl', shaderDir + 'xwing_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
@@ -409,7 +386,7 @@ async function loadShaders() {
         programs[RING_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
   
-    await utils.loadFiles([shaderDir + 'asteroid_vs3.glsl', shaderDir + 'asteroid_fs3.glsl'], function (shaderText) {
+    await utils.loadFiles([shaderDir + 'asteroid_vs.glsl', shaderDir + 'asteroid_fs.glsl'], function (shaderText) {
         var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
         var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
 
@@ -420,7 +397,7 @@ async function loadShaders() {
 
 async function loadMeshes() {
 
-    xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter3.obj");
+    xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj");
 

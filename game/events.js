@@ -182,10 +182,9 @@ function onSelectedObjChange(objectId){
 }
 
 
-createScore(); 
-window.addEventListener("keydown", keyDownFunction, false);
-window.addEventListener("keyup", keyUpFunction, false);
+createScore();
 
+// Light event listeners
 dirLightAlphaASlider.addEventListener("input",updateLights,false);
 dirLightBetaASlider.addEventListener("input",updateLights,false);
 dirLightAlphaBSlider.addEventListener("input",updateLights,false);
@@ -193,7 +192,12 @@ dirLightBetaBSlider.addEventListener("input",updateLights,false);
 directionalLightColorASlider.addEventListener("input",updateLights,false);
 directionalLightColorBSlider.addEventListener("input",updateLights,false);
 
+// Showcase event listeners (mouse movement)
 canvas.addEventListener("mousedown", doMouseDown, false);
 canvas.addEventListener("mouseup", doMouseUp, false);
 canvas.addEventListener("mousemove", doMouseMove, false);
 canvas.addEventListener("mousewheel", doMouseWheel, false);
+
+// Showcase event listeners (key)
+window.addEventListener("keydown", keyDownFunction, false);
+window.addEventListener("keyup", keyUpFunction, false);

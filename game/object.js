@@ -1,25 +1,21 @@
-// Global variables and constants 
+var gl; // context
+var programs = new Array(); // shader array
 
-var textScore = null;
-var maxScore = null;
 
-POPUP_ID = 'popup';
-POPUP_CONTENT_ID= 'popupContent' ;
-CLOSE_BUTTON_ID= 'closeButton';
+// HTML elements
+// -------------
 
-var score = document.getElementById('score');
-var bestscore = document.getElementById('bestscore');
 var canvas = document.getElementById("c");
 var lightController = document.getElementById("lightcontroller");
 var moveController = document.getElementById("movecontroller");
-var healthBar = document.getElementById("healthbar");
-
-healthBar.style.display = "none"; // initially is hidden
-
-
 var objSelected = document.getElementById("objSelected");
 var objDiv = document.getElementById("obj");
+var score = document.getElementById('score');
+var bestscore = document.getElementById('bestscore');
+var healthBar = document.getElementById("healthbar");
+healthBar.style.display = "none"; // healthbar is initially is hidden
 
+// Light controller elements
 
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
 var dirLightBetaASlider = document.getElementById("dirLightBetaA"); //32
@@ -28,44 +24,58 @@ var dirLightBetaBSlider = document.getElementById("dirLightBetaB"); //32
 var directionalLightColorASlider = document.getElementById("LAlightColor"); //#4d4d4d
 var directionalLightColorBSlider = document.getElementById("LBlightColor"); //#4d4d4d
 
+// -------------
 
-//ring PBR uniforms
-var albedoLocation;
-var metalnessLocation;
-var roughnessLocation;
-var ambientOcclusionLocation;
-var cameraPositionLocation;
+// Attributes and Uniforms location variables
+// ------------------------------------------
 
-var programs = new Array();
-var gl;
-var model;
-var vertices;
-var normals;
-var indices;
-var texture;
 var positionAttributeLocation = new Array();
 var normalAttributeLocation = new Array();
 var uvAttributeLocation = new Array();
-var textureLocation = new Array();
+
+// Matrices
 var worldViewProjectionMatrixLocation = new Array();
 var normalMatrixLocation = new Array();
 var worldMatrixLocation = new Array();
-var ambientLightColorHandle = new Array();
-var ambientMaterialHandle = new Array();
-var materialDiffColorHandle = new Array();
-var specularColorHandle = new Array();
-var shineSpecularHandle = new Array();
-var emissionColorHandle = new Array();
+var cameraPositionLocation = new Array();
+
+
+
+// ------------------------------------------
+
+// Textures variables
+// ------------------
+
+var images = [];
+var textures = [];
+
+// ------------------
+
+//------------------------------------------------------------------------------
+
+// Global variables and constants 
+
+var textScore = null;
+var maxScore = null;
+
+POPUP_ID = 'popup';
+POPUP_CONTENT_ID = 'popupContent' ;
+CLOSE_BUTTON_ID = 'closeButton';
+
+
+
+
+var textureLocation = new Array(); //////////////////////////////////////
+
+
 var lightDirectionHandleA = new Array();
 var lightColorHandleA = new Array();
 var lightDirectionHandleB = new Array();
 var lightColorHandleB = new Array();
 
-var cameraPositionLocation = new Array();
 var normalMapLocation;
-var diffuseMap;
+var diffuseMapLocation;
 var aoMapLocation;
-var normalMap;
 var metalnessMapLocation;
 var heightMapLocation;
 

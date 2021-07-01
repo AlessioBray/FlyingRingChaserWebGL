@@ -84,7 +84,6 @@ function loadEnvironment(){
     
     });
     
-    
 }
 
 function drawSkybox(){

@@ -109,26 +109,26 @@ function createGameSceneGraph(){   // objects array not used in game
 
 function spawnNewObject(){
 
-   // randomizations
-   let indexes = [RING_INDEX,ASTEROID_INDEX];
-   let index = indexes[0];
-   let tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
-   let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
+    // randomizations
+    let indexes = [RING_INDEX,ASTEROID_INDEX];
+    let index = indexes[0];
+    let tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
+    let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
    
-   if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
+    if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
 
-   let objectNode = getFreeNode();
-   objectNode.localMatrix = utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index));
-   objectNode.drawInfo = {
+    let objectNode = getFreeNode();
+    objectNode.localMatrix = utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index));
+    objectNode.drawInfo = {
         type: index,
         materialColor: [1.0, 1.0, 1.0],
         programInfo: programs[index],
         bufferLength: allMeshes[index].indices.length,
         vertexArray: vaos[index],
-   };
-   objectNode.setParent(xwingNode);
+    };
+    objectNode.setParent(xwingNode);
    
-   lastNewRingTime = Date.now();
+    lastNewRingTime = Date.now();
 
 }
 
@@ -143,5 +143,3 @@ function getFreeNode(){
     freeslot = (freeslot + 1)%nodes.length;
     return node;
 }
-
-
