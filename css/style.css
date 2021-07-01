@@ -132,8 +132,6 @@ a.closeButton:hover {
     z-index: 7;
 }
 
-
-
 #lightcontroller {
     font-family: Soloist;
     position: absolute; text-align: center;
@@ -141,7 +139,7 @@ a.closeButton:hover {
     bottom: 0px; 
     background-color: #fcba03; 
     opacity: 1.0; 
-    padding: 0px 20px 0px 0px; 
+    padding: 0px 0px 0px 0px; 
     overflow: auto; 
     padding: 20px; 
     border-radius: 15px 30px 15px 5px; 
@@ -156,6 +154,11 @@ a.closeButton:hover {
     font-family: Soloist;
     font-size: 15px;
     color: #000000;
+    padding-bottom: 5px;
+}
+
+#colorSelector {
+    padding-top: 5px;
 }
 
 #movecontroller {
@@ -167,7 +170,7 @@ a.closeButton:hover {
     bottom: 0px; 
     background-color: #fcba03; 
     opacity: 1.0; 
-    padding: 0px 20px 0px 0px; 
+    padding: 0px 25px 0px 0px; 
     overflow:auto; 
     border-radius: 30px 15px 5px 15px; 
     box-shadow: rgba(252, 186, 3, 0.4) -5px -5px, 
