@@ -37,23 +37,23 @@ function getAttributesAndUniforms(){
         worldMatrixLocation[i] = gl.getUniformLocation(programs[i], "worldMatrix");
         cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
 
-        if (i == XWING_INDEX){
-            textureLocation = gl.getUniformLocation(programs[i], "in_texture");
-        }
-
-        if (i == ASTEROID_INDEX){
-
-            diffuseMapLocation = gl.getUniformLocation(programs[i], "diffuseMap");
-            roughnessMapLocation = gl.getUniformLocation(programs[i], "roughnessMap");
-            aoMapLocation = gl.getUniformLocation(programs[i], "aoMap");
-            normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
-            metalnessMapLocation = gl.getUniformLocation(programs[i], "metalnessMap");
+        switch(i){
             
+            case XWING_INDEX:
+                textureLocation = gl.getUniformLocation(programs[i], "in_texture");
+                break;
+            
+            case ASTEROID_INDEX:
+                diffuseMapLocation = gl.getUniformLocation(programs[i], "diffuseMap");
+                roughnessMapLocation = gl.getUniformLocation(programs[i], "roughnessMap");
+                aoMapLocation = gl.getUniformLocation(programs[i], "aoMap");
+                normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
+                metalnessMapLocation = gl.getUniformLocation(programs[i], "metalnessMap");
+                break;
         }
 
 
         // Light uniforms location COMMON to all objects
-            
         lightDirectionHandleA[i] = gl.getUniformLocation(programs[i], 'lightDirectionA');
         lightColorHandleA[i] = gl.getUniformLocation(programs[i], 'lightColorA');
         lightDirectionHandleB[i] = gl.getUniformLocation(programs[i], 'lightDirectionB');
@@ -227,7 +227,7 @@ function render(){
     drawScene();
 }
 
-function animate(){ //animate for showCase
+function animateShowcase(){ //animate for showCase
     Ry = Ry + 0.5;
 }
 
@@ -315,7 +315,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     
 function drawScene() {    
 
-    animate();
+    animateShowcase();
 
     updateShowcaseWorldMatrix(); // to update rings world matrices
 
