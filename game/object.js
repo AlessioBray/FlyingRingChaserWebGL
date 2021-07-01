@@ -1,12 +1,35 @@
 var gl; // context
 var programs = new Array(); // shader array
 
+var vaos;
+
+var requestAnimationId; // Id of the animation that is being requested
+
+// Meshes
+// ------
+
 var allMeshes;
 var xwingMesh;
 var ringMesh;
 var asteroidMesh;
 
-var vaos;
+// ------
+
+// Scene graph
+// -----------
+
+var objects = [];
+
+var XWING_INDEX = 0;
+var RING_INDEX = 1;
+var ASTEROID_INDEX = 2;
+var SKYBOX_INDEX = 3;
+
+var showcaseNode;
+var xwingNode;
+var ringNode;
+
+// -----------
 
 // Initialize resource paths
 // -------------------------
@@ -20,19 +43,21 @@ var textureDir = baseDir + "assets/textures/";
 
 // -------------------------
 
-// World matrix
-// ------------
+// Matrices
+// --------
 
+var projectionMatrix;
+
+// World matrix
+var worldmatrix;
 var Rx = 0.0;
 var Ry = 0.0;
 var Rz = 0.0;
 var S  = 1.0;
 var Tz = 0.0; 
 
-// ------------
-
 // View Matrix
-// ------
+var viewMatrix;
 var camera_x = 0.0;
 var camera_y = 0.0;
 var camera_z = 50;
@@ -41,17 +66,14 @@ var camera_angle = 0;
 
 var lookRadius = 50; //same initialization as camera_z (variable used in the showcase to keep track of the zoom effect)
 
-// ------
-
 // Perspective matrix
-// -----------
-
+var perspectiveMatrix;
 var zNear = 0.1;
 var zFar = 100;
 var fieldOfViewDeg = 15;
+var aspect;
 
-// -----------
-
+// --------
 
 // HTML elements
 // -------------
@@ -96,6 +118,9 @@ var lightColorHandleA = new Array();
 var lightDirectionHandleB = new Array();
 var lightColorHandleB = new Array();
 
+// X-Wing
+var textureLocation;
+
 // Asteroid maps
 var normalMapLocation;
 var diffuseMapLocation;
@@ -114,89 +139,9 @@ var textures = [];
 
 // ------------------
 
-//------------------------------------------------------------------------------
+// Skybox
+// ------
 
-// Global variables and constants 
-
-var textScore = null;
-var maxScore = null;
-
-POPUP_ID = 'popup';
-POPUP_CONTENT_ID = 'popupContent' ;
-CLOSE_BUTTON_ID = 'closeButton';
-
-
-var textureLocation = new Array(); //////////////////////////////////////
-
-
-var aspect;
-var perspectiveMatrix;
-var viewMatrix;
-var worldmatrix;
-var projectionMatrix;
-var inverseViewProjMatrix; //used in skybox
-
-
-// lights 
-var directionalLightA;
-var directionalLightColorA;
-var directionalLightB;
-var directionalLightColorB;
-
-
-var delta = 5;
-
-
-
-
-
-
-// id showcase obj
-var selectedObjId = 0;
-
-// ring spawn
-var lastNewRingTime = Date.now();
-var SPAWNTIME = 3500;
-var ASTEROIDSPAWNRATE = 0.5;
-var SPEED = 0.15;
-var ANGULARSPEED_X = 0.6;
-var ANGULARSPEED_Y = 0.6;
-var ANGULARSPEED_Z = 0.6;
-var MAX_X = 10;
-var MIN_X =  5; 
-var MAX_Y = 3;
-var MIN_Y = 1; 
-
-var gameOn = false;
-
-// to reduce lag when we call main to change the object showed
-var requestAnimationId;
-
-var XWING_INDEX = 0;
-var RING_INDEX = 1;
-var ASTEROID_INDEX = 2;
-
-var SKYBOX_INDEX = 3;
-
-var CAMERA_INDEX = -1;
-
-
-// scene graph variables
-var objects = [];
-
-//object pooling
-var NUM_OBJECTS_IN_SCENE = 3;
-var nodes = [];
-var freeslot = 0;
-var collision_index = -1;
-//////
-
-var showcaseNode;
-var xwingNode;
-var ringNode;
-
-
-//skybox
 var skyboxTexture;
 
 var skyboxVertPos;
@@ -209,30 +154,77 @@ var skyboxTexHandle;
 
 var skyboxProgram;
 
-// DAMAGE OF OBSTACLES
+var inverseViewProjMatrix; //used in skybox
 
-var ASTEROID_DAMAGE = 100;
+// ------
 
-//game
+// Game
+// ----
+
+var gameOn = false;
 var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
 var GAME_XWING_POSITION = [0, -0.85, 40.0];
+
+// Game initialization
 var deltaX = 0;
 var deltaY = 0;
 var deltaZ = 0;
 var deltaRx = 0;
 var deltaRy = 0;
 var deltaRz = 0;
-var Z = 0;
-var Y = 0;
-var COLLISION_RADIUS_ASTEROID = 1.5;
-var COLLISION_RADIUS_RING = 2.5;
-var SCORE_RING = 300;
-
-
 var deltaLookRadius = 0;
 var deltaCameraAngle = 0;
 var deltaCameraElevation = 0;
 var isCameraMoved = false;
-
+var Z = 0;
+var Y = 0;
 var NUMBER_INITIALIZATION_FRAMES = 100;
 var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
+
+// Spawn
+var lastNewRingTime = Date.now();
+var SPAWNTIME = 3500;
+var ASTEROIDSPAWNRATE = 0.5;
+var SPEED = 0.15;
+var ANGULARSPEED_X = 0.6;
+var ANGULARSPEED_Y = 0.6;
+var ANGULARSPEED_Z = 0.6;
+var MAX_X = 10;
+var MIN_X =  5; 
+var MAX_Y = 3;
+var MIN_Y = 1;
+
+// Collision
+var COLLISION_RADIUS_ASTEROID = 1.5;
+var COLLISION_RADIUS_RING = 2.5;
+var SCORE_RING = 300;
+var ASTEROID_DAMAGE = 100;
+
+// Object pooling
+var NUM_OBJECTS_IN_SCENE = 3;
+var nodes = [];
+var freeslot = 0;
+var collision_index = -1;
+
+// ----
+
+
+//------------------------------------------------------------------------------
+
+// Global variables and constants 
+
+var textScore = null;
+var maxScore = null;
+
+POPUP_ID = 'popup';
+POPUP_CONTENT_ID = 'popupContent' ;
+CLOSE_BUTTON_ID = 'closeButton'; 
+
+// Lights 
+var directionalLightA;
+var directionalLightColorA;
+var directionalLightB;
+var directionalLightColorB;
+
+// id showcase obj
+var selectedObjId = 0;

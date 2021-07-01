@@ -38,7 +38,7 @@ function getAttributesAndUniforms(){
         cameraPositionLocation[i] = gl.getUniformLocation(programs[i], "cameraPosition");
 
         if (i == XWING_INDEX){
-            textureLocation[i] = gl.getUniformLocation(programs[i], "in_texture");
+            textureLocation = gl.getUniformLocation(programs[i], "in_texture");
         }
 
         if (i == ASTEROID_INDEX){
@@ -253,7 +253,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
         // Diffuse map
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, textures[0]);
-        gl.uniform1i(textureLocation[obj.drawInfo.type], 1);
+        gl.uniform1i(textureLocation, 1);
         
     }
     if (obj.drawInfo.type == ASTEROID_INDEX){
