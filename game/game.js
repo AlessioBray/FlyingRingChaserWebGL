@@ -188,6 +188,7 @@ function drawGameScene() {
     }
 
     if(isGameOver()) {
+        createPopup("gameover");
         gameOver();
         window.cancelAnimationFrame(drawGameScene);
     }
@@ -254,7 +255,6 @@ function startGame(){
     HideShowElement(healthBar);
 
     restoreMaxLife();
-    addScore();
   
     createGameSceneGraph();
 
@@ -307,7 +307,6 @@ function isGameOver(){
 //game over
 function gameOver(){
 
-    createPopup("gameover"); 
     textScore.nodeValue = "0"; //reset current score
     restoreMaxLife();
 
