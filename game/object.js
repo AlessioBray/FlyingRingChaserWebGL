@@ -1,6 +1,57 @@
 var gl; // context
 var programs = new Array(); // shader array
 
+var allMeshes;
+var xwingMesh;
+var ringMesh;
+var asteroidMesh;
+
+var vaos;
+
+// Initialize resource paths
+// -------------------------
+
+var path = window.location.pathname;
+var page = path.split("/").pop();
+var baseDir = window.location.href.replace(page, '');
+var shaderDir = baseDir + "shaders/";
+var modelsDir = baseDir + "assets/models/";
+var textureDir = baseDir + "assets/textures/";
+
+// -------------------------
+
+// World matrix
+// ------------
+
+var Rx = 0.0;
+var Ry = 0.0;
+var Rz = 0.0;
+var S  = 1.0;
+var Tz = 0.0; 
+
+// ------------
+
+// View Matrix
+// ------
+var camera_x = 0.0;
+var camera_y = 0.0;
+var camera_z = 50;
+var camera_elevation = 0;
+var camera_angle = 0;
+
+var lookRadius = 50; //same initialization as camera_z (variable used in the showcase to keep track of the zoom effect)
+
+// ------
+
+// Perspective matrix
+// -----------
+
+var zNear = 0.1;
+var zFar = 100;
+var fieldOfViewDeg = 15;
+
+// -----------
+
 
 // HTML elements
 // -------------
@@ -39,6 +90,18 @@ var normalMatrixLocation = new Array();
 var worldMatrixLocation = new Array();
 var cameraPositionLocation = new Array();
 
+// Lights
+var lightDirectionHandleA = new Array();
+var lightColorHandleA = new Array();
+var lightDirectionHandleB = new Array();
+var lightColorHandleB = new Array();
+
+// Asteroid maps
+var normalMapLocation;
+var diffuseMapLocation;
+var aoMapLocation;
+var metalnessMapLocation;
+var heightMapLocation;
 
 
 // ------------------------------------------
@@ -63,21 +126,8 @@ POPUP_CONTENT_ID = 'popupContent' ;
 CLOSE_BUTTON_ID = 'closeButton';
 
 
-
-
 var textureLocation = new Array(); //////////////////////////////////////
 
-
-var lightDirectionHandleA = new Array();
-var lightColorHandleA = new Array();
-var lightDirectionHandleB = new Array();
-var lightColorHandleB = new Array();
-
-var normalMapLocation;
-var diffuseMapLocation;
-var aoMapLocation;
-var metalnessMapLocation;
-var heightMapLocation;
 
 var aspect;
 var perspectiveMatrix;
@@ -93,54 +143,13 @@ var directionalLightColorA;
 var directionalLightB;
 var directionalLightColorB;
 
-// define material diffusion color 
-var materialColor = [0.75164, 0.60648, 0.22648];
-
-// define ambient light color and material
-var ambientLight = [1.0, 1.0, 1.0];
-var ambientMat = [0.24725, 0.1995, 0.0745];
-  
-// define specular component of color
-var specularColor = [0.628281,	0.555802,	0.366065];
-var specShine = 0.4*64;
-
-// World matrix
-var Rx = 0.0;
-var Ry = 0.0;
-var Rz = 0.0;
-var S  = 1.0;
-
-var Tz = 0.0; 
-
-// Camera
-var camera_x = 0.0;
-var camera_y = 0.0;
-var camera_z = 50;
-var camera_elevation = 0;
-var camera_angle = 0;
-
-var lookRadius = 50; //same initialization as camera_z (variable used in the showcase to keep track of the zoom effect)
 
 var delta = 5;
 
-// Perspective
-var zNear = 0.1;
-var zFar = 100;
-var fieldOfViewDeg = 15;
 
-// initialize resource paths
-var path = window.location.pathname;
-var page = path.split("/").pop();
-var baseDir = window.location.href.replace(page, '');
-var shaderDir = baseDir + "shaders/";
-var modelsDir = baseDir + "assets/models/";
-var textureDir = baseDir + "assets/textures/";
 
-var allMeshes;
-var moonMesh;
-var ringMesh;
-var vaos;
-var vao;
+
+
 
 // id showcase obj
 var selectedObjId = 0;
