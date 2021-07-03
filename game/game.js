@@ -138,11 +138,14 @@ function updateGameMatrices(){
         let matrix = utils.MakeTranslateMatrix(0,0,-SPEED);
         if(child.drawInfo["type"] == ASTEROID_INDEX){ //if asteroid
             matrix = utils.multiplyMatrices(matrix,child.localMatrix);
-            let rot = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z,1);
+            let rot = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
             child.localMatrix = utils.multiplyMatrices(matrix,rot);
         }
         else{ // if ring
-            child.localMatrix = utils.multiplyMatrices(matrix,child.localMatrix);
+            //child.localMatrix = utils.multiplyMatrices(matrix,child.localMatrix);
+            matrix = utils.multiplyMatrices(matrix,child.localMatrix);
+            let rot = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
+            child.localMatrix = utils.multiplyMatrices(matrix,rot);
         }
 
     }
@@ -188,7 +191,7 @@ function drawGameScene() {
         window.cancelAnimationFrame(drawGameScene);
     }
     else{
-    requestAnimationId = window.requestAnimationFrame(drawGameScene);
+        requestAnimationId = window.requestAnimationFrame(drawGameScene);
     }
 }
 
@@ -224,7 +227,7 @@ function handleObjects(){
     for (var i = 0; i < objects.length; i++){
 
 
-        if(objects[i].worldMatrix[11] > 60 ){ //out of bounds
+        if(objects[i].worldMatrix[11] > 40 ){ //out of bounds
                xwingNode.removeFirstChild();
                if(i==collision_index) collision_index = -1; 
         }
