@@ -61,7 +61,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 bufferLength: allMeshes[XWING_INDEX].indices.length,
                 vertexArray: vaos[XWING_INDEX],
             };
-            
+            showcaseNode.localMatrix = utils.MakeRotateYMatrix(270);
             break;
 
         case RING_INDEX:

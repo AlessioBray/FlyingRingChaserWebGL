@@ -228,7 +228,7 @@ function render(){
 }
 
 function animateShowcase(){ //animate for showCase
-    Ry = Ry + 0.5;
+    Ry = (Ry + 0.5) % 360;
 }
 
 function updateShowcaseWorldMatrix(){

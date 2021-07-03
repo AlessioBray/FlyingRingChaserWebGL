@@ -32,7 +32,6 @@ function computeDeltaGameInitializationMovements(){
     
 }
 
-
 function animateGameInitialization(){
 
     elapsedInitializationFrames -= 1;
@@ -51,22 +50,21 @@ function animateGameInitialization(){
     else{
         if ((Ry % 360) != 270){
 
-            if ((Ry % 360) + deltaRy < 0){
-                Ry = 360 + (Ry % 360) + deltaRy;
-            }
-            else if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){ // fai una cosa simile per gli altri
+            if (((Ry % 360) > 270 && (Ry % 360) + deltaRy < 270) || ((Ry % 360) < 270 && (Ry % 360) + deltaRy > 270)){
                 Ry = 270;
             }
-            else{
-                Ry = (Ry % 360) + deltaRy;
+            else if ((Ry % 360) + deltaRy < 0){
+                Ry = 360 + Ry + deltaRy;
             }
-            
+            else if ((Ry % 360) + deltaRy > 0){
+                Ry = Ry + deltaRy;
+            }
+    
         }
     }
     
     var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
     xwingNode.updateWorldMatrix(deltaMatrix); //world = world * delta
-
 
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
         lookRadius = lookRadius + deltaLookRadius;
