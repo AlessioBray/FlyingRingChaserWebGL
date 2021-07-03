@@ -31,10 +31,9 @@ Node.prototype.updateWorldMatrix = function(matrix) {
     if (matrix) {
         // a matrix was passed in so do the math
         this.worldMatrix = utils.multiplyMatrices(matrix, this.localMatrix);
-        //this.localMatrix = this.worldMatrix;
     } else {
         // no matrix was passed in so just copy.
-        //utils.copy(this.localMatrix, this.worldMatrix); // little bug
+        utils.copy(this.localMatrix, this.worldMatrix); // little bug
     }
   
     // now process all the children
@@ -94,7 +93,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
 function createGameSceneGraph(){   // objects array not used in game
 
     xwingNode = new Node();
-    xwingNode.localMatrix = utils.MakeWorld(0.0, 0.0, 0.0, 0.0, 270.0, 0.0, S); 
+    xwingNode.localMatrix = utils.identityMatrix(); 
     xwingNode.drawInfo = {
         type: XWING_INDEX,
         materialColor: [1.0, 1.0, 1.0],
@@ -102,8 +101,6 @@ function createGameSceneGraph(){   // objects array not used in game
         bufferLength: allMeshes[XWING_INDEX].indices.length,
         vertexArray: vaos[XWING_INDEX],
     };
-    xwingNode.updateWorldMatrix();
-    
 }
 
 

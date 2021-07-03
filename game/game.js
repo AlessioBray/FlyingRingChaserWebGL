@@ -63,8 +63,7 @@ function animateGameInitialization(){
         }
     }
     
-    var deltaMatrix = utils.MakeWorld(0, Y, Z, 0, Ry, 0, S);
-    xwingNode.updateWorldMatrix(deltaMatrix); //world = world * delta
+    xwingNode.worldMatrix = utils.MakeWorld(0, Y, Z, 0, Ry+270, 0, S);
 
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
         lookRadius = lookRadius + deltaLookRadius;
@@ -110,8 +109,6 @@ function drawGameInitializationScene(){
         
         window.addEventListener("keydown", keyDownFunction, false);
         window.addEventListener("keyup", keyUpFunction, false);
-
-        xwingNode.localMatrix = utils.MakeWorld(GAME_XWING_POSITION[0], GAME_XWING_POSITION[1], GAME_XWING_POSITION[2], 0 , 270, 0, 1);
         
         lastNewRingTime = Date.now();
         createFreeNodes();
@@ -150,7 +147,7 @@ function updateGameMatrices(){
 
     }
     
-    xwingNode.updateWorldMatrix(); // update children world matrices
+    xwingNode.updateWorldMatrix(xwingNode.worldMatrix); // update children world matrices
 
 }
 
