@@ -36,12 +36,12 @@ function animateGameInitialization(){
 
     elapsedInitializationFrames -= 1;
 
-    if (Z != GAME_XWING_POSITION[2]){
-        Z += deltaZ;
+    if (starshipZ != GAME_XWING_POSITION[2]){
+        starshipZ += deltaZ;
     }
     
-    if (Y != GAME_XWING_POSITION[1]){
-        Y += deltaY;
+    if (starshipY != GAME_XWING_POSITION[1]){
+        starshipY += deltaY;
     }
 
     if (selectedObjId != XWING_INDEX || isCameraMoved){
@@ -63,7 +63,7 @@ function animateGameInitialization(){
         }
     }
     
-    xwingNode.worldMatrix = utils.MakeWorld(0, Y, Z, 0, Ry+270, 0, S);
+    xwingNode.worldMatrix = utils.MakeWorld(starshipX, starshipY, starshipZ, 0, Ry+270, 0, S);
 
     if (Math.abs(lookRadius - GAME_CAMERA_POSITION[2]) > 0.5){
         lookRadius = lookRadius + deltaLookRadius;
@@ -103,8 +103,6 @@ function drawGameInitializationScene(){
 
     if (elapsedInitializationFrames == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
         elapsedInitializationFrames = 100;
-        Z = 0;
-        Y = 0;
         window.cancelAnimationFrame(requestAnimationId);
         
         window.addEventListener("keydown", keyDownFunction, false);
@@ -131,28 +129,49 @@ function setGameMatrices(){
 
 }
 
-function updateGameMatrices(){
+function updateGameMatrices(){ 
 
-    for (var i = 0; i < xwingNode.children.length; i++){ // update children local matrices
-        let child = xwingNode.children[i];
-        let matrix = utils.MakeTranslateMatrix(0,0,-SPEED);
-        if(child.drawInfo["type"] == ASTEROID_INDEX){ //if asteroid
-            matrix = utils.multiplyMatrices(matrix,child.localMatrix);
-            let rot = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
-            child.localMatrix = utils.multiplyMatrices(matrix,rot);
-        }
-        else{ // if ring
-            //child.localMatrix = utils.multiplyMatrices(matrix,child.localMatrix);
-            matrix = utils.multiplyMatrices(matrix,child.localMatrix);
-            let rot = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
-            child.localMatrix = utils.multiplyMatrices(matrix,rot);
-        }
-
-    }
-    
-    xwingNode.updateWorldMatrix(xwingNode.worldMatrix); // update children world matrices
+    moveObjects('ahead');
+    //moveStarship('right');
 
 }
+
+function moveObjects(action){
+
+    let matrix = [];
+
+    switch(action){
+       case 'ahead': matrix = utils.MakeTranslateMatrix(0,0,SPEED); break;
+       case 'up' : matrix = utils.MakeTranslateMatrix(0,deltaMove,0); break;
+       case 'down' : matrix = utils.MakeTranslateMatrix(0,-deltaMove,0); break;
+       case 'right' : matrix = utils.MakeTranslateMatrix(deltaMove,0,0); break;
+       case 'left' : matrix = utils.MakeTranslateMatrix(-deltaMove,0,0); break;
+    }
+
+    for (var i = 0; i < objects.length; i++){
+        let object = objects[i];
+        let newWorldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
+        object.updateWorldMatrix(newWorldMatrix);
+    }  
+
+}
+
+function  moveStarship(action){
+
+    let matrix = [];
+
+    switch(action){
+        case 'up': matrix = utils.MakeRotateXMatrix(-deltaRot); break;
+        case 'down' : matrix =  matrix = utils.MakeRotateXMatrix(deltaRot); break;
+        case 'right' : matrix = utils.MakeRotateZMatrix(-deltaRot); break;
+        case 'left' : matrix = utils.MakeRotateZMatrix(deltaRot); break;
+    }
+
+    let newWorldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix,matrix);
+
+    xwingNode.updateWorldMatrix(newWorldMatrix);
+}
+
 
 
 function animateGame(){
@@ -179,7 +198,6 @@ function drawGameScene() {
 
     drawObject(xwingNode);
 
-    let objects = xwingNode.children;
     for (var i = 0; i < objects.length; i++){
         drawObject(objects[i]);
         detectCollision(i);
@@ -197,10 +215,10 @@ function drawGameScene() {
 
 function detectCollision(i){
 
-   let object = xwingNode.children[i];
-   let tx = object.localMatrix[3];
-   let ty = object.localMatrix[7];
-   let tz = object.localMatrix[11];
+   let object = objects[i];
+   let tx = object.worldMatrix[3] - GAME_XWING_POSITION[0];
+   let ty = object.worldMatrix[7] - GAME_XWING_POSITION[1];
+   let tz = object.worldMatrix[11] - GAME_XWING_POSITION[2];
    let distance = Math.sqrt(Math.pow(tx,2) + Math.pow(ty,2) + Math.pow(tz,2));
    let type = object.drawInfo["type"];
 
@@ -223,20 +241,15 @@ function detectCollision(i){
 
 function handleObjects(){ 
 
-    let objects = xwingNode.children;   
     for (var i = 0; i < objects.length; i++){
 
 
-        if(objects[i].worldMatrix[11] > 40 ){ //out of bounds
-               xwingNode.removeFirstChild();
+        if(objects[i].worldMatrix[11] > 60 ){ //out of bounds
+               objects.shift(); //removes first object spawned in scene
                if(i==collision_index) collision_index = -1; 
         }
 
-        //detectCollision(i);
-
     }
-
-    
 
 
 }
@@ -306,6 +319,8 @@ function isGameOver(){
 function gameOver(){
 
     textScore.nodeValue = "0"; //reset current score
+    starshipY = 0;
+    starshipZ = 0;
     restoreMaxLife();
 
     // shows controllers 

@@ -4,12 +4,6 @@ var Node = function() {
     this.worldMatrix = utils.identityMatrix();
 };
 
-// NEW
-Node.prototype.removeFirstChild = function(){
-    //remove first child from father
-    this.children.shift();
-}
-//
   
 Node.prototype.setParent = function(parent) {
     // remove us from our parent
@@ -92,6 +86,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
 
 function createGameSceneGraph(){   // objects array not used in game
 
+    objects = [];
     xwingNode = new Node();
     xwingNode.localMatrix = utils.identityMatrix(); 
     xwingNode.drawInfo = {
@@ -115,7 +110,7 @@ function spawnNewObject(){
     if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
 
     let objectNode = getFreeNode();
-    objectNode.localMatrix = utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index));
+    objectNode.worldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix,utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index)));
     objectNode.drawInfo = {
         type: index,
         materialColor: [1.0, 1.0, 1.0],
@@ -123,8 +118,21 @@ function spawnNewObject(){
         bufferLength: allMeshes[index].indices.length,
         vertexArray: vaos[index],
     };
-    objectNode.setParent(xwingNode);
-   
+    
+    switch(index){
+
+    case 1: 
+         objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
+         break;
+    
+    case 2:
+        objectNode.localMatrix = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
+        break;
+    
+    }
+
+    objects.push(objectNode);
+            
     lastNewRingTime = Date.now();
 
 }
