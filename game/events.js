@@ -13,8 +13,7 @@ function keyDownFunction(e){
                 break;
             }
             else{
-                //camera_angle -= 5;
-                
+                moveStarship('left');
                 break;
             }
             
@@ -26,14 +25,14 @@ function keyDownFunction(e){
                 break;
             }
             else{
-                //camera_angle += 5;
+                moveStarship('right');
                 break;
             }
 
         case "ArrowUp":
         case "w": 
             if (gameOn){
-
+                moveStarship('up');
             }
             
             break;
@@ -42,7 +41,7 @@ function keyDownFunction(e){
         case "s": 
             
             if (gameOn){
-
+               moveStarship('down');
             }
             break;
 

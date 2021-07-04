@@ -186,9 +186,9 @@ var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
 var lastNewRingTime = Date.now();
 var SPAWNTIME = 3500;
 var ASTEROIDSPAWNRATE = 0.5;
-var SPEED = 0.15;
+var SPEED = 0.20;
 var deltaMove = 0.01;
-var deltaRot = 0.05;
+var deltaRot = 0.3;
 var ANGULARSPEED_X = 0.6;
 var ANGULARSPEED_Y = 0.6;
 var ANGULARSPEED_Z = 0.6;
@@ -196,6 +196,8 @@ var MAX_X = 10;
 var MIN_X =  5; 
 var MAX_Y = 3;
 var MIN_Y = 1;
+var MAX_ROTATION_X_STARSHIP = 5;
+var MAX_ROTATION_Z_STARSHIP = 10;
 
 // Collision
 var COLLISION_RADIUS_ASTEROID = 1.5;

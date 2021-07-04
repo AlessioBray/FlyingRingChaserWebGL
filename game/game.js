@@ -112,6 +112,10 @@ function drawGameInitializationScene(){
         createFreeNodes();
         drawGameScene(); // when animation is finished starts spawning
 
+        //// used to keep track of rotation of starship
+        Rx = 0;
+        Rz = 0;
+        ////
     }
     else{ 
         requestAnimationId = window.requestAnimationFrame(drawGameInitializationScene);
@@ -140,9 +144,13 @@ function moveObjects(action){
 
     let matrix = [];
 
+    let deltaMove = 40 * SPEED * Math.tan(utils.degToRad(deltaRot)); // how to relate with deltaRot ? It seems not to work
+
     switch(action){
        case 'ahead': matrix = utils.MakeTranslateMatrix(0,0,SPEED); break;
-       case 'up' : matrix = utils.MakeTranslateMatrix(0,deltaMove,0); break;
+       case 'up' : matrix = utils.MakeTranslateMatrix(0,deltaMove,0);
+       console.log(deltaMove);
+       break;
        case 'down' : matrix = utils.MakeTranslateMatrix(0,-deltaMove,0); break;
        case 'right' : matrix = utils.MakeTranslateMatrix(deltaMove,0,0); break;
        case 'left' : matrix = utils.MakeTranslateMatrix(-deltaMove,0,0); break;
@@ -161,10 +169,55 @@ function  moveStarship(action){
     let matrix = [];
 
     switch(action){
-        case 'up': matrix = utils.MakeRotateXMatrix(-deltaRot); break;
-        case 'down' : matrix =  matrix = utils.MakeRotateXMatrix(deltaRot); break;
-        case 'right' : matrix = utils.MakeRotateZMatrix(-deltaRot); break;
-        case 'left' : matrix = utils.MakeRotateZMatrix(deltaRot); break;
+        case 'up': 
+        if((Rx - deltaRot) < - MAX_ROTATION_X_STARSHIP){
+            Rx = -MAX_ROTATION_X_STARSHIP;
+            matrix = utils.identityMatrix();
+        }
+        else{
+        Rx = Rx - deltaRot;
+        matrix = utils.MakeRotateXMatrix(-deltaRot); 
+        }
+        moveObjects('down');
+        //console.log(Rx);
+        break;
+        case 'down' : 
+        if((Rx + deltaRot) > MAX_ROTATION_X_STARSHIP){
+            Rx = MAX_ROTATION_X_STARSHIP;
+            matrix = utils.identityMatrix();
+        }
+        else{
+        Rx = Rx + deltaRot;
+        matrix =  matrix = utils.MakeRotateXMatrix(deltaRot); 
+        }
+        moveObjects('up');
+        //console.log(Rx);
+        break;
+        case 'right' : 
+        //console.log(Rz);
+        if((Rz - deltaRot) < -MAX_ROTATION_Z_STARSHIP){
+            Rz = -MAX_ROTATION_Z_STARSHIP;
+            matrix = utils.identityMatrix();
+        }
+        else{
+        Rz = Rz - deltaRot;
+        matrix = utils.MakeRotateZMatrix(-deltaRot); 
+        }
+        moveObjects('left');
+        console.log(Rz);
+        break;
+        case 'left' : 
+        if((Rz + deltaRot) > MAX_ROTATION_Z_STARSHIP){
+            Rz = MAX_ROTATION_Z_STARSHIP;
+            matrix = utils.identityMatrix();
+        }
+        else{
+        Rz = Rz + deltaRot;
+        matrix = utils.MakeRotateZMatrix(deltaRot); 
+        }
+        moveObjects('right');
+        //console.log(Rz);
+        break;
     }
 
     let newWorldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix,matrix);
