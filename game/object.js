@@ -221,7 +221,7 @@ var collision_index = -1;
 var textScore = null;
 var maxScore = null;
 
-POPUP_ID = 'popup';
+POPUP_ID = 'gameOverPopup';
 POPUP_CONTENT_ID = 'popupContent' ;
 CLOSE_BUTTON_ID = 'closeButton'; 
 

@@ -4,25 +4,14 @@ function computeDeltaGameInitializationMovements(){
     deltaY = GAME_XWING_POSITION[1] / NUMBER_INITIALIZATION_FRAMES;
 
     if ((Ry % 360) >= 270 || (Ry % 360) <= 90){
-        deltaRy = -2.5; //((Ry % 360) - 270) / NUMBER_INITIALIZATION_FRAMES;
+        deltaRy = -2.5;
     }
     else{ // if ((Ry % 360) < 270 && (Ry % 360) > 90)
-        deltaRy = +2.5; //(270 - (Ry % 360)) / NUMBER_INITIALIZATION_FRAMES;
+        deltaRy = +2.5;
 
     }
 
     deltaLookRadius = (GAME_CAMERA_POSITION[2] - lookRadius) / NUMBER_INITIALIZATION_FRAMES;
-    
-    /*
-    if (camera_x > 0 && camera_y > 0 && camera_z > 0){
-        deltaCameraElevation = -0.5;
-        deltaCameraAngle = -0.5;
-    }
-    else if (camera_x < 0 && camera_y > 0 && camera_z >0){
-        deltaCameraElevation = -0.5;
-        deltaCameraAngle = 0.5;
-    }
-    */
 
     if (camera_elevation != 0 || camera_angle != 0){
         isCameraMoved = true;
@@ -71,15 +60,7 @@ function animateGameInitialization(){
     else{
         lookRadius = GAME_CAMERA_POSITION[2];
     }
-/*
-    if (camera_elevation != GAME_CAMERA_POSITION[3]){
-        camera_elevation = camera_elevation + p;
-    }
 
-    if (camera_angle != GAME_CAMERA_POSITION[4]){
-        camera_angle = camera_angle + deltaCameraAngle;
-    }
-*/
     camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
     camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
     camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
@@ -101,7 +82,7 @@ function drawGameInitializationScene(){
 
     drawObject(xwingNode); 
 
-    if (elapsedInitializationFrames == 0){ // mettere come condizione: if tutte le variabili hanno raggiunto il loro obbiettivo
+    if (elapsedInitializationFrames == 0){
         elapsedInitializationFrames = 100;
         window.cancelAnimationFrame(requestAnimationId);
         
@@ -410,21 +391,31 @@ function createScore(){
 
 //creates a score popup
 function createScorePopup(){
-    var scorePopup = document.createElement('div'); 
-    var textScorePopup = document.createTextNode('Game Over!!');
-    scorePopup.appendChild(textScorePopup);  
-    var currentScore=parseInt(textScore.nodeValue);
-    var textScorePopup = document.createTextNode('Your score is: ' +  currentScore);
-    scorePopup.appendChild(textScorePopup);  
+    var scoreDiv = document.createElement('div');
+    var ulElement = document.createElement('ul');
+    var liElement;
+    
+    liElement = document.createElement('li');
+    liElement.innerText = "Game Over!!";
+    ulElement.appendChild(liElement);
+    
+    liElement = document.createElement('li');
+    var currentScore = parseInt(textScore.nodeValue);
+    liElement.innerText = "Your score is: " +  currentScore;
+    ulElement.appendChild(liElement);
 
     if(currentScore > maxScore){
-        var textScorePopup = document.createTextNode('New best score!!');
-        scorePopup.appendChild(textScorePopup); 
+        liElement = document.createElement('li');
+        liElement.innerText = 'New best score!!';
+        ulElement.appendChild(liElement);
+        
         maxScore = currentScore;
         bestScore.nodeValue = maxScore;
     }
-
-    return scorePopup;
+    
+    scoreDiv.appendChild(ulElement);
+    
+    return scoreDiv;
 }
 
 //creates a generic popup
@@ -438,11 +429,11 @@ function createPopup(action){
     popup.setAttribute('id', POPUP_ID);
     
     var content = document.createElement('div');    
-    content.setAttribute('id',POPUP_CONTENT_ID);
+    content.setAttribute('id', POPUP_CONTENT_ID);
     
     content.appendChild(createCloseButtonPopup());
     if (action=='gameover'){
-      content.appendChild(createScorePopup());
+        content.appendChild(createScorePopup());
     }
     else {
       console.log("Quit not yet implemented");

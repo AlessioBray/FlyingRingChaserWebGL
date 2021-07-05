@@ -12,6 +12,12 @@ canvas {
     display: block;
     background-color: white;
 }
+
+ul{
+    color: #000000; 
+    list-style-type: none; 
+    padding-left: 25px;
+}
   
 #scoringtab {
     width: 200px;
@@ -76,61 +82,7 @@ canvas {
                rgba(252, 186, 3, 0.05) -25px 25px;
 }
 
-#popup {
-    width: 100%;
-    height: 100%;
-    left: 0px;
-    top: 0px;
-    background-color: rgba(116,126,138,0.5);
-    position: fixed;
-    z-index: 6; 
- }
 
-#popupContent {
-    width: 30%;
-    height: 40%;
-    min-width: 220px;
-    min-height: 220px;
-    position: relative;
-    left: 35%;
-    top: 30%;
-    background-color: rgba(250,250,210,1);
-    border: 2px solid;
-    border-radius: 5px;
-    box-shadow:0 3px 7px rgba(0,0,0,0.25);
-}
- 
-#popupContent div {
-    position:relative;
-    bottom:-30px;
-    padding: 3pt;
-    font-weight: bold;
-    text-align: center;
-    font-size: x-large;
-}
-
-a.closeButton {
-    width: 32px;
-    height: 32px;
-    position: relative;
-    display: block;
-    left: 95%;
-    top: -16px;
-    background: url('./../assets/close_button.png') no-repeat;
-    z-index: 7;
-}
-
-a.closeButton:hover {
-    cursor:pointer;
-    width: 32px;
-    height: 32px;
-    display: block;
-    position: relative;
-    left: 95%;
-    top: -16px;
-    background: url('./../assets/close_button_over.png') no-repeat;
-    z-index: 7;
-}
 
 #lightcontroller {
     font-family: Soloist;
@@ -179,3 +131,77 @@ a.closeButton:hover {
                 rgba(252, 186, 3, 0.1) -20px -20px, 
                 rgba(252, 186, 3, 0.05) -25px -25px;
 }
+
+#gameOverPopup {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    z-index: 6; 
+ }
+
+#popupContent {
+
+    font-family: Soloist;
+    text-align: center;
+    font-size: 18px;
+    position: absolute;
+
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    width: 30%;
+    height: 40%;
+    min-width: 220px;
+    min-height: 220px;
+    position: relative;
+    left: 35%;
+    top: 30%;
+
+    background-color: #fcba03; 
+    opacity: 1.0; 
+    padding: 0px 0px 0px 0px; 
+    overflow:auto; 
+    border-radius: 15px 15px 15px 15px; 
+    box-shadow: rgba(252, 186, 3, 0.4) 0px 0px 0px 3px, 
+                rgba(252, 186, 3, 0.3) 0px 0px 0px 6px, 
+                rgba(252, 186, 3, 0.2) 0px 0px 0px 9px, 
+                rgba(252, 186, 3, 0.1) 0px 0px 0px 12px, 
+                rgba(252, 186, 3, 0.05) 0px 0px 0px 15px;
+}
+ 
+#popupContent div {
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    position:relative;
+    bottom:-30px;
+    padding: 3pt;
+    font-weight: bold;
+    text-align: center;
+    font-size: x-large;
+}
+/*
+a.closeButton {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    display: block;
+    left: 95%;
+    top: -16px;
+    background: url('./../assets/close_button.png') no-repeat;
+    z-index: 7;
+}
+
+a.closeButton:hover {
+    cursor:pointer;
+    width: 32px;
+    height: 32px;
+    display: block;
+    position: relative;
+    left: 95%;
+    top: -16px;
+    background: url('./../assets/close_button_over.png') no-repeat;
+    z-index: 7;
+}*/
+

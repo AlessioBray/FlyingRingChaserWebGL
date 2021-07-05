@@ -64,6 +64,7 @@ function keyUpFunction(e){
             window.removeEventListener("keyup", keyUpFunction, false);
             
             startGame();
+            //createPopup("gameover");
         }
         else{
             canvas.addEventListener("mousedown", doMouseDown, false);
