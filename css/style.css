@@ -13,7 +13,7 @@ canvas {
     background-color: white;
 }
 
-ul{
+ul {
     color: #000000; 
     list-style-type: none; 
     padding-left: 25px;
@@ -162,7 +162,7 @@ ul{
     background-color: #fcba03; 
     opacity: 1.0; 
     padding: 0px 0px 0px 0px; 
-    overflow:auto; 
+    overflow: auto; 
     border-radius: 15px 15px 15px 15px; 
     box-shadow: rgba(252, 186, 3, 0.4) 0px 0px 0px 3px, 
                 rgba(252, 186, 3, 0.3) 0px 0px 0px 6px, 
@@ -181,27 +181,26 @@ ul{
     text-align: center;
     font-size: x-large;
 }
-/*
-a.closeButton {
-    width: 32px;
-    height: 32px;
-    position: relative;
-    display: block;
-    left: 95%;
-    top: -16px;
-    background: url('./../assets/close_button.png') no-repeat;
+
+button.closeButton {
+    font-family: Soloist;
+    text-align: center;
+    font-size: 18px;
+
+    border-radius: 5px 5px 5px 5px; 
+    margin: 0;
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: #fcba03;
+    height: 15%;
     z-index: 7;
 }
 
-a.closeButton:hover {
-    cursor:pointer;
-    width: 32px;
-    height: 32px;
-    display: block;
-    position: relative;
-    left: 95%;
-    top: -16px;
-    background: url('./../assets/close_button_over.png') no-repeat;
+button.closeButton:hover {
+    background-color: #ffcf4a;
     z-index: 7;
-}*/
+}
 

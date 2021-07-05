@@ -393,15 +393,18 @@ function createScore(){
 function createScorePopup(){
     var scoreDiv = document.createElement('div');
     var ulElement = document.createElement('ul');
+    ulElement.style = 'padding-left: 0px;'
     var liElement;
     
     liElement = document.createElement('li');
     liElement.innerText = "Game Over!!";
+    liElement.style = 'padding-bottom: 24px;'
     ulElement.appendChild(liElement);
     
     liElement = document.createElement('li');
     var currentScore = parseInt(textScore.nodeValue);
     liElement.innerText = "Your score is: " +  currentScore;
+    liElement.style = 'padding-bottom: 24px;'
     ulElement.appendChild(liElement);
 
     if(currentScore > maxScore){
@@ -457,8 +460,9 @@ function closePopup(){
 
 //creates a close button popup
 function createCloseButtonPopup(){   
-    var closeButtonPopup = document.createElement("a");
-    closeButtonPopup.setAttribute('class',CLOSE_BUTTON_ID);
+    var closeButtonPopup = document.createElement("button");
+    closeButtonPopup.setAttribute('class', CLOSE_BUTTON_ID);
     closeButtonPopup.setAttribute('onClick', 'closePopup()');
+    closeButtonPopup.innerText = "Return to Showcase";
     return closeButtonPopup;
 }
