@@ -197,9 +197,11 @@ button.closeButton {
     background-color: #fcba03;
     height: 15%;
     z-index: 7;
+    border: 2px solid #000000;
 }
 
 button.closeButton:hover {
+    transition-duration: 0.4s;
     background-color: #ffcf4a;
     z-index: 7;
 }
