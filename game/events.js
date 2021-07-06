@@ -14,8 +14,6 @@ function keyDownFunction(e){
             }
             else{
                 moveStarship('left');
-                //window.cancelAnimationFrame(requestAnimationId);
-                //requestAnimationId = window.requestAnimationFrame(drawGameScene);
                 break;
             }
             

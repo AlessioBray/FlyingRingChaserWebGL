@@ -100,13 +100,17 @@ function spawnNewObject(){
     // randomizations
     let indexes = [RING_INDEX, ASTEROID_INDEX];
     let index = indexes[0];
-    let tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5] 
-    let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3] //////////////////////// credo sia [-1,2]
+    //MAX = 2 MIN = 1
+    let tx = Math.random() * MAX_X - MIN_X;  // x in [-1,1] (not considering starship pos)
+    let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,1] 
 
     if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
 
     let objectNode = getFreeNode();
-    objectNode.worldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix, utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index))); /// Secondo me qua bisogna fare attenzione quando si moltiplica per xwing world matrix
+    objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
+                                             GAME_XWING_POSITION[1] - ty,
+                                             GAME_XWING_POSITION[2] - Tz - 60,
+                                             90.0, Ry, Rz + 90, S*(3-index));                                    
     objectNode.drawInfo = {
         type: index,
         programInfo: programs[index],
@@ -127,8 +131,6 @@ function spawnNewObject(){
     }
 
     objects.push(objectNode);
-    
-    console.log(tx, objectNode.worldMatrix[3], ty, objectNode.worldMatrix[7]); // muovendo la navicella c'è una discrepanza 
             
     lastNewRingTime = Date.now();
 

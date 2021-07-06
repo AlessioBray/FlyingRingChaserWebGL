@@ -200,16 +200,16 @@ var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
 
 // Spawn
 var lastNewRingTime = Date.now();
-var SPAWNTIME = 3500;
+var SPAWNTIME = 2500;
 var ASTEROIDSPAWNRATE = 0.5;
-var SPEED = 0.20;
+var SPEED = 0.30;
 var deltaMove = 0.01;
-var deltaRot = 0.3;
+var deltaRot = 0.5;//0.3;
 var ANGULARSPEED_X = 0.6;
 var ANGULARSPEED_Y = 0.6;
 var ANGULARSPEED_Z = 0.6;
-var MAX_X = 10;
-var MIN_X =  5; 
+var MAX_X = 2 - GAME_XWING_POSITION[0];//10;
+var MIN_X = 1 - GAME_XWING_POSITION[0]; //5; 
 var MAX_Y = 2 - GAME_XWING_POSITION[1];
 var MIN_Y = 1 - GAME_XWING_POSITION[1];
 var MAX_ROTATION_X_STARSHIP = 5;
