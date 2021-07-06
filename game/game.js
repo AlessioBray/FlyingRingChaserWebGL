@@ -220,8 +220,58 @@ function animateGame(){
         spawnNewObject();
     }
 
-    stabilizeStarship();
+    stabilizeStarship(); //function which checks if starship needs stabilization and apply it if necessary
+    collisionAnimation();  // if there is collission starts the animation for asteroid collision
 
+}
+
+
+function collisionAnimation(){
+
+    if(startCollisionAnimation){
+    if(initAnimation){
+        maxRz = Rz + deltaImpact;
+        minRz = Rz - deltaImpact;
+        initAnimation = false;
+        stable = false;
+        window.removeEventListener("keydown", keyDownFunction, false);
+        window.removeEventListener("keyup", keyUpFunction, false);
+    }
+    if(firstPartCollisionAnimation){
+        if(Math.abs(maxRz - delta) < Rz ){
+             firstPartCollisionAnimation= false;// if close to stability put stable
+             secondPartCollisionAnimation = true;
+        }
+        else{
+            Rz = Rz+ delta;
+        }
+    }
+    if(secondPartCollisionAnimation){
+        if( (minRz+ delta) > Rz  ){
+             secondPartCollisionAnimation= false;// if close to stability put stable
+             thirdPartCollisionAnimation = true;
+        }
+        else{
+            Rz = Rz - delta;
+        }
+    }
+
+    if(thirdPartCollisionAnimation){
+        if(Math.abs(Rz) < delta){
+             Rz=0;
+             startCollisionAnimation = false;
+             thirdPartCollisionAnimation = false;
+             initAnimation = true;
+             firstPartCollisionAnimation = true;
+             stable = true; // check conflicts with other functions to set stable
+             window.addEventListener("keydown", keyDownFunction, false);
+             window.addEventListener("keyup", keyUpFunction, false);
+        }
+        else{
+            Rz = Rz+ delta;
+        }
+    }
+  }
 }
 
 function stabilizeStarship(){
@@ -272,6 +322,7 @@ function drawGameScene() {
     if(isGameOver()) {
         createPopup("gameover");
         gameOver();
+        startCollisionAnimation = false; 
         window.cancelAnimationFrame(drawGameScene);
     }
     else{
@@ -300,6 +351,7 @@ function detectCollision(i){
    if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
     collision_index = i;
     takeDamage(ASTEROID_DAMAGE);
+    startCollisionAnimation = true;
    }
    break;
     }

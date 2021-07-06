@@ -222,6 +222,17 @@ var COLLISION_RADIUS_RING = 2.5;
 var SCORE_RING = 300;
 var ASTEROID_DAMAGE = 30;
 
+//collisionAnimation
+var deltaImpact = 30;
+var startCollisionAnimation = false;
+var firstPartCollisionAnimation = true;
+var secondPartCollisionAnimation = false;
+var thirdPartCollisionAnimation = false;
+var initAnimation = true;
+var maxRz;
+var minRz;
+var delta = 5*deltaRot;
+
 // Object pooling
 var NUM_OBJECTS_IN_SCENE = 3;
 var nodes = [];
