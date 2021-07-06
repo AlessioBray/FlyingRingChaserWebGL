@@ -215,10 +215,37 @@ function  moveStarship(action){
 
 function animateGame(){
 
+    // spawn objects
     if (Date.now() - lastNewRingTime > SPAWNTIME) {
         spawnNewObject();
     }
 
+    stabilizeStarship();
+
+}
+
+function stabilizeStarship(){
+    if(stable){
+        //stabilize starship
+      if(Math.abs(Rz)< 0.5*deltaRot)Rz=0; // if close to stability put stable
+        else{
+            if(Rz > 0){
+                Rz = Rz-0.5*deltaRot;
+            }
+            else{ //Rz < 0 
+                Rz = Rz + 0.5*deltaRot;
+            }
+        }
+        if(Math.abs(Rx)< 0.5*deltaRot/2.5) Rx=0; // if close to stability put stable
+        else{
+            if(Rx > 0){
+                Rx = Rx-0.5*deltaRot/2.5;
+            }
+            else{ //Rz < 0 
+                Rx = Rx + 0.5*deltaRot/2.5;
+            }
+        }
+     }
 }
 
 function drawGameScene() {    

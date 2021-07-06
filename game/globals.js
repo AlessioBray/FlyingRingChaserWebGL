@@ -197,6 +197,7 @@ var starshipY = 0;
 var starshipZ = 0;
 var NUMBER_INITIALIZATION_FRAMES = 100;
 var elapsedInitializationFrames = NUMBER_INITIALIZATION_FRAMES;
+var stable = true;
 
 // Spawn
 var lastNewRingTime = Date.now();
