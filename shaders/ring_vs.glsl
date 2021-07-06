@@ -1,7 +1,7 @@
 #version 300 es
 
-in vec3 in_position; 
-in vec3 in_normal;
+in vec3 inPosition; 
+in vec3 inNormal;
 
 out vec3 fsNormal; 
 out vec4 fsPosition;
@@ -15,11 +15,11 @@ uniform vec4 cameraPosition;
 
 void main() {
 
-    fsNormal = mat3(normalMatrix) * in_normal;
-    fsPosition = (worldMatrix * vec4(in_position, 1.0)); // coordinates in world space
+    fsNormal = mat3(normalMatrix) * inNormal;
+    fsPosition = (worldMatrix * vec4(inPosition, 1.0)); // coordinates in world space
 
     fsCamera = cameraPosition;
 
-    gl_Position = worldViewProjectionMatrix * vec4(in_position, 1.0);
+    gl_Position = worldViewProjectionMatrix * vec4(inPosition, 1.0);
 
 }

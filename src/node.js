@@ -49,7 +49,6 @@ function createShowcaseSceneGraph(){ //scene graph show case
         case XWING_INDEX:
             showcaseNode.drawInfo = {
                 type: XWING_INDEX,
-                materialColor: [1.0, 1.0, 1.0],
                 programInfo: programs[XWING_INDEX],
                 bufferLength: allMeshes[XWING_INDEX].indices.length,
                 vertexArray: vaos[XWING_INDEX],
@@ -60,7 +59,6 @@ function createShowcaseSceneGraph(){ //scene graph show case
         case RING_INDEX:
             showcaseNode.drawInfo = {
                 type: RING_INDEX,
-                materialColor: [1.0, 1.0, 1.0],
                 programInfo: programs[RING_INDEX],
                 bufferLength: allMeshes[RING_INDEX].indices.length,
                 vertexArray: vaos[RING_INDEX],
@@ -71,7 +69,6 @@ function createShowcaseSceneGraph(){ //scene graph show case
         case ASTEROID_INDEX:
             showcaseNode.drawInfo = {
                 type: ASTEROID_INDEX,
-                materialColor: [1.0, 1.0, 1.0],
                 programInfo: programs[ASTEROID_INDEX],
                 bufferLength: allMeshes[ASTEROID_INDEX].indices.length,
                 vertexArray: vaos[ASTEROID_INDEX],
@@ -91,7 +88,6 @@ function createGameSceneGraph(){   // objects array not used in game
     xwingNode.localMatrix = utils.identityMatrix(); 
     xwingNode.drawInfo = {
         type: XWING_INDEX,
-        materialColor: [1.0, 1.0, 1.0],
         programInfo: programs[XWING_INDEX],
         bufferLength: allMeshes[XWING_INDEX].indices.length,
         vertexArray: vaos[XWING_INDEX],
@@ -102,18 +98,17 @@ function createGameSceneGraph(){   // objects array not used in game
 function spawnNewObject(){
 
     // randomizations
-    let indexes = [RING_INDEX,ASTEROID_INDEX];
+    let indexes = [RING_INDEX, ASTEROID_INDEX];
     let index = indexes[0];
-    let tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5]
-    let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3]
-   
+    let tx = Math.random() * MAX_X - MIN_X;  // x in [-5,5] 
+    let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,3] //////////////////////// credo sia [-1,2]
+
     if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
 
     let objectNode = getFreeNode();
-    objectNode.worldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix,utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index)));
+    objectNode.worldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix, utils.MakeWorld(tx, ty, Tz+60, 90.0, Ry, Rz + 90, S*(3-index))); /// Secondo me qua bisogna fare attenzione quando si moltiplica per xwing world matrix
     objectNode.drawInfo = {
         type: index,
-        materialColor: [1.0, 1.0, 1.0],
         programInfo: programs[index],
         bufferLength: allMeshes[index].indices.length,
         vertexArray: vaos[index],
@@ -121,17 +116,19 @@ function spawnNewObject(){
     
     switch(index){
 
-    case 1: 
-         objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
-         break;
+        case 1: 
+            objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
+            break;
     
-    case 2:
-        objectNode.localMatrix = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
-        break;
-    
+        case 2:
+            objectNode.localMatrix = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
+            break;
+
     }
 
     objects.push(objectNode);
+    
+    console.log(tx, objectNode.worldMatrix[3], ty, objectNode.worldMatrix[7]); // muovendo la navicella c'è una discrepanza 
             
     lastNewRingTime = Date.now();
 

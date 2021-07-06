@@ -1,9 +1,12 @@
 var gl; // context
+
 var programs = new Array(); // shader array
 
 var vaos;
 
 var requestAnimationId; // Id of the animation that is being requested
+
+var selectedObjId = 0; // id showcase obj
 
 // Meshes
 // ------
@@ -89,13 +92,26 @@ var healthBar = document.getElementById("healthbar");
 healthBar.style.display = "none"; // healthbar is initially is hidden
 
 // Light controller elements
-
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
 var dirLightBetaASlider = document.getElementById("dirLightBetaA"); //32
 var dirLightAlphaBSlider = document.getElementById("dirLightAlphaB");
 var dirLightBetaBSlider = document.getElementById("dirLightBetaB"); //32
 var directionalLightColorASlider = document.getElementById("LAlightColor"); //#4d4d4d
 var directionalLightColorBSlider = document.getElementById("LBlightColor"); //#4d4d4d
+
+// Lights values 
+var directionalLightA;
+var directionalLightColorA;
+var directionalLightB;
+var directionalLightColorB;
+
+// Score Popup
+var textScore = null;
+var maxScore = null;
+
+POPUP_ID = 'gameOverPopup';
+POPUP_CONTENT_ID = 'popupContent' ;
+CLOSE_BUTTON_ID = 'closeButton';
 
 // -------------
 
@@ -162,8 +178,8 @@ var inverseViewProjMatrix; //used in skybox
 // ----
 
 var gameOn = false;
-var GAME_CAMERA_POSITION = [0, 0, 50.0, 0, 0]; // x, y, z, elev, ang
-var GAME_XWING_POSITION = [0, -0.85, 40.0];
+var GAME_CAMERA_POSITION = [0, 0, 70.0, 0, 0]; // x, y, z, elev, ang
+var GAME_XWING_POSITION = [0, -0.85, 60.0];
 
 // Game initialization
 var deltaX = 0;
@@ -194,8 +210,8 @@ var ANGULARSPEED_Y = 0.6;
 var ANGULARSPEED_Z = 0.6;
 var MAX_X = 10;
 var MIN_X =  5; 
-var MAX_Y = 3;
-var MIN_Y = 1;
+var MAX_Y = 2 - GAME_XWING_POSITION[1];
+var MIN_Y = 1 - GAME_XWING_POSITION[1];
 var MAX_ROTATION_X_STARSHIP = 5;
 var MAX_ROTATION_Z_STARSHIP = 10;
 
@@ -213,23 +229,7 @@ var collision_index = -1;
 
 // ----
 
+//--------------------------------------------------------------------
 
-//------------------------------------------------------------------------------
 
-// Global variables and constants 
-
-var textScore = null;
-var maxScore = null;
-
-POPUP_ID = 'gameOverPopup';
-POPUP_CONTENT_ID = 'popupContent' ;
-CLOSE_BUTTON_ID = 'closeButton'; 
-
-// Lights 
-var directionalLightA;
-var directionalLightColorA;
-var directionalLightB;
-var directionalLightColorB;
-
-// id showcase obj
-var selectedObjId = 0;
+var movementDirection = 'none';

@@ -23,11 +23,11 @@ function getAttributesAndUniforms(){
 
         // Attributes locations
 
-        positionAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_position");
-        normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_normal");
+        positionAttributeLocation[i] = gl.getAttribLocation(programs[i], "inPosition");
+        normalAttributeLocation[i] = gl.getAttribLocation(programs[i], "inNormal");
         
         if (i == XWING_INDEX || i == ASTEROID_INDEX){
-            uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "in_UV");
+            uvAttributeLocation[i] = gl.getAttribLocation(programs[i], "inUV");
         }
         
         // Uniforms locations
@@ -227,7 +227,7 @@ function render(){
     drawScene();
 }
 
-function animateShowcase(){ //animate for showCase
+function animateShowcase(){
     Ry = (Ry + 0.5) % 360;
 }
 
@@ -296,17 +296,6 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     if (obj.drawInfo.type == XWING_INDEX || obj.drawInfo.type == RING_INDEX || obj.drawInfo.type == ASTEROID_INDEX){
         gl.uniform4fv(cameraPositionLocation[obj.drawInfo.type], [camera_x, camera_y, camera_z, 1]);
     }
-    else{
-        gl.uniform3fv(materialDiffColorHandle[obj.drawInfo.type], obj.drawInfo.materialColor);
-        gl.uniform3fv(ambientLightColorHandle[obj.drawInfo.type], ambientLight);
-        gl.uniform3fv(ambientMaterialHandle[obj.drawInfo.type], ambientMat);
-        gl.uniform3fv(specularColorHandle[obj.drawInfo.type], specularColor);
-        gl.uniform1f(shineSpecularHandle[obj.drawInfo.type], specShine);
-    }
-
-    //I think this two calls are a duplication of the upper ones so they can be deleted
-    //gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
-    //gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix));
 
     gl.bindVertexArray(obj.drawInfo.vertexArray);
     gl.drawElements(gl.TRIANGLES, obj.drawInfo.bufferLength, gl.UNSIGNED_SHORT, 0 );

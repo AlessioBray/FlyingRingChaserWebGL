@@ -150,55 +150,59 @@ function  moveStarship(action){
     let matrix = [];
 
     switch(action){
+
         case 'up': 
-        if((Rx - deltaRot) < - MAX_ROTATION_X_STARSHIP){
-            Rx = -MAX_ROTATION_X_STARSHIP;
-            matrix = utils.identityMatrix();
-        }
-        else{
-        Rx = Rx - deltaRot;
-        matrix = utils.MakeRotateXMatrix(-deltaRot); 
-        }
-        moveObjects('down');
-        //console.log(Rx);
-        break;
+            if((Rx - deltaRot) < - MAX_ROTATION_X_STARSHIP){
+                Rx = -MAX_ROTATION_X_STARSHIP;
+                matrix = utils.identityMatrix();
+            }
+            else{
+                Rx = Rx - deltaRot;
+                matrix = utils.MakeRotateXMatrix(-deltaRot); 
+            }
+            moveObjects('down');
+            //console.log(Rx);
+            break;
+
         case 'down' : 
-        if((Rx + deltaRot) > MAX_ROTATION_X_STARSHIP){
-            Rx = MAX_ROTATION_X_STARSHIP;
-            matrix = utils.identityMatrix();
-        }
-        else{
-        Rx = Rx + deltaRot;
-        matrix =  matrix = utils.MakeRotateXMatrix(deltaRot); 
-        }
-        moveObjects('up');
-        //console.log(Rx);
-        break;
+            if((Rx + deltaRot) > MAX_ROTATION_X_STARSHIP){
+                Rx = MAX_ROTATION_X_STARSHIP;
+                matrix = utils.identityMatrix();
+            }
+            else{
+                Rx = Rx + deltaRot;
+                matrix =  matrix = utils.MakeRotateXMatrix(deltaRot); 
+            }
+            moveObjects('up');
+            //console.log(Rx);
+            break;
+        
         case 'right' : 
-        //console.log(Rz);
-        if((Rz - deltaRot) < -MAX_ROTATION_Z_STARSHIP){
-            Rz = -MAX_ROTATION_Z_STARSHIP;
-            matrix = utils.identityMatrix();
-        }
-        else{
-        Rz = Rz - deltaRot;
-        matrix = utils.MakeRotateZMatrix(-deltaRot); 
-        }
-        moveObjects('left');
-        console.log(Rz);
-        break;
+            //console.log(Rz);
+            if((Rz - deltaRot) < -MAX_ROTATION_Z_STARSHIP){
+                Rz = -MAX_ROTATION_Z_STARSHIP;
+                matrix = utils.identityMatrix();
+            }
+            else{
+                Rz = Rz - deltaRot;
+                matrix = utils.MakeRotateZMatrix(-deltaRot); 
+            }
+            moveObjects('left');
+            console.log(Rz);
+            break;
+        
         case 'left' : 
-        if((Rz + deltaRot) > MAX_ROTATION_Z_STARSHIP){
-            Rz = MAX_ROTATION_Z_STARSHIP;
-            matrix = utils.identityMatrix();
-        }
-        else{
-        Rz = Rz + deltaRot;
-        matrix = utils.MakeRotateZMatrix(deltaRot); 
-        }
-        moveObjects('right');
-        //console.log(Rz);
-        break;
+            if((Rz + deltaRot) > MAX_ROTATION_Z_STARSHIP){
+                Rz = MAX_ROTATION_Z_STARSHIP;
+                matrix = utils.identityMatrix();
+            }
+            else{
+                Rz = Rz + deltaRot;
+                matrix = utils.MakeRotateZMatrix(deltaRot); 
+            }
+            moveObjects('right');
+            //console.log(Rz);
+            break;
     }
 
     let newWorldMatrix = utils.multiplyMatrices(xwingNode.worldMatrix,matrix);
@@ -210,7 +214,7 @@ function  moveStarship(action){
 
 function animateGame(){
 
-    if ( Date.now() - lastNewRingTime > SPAWNTIME ) {
+    if (Date.now() - lastNewRingTime > SPAWNTIME) {
         spawnNewObject();
     }
 
@@ -277,10 +281,9 @@ function handleObjects(){
 
     for (var i = 0; i < objects.length; i++){
 
-
         if(objects[i].worldMatrix[11] > 60 ){ //out of bounds
                objects.shift(); //removes first object spawned in scene
-               if(i==collision_index) collision_index = -1; 
+               if(i == collision_index) collision_index = -1; 
         }
 
     }
