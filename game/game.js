@@ -135,14 +135,15 @@ function moveObjects(action){
 
     let matrix = [];
 
-    let deltaMove = 20 * SPEED * Math.tan(utils.degToRad(deltaRot)); 
+    let deltaMoveX = 20 * SPEED * Math.tan(utils.degToRad(deltaRotRx)); 
+    let deltaMoveZ = 20 * SPEED * Math.tan(utils.degToRad(deltaRotRz)); 
 
     switch(action){
        case 'ahead': matrix = utils.MakeTranslateMatrix(0,0,SPEED); break;
-       case 'up' : matrix = utils.MakeTranslateMatrix(0,deltaMove,0); break;
-       case 'down' : matrix = utils.MakeTranslateMatrix(0,-deltaMove,0); break;
-       case 'right' : matrix = utils.MakeTranslateMatrix(deltaMove,0,0); break;
-       case 'left' : matrix = utils.MakeTranslateMatrix(-deltaMove,0,0); break;
+       case 'up' : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,0); break;
+       case 'down' : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,0); break;
+       case 'right' : matrix = utils.MakeTranslateMatrix(deltaMoveZ,0,0); break;
+       case 'left' : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,0); break;
     }
 
     for (var i = 0; i < objects.length; i++){
@@ -155,46 +156,46 @@ function moveObjects(action){
 
 function  moveStarship(action){
 
-    let matrix = [];
-
     switch(action){
 
         case 'up': 
-            if((Rx - deltaRot) < - MAX_ROTATION_X_STARSHIP){
+            if((Rx - deltaRotRx) < - MAX_ROTATION_X_STARSHIP){
                 Rx = -MAX_ROTATION_X_STARSHIP;
+
             }
             else{
-                Rx = Rx - deltaRot/2.5;
+
+                Rx = Rx - deltaRotRx;
             }
             moveObjects('down');
             break;
 
         case 'down' : 
-            if((Rx + deltaRot) > MAX_ROTATION_X_STARSHIP){
+            if((Rx + deltaRotRx) > MAX_ROTATION_X_STARSHIP){
                 Rx = MAX_ROTATION_X_STARSHIP;
             }
             else{
-                Rx = Rx + deltaRot/2.5;
+                Rx = Rx + deltaRotRx;
             }
             moveObjects('up');
             break;
         
         case 'right' : 
-            if((Rz - deltaRot) < -MAX_ROTATION_Z_STARSHIP){
+            if((Rz - deltaRotRz) < -MAX_ROTATION_Z_STARSHIP){
                 Rz = -MAX_ROTATION_Z_STARSHIP;
             }
             else{
-                Rz = Rz - deltaRot;
+                Rz = Rz - deltaRotRz;
             }
             moveObjects('left');
             break;
         
         case 'left' : 
-            if((Rz + deltaRot) > MAX_ROTATION_Z_STARSHIP){
+            if((Rz + deltaRotRz) > MAX_ROTATION_Z_STARSHIP){
                 Rz = MAX_ROTATION_Z_STARSHIP;
             }
             else{
-                Rz = Rz + deltaRot;
+                Rz = Rz + deltaRotRz;
             }
             moveObjects('right');
             break;
@@ -213,6 +214,7 @@ function  moveStarship(action){
 
 
 
+
 function animateGame(){
 
     // spawn objects
@@ -220,8 +222,17 @@ function animateGame(){
         spawnNewObject();
     }
 
+    camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+    camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
+    camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
+
+    //aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    //perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
+    //viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
+
     stabilizeStarship(); //function which checks if starship needs stabilization and apply it if necessary
     collisionAnimation();  // if there is collission starts the animation for asteroid collision
+
 
 }
 
@@ -277,22 +288,25 @@ function collisionAnimation(){
 function stabilizeStarship(){
     if(stable){
         //stabilize starship
-      if(Math.abs(Rz)< 0.5*deltaRot)Rz=0; // if close to stability put stable
+      let deltaRz = 0.5*deltaRotRz;
+      let deltaRx = 0.2*deltaRotRx;
+
+      if(Math.abs(Rz)< deltaRz)Rz=0; // if close to stability put stable
         else{
             if(Rz > 0){
-                Rz = Rz-0.5*deltaRot;
+                Rz = Rz-deltaRz;
             }
             else{ //Rz < 0 
-                Rz = Rz + 0.5*deltaRot;
+                Rz = Rz + deltaRz;
             }
         }
-        if(Math.abs(Rx)< 0.5*deltaRot/2.5) Rx=0; // if close to stability put stable
+        if(Math.abs(Rx)< deltaRx) Rx=0; // if close to stability put stable
         else{
             if(Rx > 0){
-                Rx = Rx-0.5*deltaRot/2.5;
+                Rx = Rx-deltaRx;
             }
             else{ //Rz < 0 
-                Rx = Rx + 0.5*deltaRot/2.5;
+                Rx = Rx + deltaRx;
             }
         }
      }

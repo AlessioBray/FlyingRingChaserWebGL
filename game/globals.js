@@ -205,7 +205,8 @@ var SPAWNTIME = 2500;
 var ASTEROIDSPAWNRATE = 0.5;
 var SPEED = 0.30;
 var deltaMove = 0.01;
-var deltaRot = 0.5;//0.3;
+var deltaRotRz = 0.5;//0.3;
+var deltaRotRx = 0.2;
 var ANGULARSPEED_X = 0.6;
 var ANGULARSPEED_Y = 0.6;
 var ANGULARSPEED_Z = 0.6;
@@ -231,7 +232,8 @@ var thirdPartCollisionAnimation = false;
 var initAnimation = true;
 var maxRz;
 var minRz;
-var delta = 5*deltaRot;
+var delta = 2.5;
+
 
 // Object pooling
 var NUM_OBJECTS_IN_SCENE = 3;
