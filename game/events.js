@@ -71,11 +71,6 @@ function keyUpFunction(e){
             //createPopup("gameover");
         }
         else{
-            canvas.addEventListener("mousedown", doMouseDown, false);
-            canvas.addEventListener("mouseup", doMouseUp, false);
-            canvas.addEventListener("mousemove", doMouseMove, false);
-            canvas.addEventListener("mousewheel", doMouseWheel, false);
-
             gameOver();
         }    
     }

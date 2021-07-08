@@ -440,6 +440,12 @@ function gameOver(){
     starshipZ = 0;
     restoreMaxLife();
 
+    //enable mouse listener
+    canvas.addEventListener("mousedown", doMouseDown, false);
+    canvas.addEventListener("mouseup", doMouseUp, false);
+    canvas.addEventListener("mousemove", doMouseMove, false);
+    canvas.addEventListener("mousewheel", doMouseWheel, false);
+
     // shows controllers 
     HideShowElement(lightController);  
     HideShowElement(moveController);
