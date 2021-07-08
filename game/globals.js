@@ -205,8 +205,8 @@ var SPAWNTIME = 2500;
 var ASTEROIDSPAWNRATE = 0.5;
 var SPEED = 0.30;
 var deltaMove = 0.01;
-var deltaRotRz = 0.5;//0.3;
-var deltaRotRx = 0.2;
+var deltaRotRz = 0.25;//0.3;
+var deltaRotRx = 0.15;//deltaRotRz * 0.25; 
 var ANGULARSPEED_X = 0.6;
 var ANGULARSPEED_Y = 0.6;
 var ANGULARSPEED_Z = 0.6;
@@ -240,6 +240,18 @@ var NUM_OBJECTS_IN_SCENE = 3;
 var nodes = [];
 var freeslot = 0;
 var collision_index = -1;
+
+//state machine
+var state;
+var STATE_STABLE = 0;
+var STATE_MOVING_UP = 1;
+var STATE_MOVING_DOWN = 2;
+var STATE_MOVING_RIGHT = 3;
+var STATE_MOVING_LEFT = 4;
+var STATE_COLLISSION_1 = 5; // init animation
+var STATE_COLLISSION_2 = 6;
+var STATE_COLLISSION_3 = 7;
+var STATE_COLLISSION_4 = 8;
 
 // ----
 

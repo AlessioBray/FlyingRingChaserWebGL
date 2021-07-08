@@ -135,7 +135,7 @@ function moveObjects(action){
 
     let matrix = [];
 
-    let deltaMoveX = 20 * SPEED * Math.tan(utils.degToRad(deltaRotRx)); 
+    let deltaMoveX = 30 * SPEED * Math.tan(utils.degToRad(deltaRotRx)); 
     let deltaMoveZ = 20 * SPEED * Math.tan(utils.degToRad(deltaRotRz)); 
 
     switch(action){
@@ -146,10 +146,15 @@ function moveObjects(action){
        case 'left' : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,0); break;
     }
 
-    for (var i = 0; i < objects.length; i++){
+    for (var i = 0; i < objects.length; i++){  
         let object = objects[i];
-        let newWorldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
-        object.updateWorldMatrix(newWorldMatrix);
+        if(action=="ahead"){   // TO BE OPTIMIZED (objects movement should be grouped all together and then update)
+          let newWorldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
+          object.updateWorldMatrix(newWorldMatrix); // traslate and rotate (because of local matrices)
+        }
+        else{ //no additional rotate is needed 
+          object.worldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
+        }
     }  
 
 }
@@ -200,16 +205,6 @@ function  moveStarship(action){
             moveObjects('right');
             break;
     }
-/*
-    let newWorldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0],
-        GAME_XWING_POSITION[1],
-        GAME_XWING_POSITION[2],
-        Rx,
-        Ry+270,
-        Rz,
-        S);
-
-    xwingNode.updateWorldMatrix(newWorldMatrix);  */
 }
 
 
@@ -221,75 +216,72 @@ function animateGame(){
     if (Date.now() - lastNewRingTime > SPAWNTIME) {
         spawnNewObject();
     }
-
-    camera_z = lookRadius * Math.cos(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
-    camera_x = lookRadius * Math.sin(utils.degToRad(-camera_angle)) * Math.cos(utils.degToRad(-camera_elevation));
-    camera_y = lookRadius * Math.sin(utils.degToRad(-camera_elevation));
-
-    //aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    //perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-    //viewMatrix = utils.MakeView(camera_x, camera_y, camera_z, camera_elevation, -camera_angle);
-
+    
+    movementControllerStarship();
     stabilizeStarship(); //function which checks if starship needs stabilization and apply it if necessary
     collisionAnimation();  // if there is collission starts the animation for asteroid collision
+    
+}
 
-
+function movementControllerStarship(){ //can we handle here all states in future? (TO BE OPTIMIZED)
+                                       //or maybe a class for starship with all state machine functions , one function for each state + changeState + states controller
+    switch(state){
+        case STATE_MOVING_UP: moveStarship("up"); break;
+        case STATE_MOVING_DOWN: moveStarship("down"); break;
+        case STATE_MOVING_RIGHT: moveStarship("right"); break;
+        case STATE_MOVING_LEFT: moveStarship("left"); break;
+    }
 }
 
 
 function collisionAnimation(){
 
-    if(startCollisionAnimation){
-    if(initAnimation){
+    if(isCurrentState(STATE_COLLISSION_1)){
+    //if(initAnimation){
         maxRz = Rz + deltaImpact;
         minRz = Rz - deltaImpact;
-        initAnimation = false;
-        stable = false;
         window.removeEventListener("keydown", keyDownFunction, false);
         window.removeEventListener("keyup", keyUpFunction, false);
+        changeState(STATE_COLLISSION_2);
     }
-    if(firstPartCollisionAnimation){
+
+    if(isCurrentState(STATE_COLLISSION_2)){
         if(Math.abs(maxRz - delta) < Rz ){
-             firstPartCollisionAnimation= false;// if close to stability put stable
-             secondPartCollisionAnimation = true;
+             changeState(STATE_COLLISSION_3);
         }
         else{
             Rz = Rz+ delta;
         }
     }
-    if(secondPartCollisionAnimation){
+
+    if(isCurrentState(STATE_COLLISSION_3)){
         if( (minRz+ delta) > Rz  ){
-             secondPartCollisionAnimation= false;// if close to stability put stable
-             thirdPartCollisionAnimation = true;
+            changeState(STATE_COLLISSION_4);
         }
         else{
             Rz = Rz - delta;
         }
     }
 
-    if(thirdPartCollisionAnimation){
+    if(isCurrentState(STATE_COLLISSION_4)){
         if(Math.abs(Rz) < delta){
              Rz=0;
-             startCollisionAnimation = false;
-             thirdPartCollisionAnimation = false;
-             initAnimation = true;
-             firstPartCollisionAnimation = true;
-             stable = true; // check conflicts with other functions to set stable
              window.addEventListener("keydown", keyDownFunction, false);
              window.addEventListener("keyup", keyUpFunction, false);
+             changeState(STATE_STABLE);
         }
         else{
             Rz = Rz+ delta;
         }
     }
-  }
+  
 }
 
 function stabilizeStarship(){
-    if(stable){
+    if(isCurrentState(STATE_STABLE)){
         //stabilize starship
-      let deltaRz = 0.5*deltaRotRz;
-      let deltaRx = 0.2*deltaRotRx;
+      let deltaRz = 1*deltaRotRz;
+      let deltaRx = 1*deltaRotRx;
 
       if(Math.abs(Rz)< deltaRz)Rz=0; // if close to stability put stable
         else{
@@ -365,7 +357,7 @@ function detectCollision(i){
    if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
     collision_index = i;
     takeDamage(ASTEROID_DAMAGE);
-    startCollisionAnimation = true;
+    changeState(STATE_COLLISSION_1);
    }
    break;
     }
@@ -407,6 +399,23 @@ function startGame(){
     gameOn = !gameOn;
 
 }
+
+/////////////////// little state machine
+function changeState(newState){
+
+    state = newState;
+
+}
+
+function isCurrentState(currentState){
+
+    if (currentState == state) 
+        return true;
+    else
+        return false;
+    
+}
+/////////////////////////////////
 
 
 

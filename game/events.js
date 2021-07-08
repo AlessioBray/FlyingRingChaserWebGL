@@ -13,8 +13,8 @@ function keyDownFunction(e){
                 break;
             }
             else{
-                stable = false;
-                moveStarship('left');
+                changeState(STATE_MOVING_LEFT);
+                //moveStarship('left');
                 break;
             }
             
@@ -26,16 +26,16 @@ function keyDownFunction(e){
                 break;
             }
             else{
-                stable = false;
-                moveStarship('right');
+                changeState(STATE_MOVING_RIGHT);
+                //moveStarship('right');
                 break;
             }
 
         case "ArrowUp":
         case "w": 
             if (gameOn){
-                stable = false;
-                moveStarship('up');
+                changeState(STATE_MOVING_UP);
+                //moveStarship('up');
             }
             
             break;
@@ -44,8 +44,8 @@ function keyDownFunction(e){
         case "s": 
             
             if (gameOn){
-               stable = false;
-               moveStarship('down');
+               changeState(STATE_MOVING_DOWN);
+               //moveStarship('down');
             }
             break;
 
@@ -81,7 +81,7 @@ function keyUpFunction(e){
         || e.keyCode == 83 // "s"
         || e.keyCode == 68 //"d" 
         ) && gameOn) {
-            stable = true;
+            changeState(STATE_STABLE);
         };
 
 }
