@@ -62,6 +62,8 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 programInfo: programs[RING_INDEX],
                 bufferLength: allMeshes[RING_INDEX].indices.length,
                 vertexArray: vaos[RING_INDEX],
+                isMissed: false,
+                changeColor: false,
             };
             showcaseNode.localMatrix = utils.MakeRotateXMatrix(-90);
             break;
@@ -92,6 +94,7 @@ function createGameSceneGraph(){   // objects array not used in game
         bufferLength: allMeshes[XWING_INDEX].indices.length,
         vertexArray: vaos[XWING_INDEX],
     };
+
 }
 
 
@@ -138,7 +141,7 @@ function spawnNewObject(){
 
 //implements a sort of object pooling 
 function createFreeNodes(){
-    for ( var i = 0; i< NUM_OBJECTS_IN_SCENE; i++)
+    for (var i = 0; i< NUM_OBJECTS_IN_SCENE ; i++)
         nodes.push(new Node());
 }
 

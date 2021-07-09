@@ -83,6 +83,7 @@ function drawGameInitializationScene(){
     drawObject(xwingNode); 
 
     if (elapsedInitializationFrames == 0){
+
         elapsedInitializationFrames = 100;
         window.cancelAnimationFrame(requestAnimationId);
         
@@ -118,12 +119,12 @@ function setGameMatrices(){
 function updateGameMatrices(){ 
 
     let newWorldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0],
-        GAME_XWING_POSITION[1],
-        GAME_XWING_POSITION[2],
-        Rx,
-        Ry+270,
-        Rz,
-        S);
+                                         GAME_XWING_POSITION[1],
+                                         GAME_XWING_POSITION[2],
+                                         Rx,
+                                         Ry+270,
+                                         Rz,
+                                         S);
 
     xwingNode.updateWorldMatrix(newWorldMatrix);
 
@@ -326,7 +327,6 @@ function drawGameScene() {
     }
 
     if(isGameOver()) {
-        createPopup("gameover");
         gameOver();
         startCollisionAnimation = false; 
         window.cancelAnimationFrame(drawGameScene);
@@ -338,28 +338,40 @@ function drawGameScene() {
 
 function detectCollision(i){
 
-   let object = objects[i];
-   let tx = object.worldMatrix[3] - GAME_XWING_POSITION[0];
-   let ty = object.worldMatrix[7] - GAME_XWING_POSITION[1];
-   let tz = object.worldMatrix[11] - GAME_XWING_POSITION[2];
-   let distance = Math.sqrt(Math.pow(tx,2) + Math.pow(ty,2) + Math.pow(tz,2));
-   let type = object.drawInfo["type"];
+    let object = objects[i];
+    let tx = object.worldMatrix[3] - GAME_XWING_POSITION[0];
+    let ty = object.worldMatrix[7] - GAME_XWING_POSITION[1];
+    let tz = object.worldMatrix[11] - GAME_XWING_POSITION[2];
+    let distance = Math.sqrt(Math.pow(tx,2) + Math.pow(ty,2) + Math.pow(tz,2));
+    let type = object.drawInfo["type"];
 
-   switch(type){
-   case 1:
-   if(distance < COLLISION_RADIUS_RING && i!=collision_index){
-        collision_index = i;
-        addScore();
-   }
-   break;
- 
-   case 2:
-   if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
-    collision_index = i;
-    takeDamage(ASTEROID_DAMAGE);
-    changeState(STATE_COLLISSION_1);
-   }
-   break;
+    switch(type){
+        case RING_INDEX:
+            if (distance < COLLISION_RADIUS_RING && i != collision_index){
+                collision_index = i;
+                object.drawInfo["isMissed"] = false;
+                object.drawInfo["changeColor"] = true;
+                console.log(tz, ty, tx);
+                addScore();
+            }
+            else if (distance > COLLISION_RADIUS_RING && tz > -2.4) {
+                object.drawInfo["isMissed"] = true;
+                object.drawInfo["changeColor"] = true;
+            }
+            // Aggiungi situazione in cui l'anello non viene preso
+
+            break;
+
+            
+   
+        case ASTEROID_INDEX:
+            if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
+                collision_index = i;
+                takeDamage(ASTEROID_DAMAGE);
+                changeState(STATE_COLLISSION_1);
+            }
+
+            break;
     }
 }
 
@@ -368,8 +380,8 @@ function handleObjects(){
     for (var i = 0; i < objects.length; i++){
 
         if(objects[i].worldMatrix[11] > 60 ){ //out of bounds
-               objects.shift(); //removes first object spawned in scene
-               if(i == collision_index) collision_index = -1; 
+            objects.shift(); //removes first object spawned in scene
+            if(i == collision_index) collision_index = -1; 
         }
 
     }
@@ -457,13 +469,15 @@ function isGameOver(){
 
 //game over
 function gameOver(){
+    
+    createPopup("gameover");
 
     textScore.nodeValue = "0"; //reset current score
     starshipY = 0;
     starshipZ = 0;
     restoreMaxLife();
 
-    //enable mouse listener
+    // enable mouse event listener
     canvas.addEventListener("mousedown", doMouseDown, false);
     canvas.addEventListener("mouseup", doMouseUp, false);
     canvas.addEventListener("mousemove", doMouseMove, false);
@@ -475,7 +489,9 @@ function gameOver(){
     HideShowElement(objDiv);
     HideShowElement(healthBar);
 
-    gameOn = !gameOn; 
+    gameOn = !gameOn;
+
+    
 
     createShowcaseSceneGraph();
     changeRender();

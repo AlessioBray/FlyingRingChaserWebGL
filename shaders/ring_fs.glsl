@@ -5,10 +5,14 @@ const float PI = 3.14159265359;
 const float distance = 0.5; // lights are directional ones
 
 // material parameters
-const vec3 albedo = vec3(255.0/255.0, 240.0/255.0, 26.0/255.0);
+
 const float roughness = 0.4;
 const float metallic = 0.9;
 const float ao = 1.0;
+
+const vec3 gold_albedo = vec3(255.0/255.0, 240.0/255.0, 26.0/255.0);
+const vec3 red_albedo = vec3(1.0, 0.0, 0.0);
+const vec3 green_albedo = vec3(0.0, 1.0, 0.0);
 
 in vec3 fsNormal;
 in vec4 fsPosition;
@@ -21,6 +25,10 @@ uniform vec3 lightColorA;
 //directional light B
 uniform vec3 lightDirectionB; 
 uniform vec3 lightColorB;
+
+// Collision detection
+uniform bool changeColor;
+uniform bool isMissed;
 
 out vec4 outColor;
 
@@ -67,9 +75,21 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 
 void main() {
 
-    //normalize fsNormal, it might not be in the normalized form coming from the vs
+    // normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = normalize(fsNormal);
     vec3 V = vec3(normalize(fsCamera - fsPosition));
+
+    vec3 albedo;
+
+    if (changeColor == true && isMissed == false){
+        albedo = green_albedo;
+    }
+    else if (changeColor == true && isMissed == true){
+        albedo = red_albedo;
+    }
+    else{
+        albedo = gold_albedo;
+    }
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    

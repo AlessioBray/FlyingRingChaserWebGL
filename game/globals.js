@@ -144,6 +144,9 @@ var aoMapLocation;
 var metalnessMapLocation;
 var heightMapLocation;
 
+// Ring
+var changeColorLocation;
+var isMissedLocation;
 
 // ------------------------------------------
 
@@ -223,7 +226,7 @@ var COLLISION_RADIUS_RING = 2.5;
 var SCORE_RING = 300;
 var ASTEROID_DAMAGE = 30;
 
-//collisionAnimation
+// Collision Animation
 var deltaImpact = 30;
 var startCollisionAnimation = false;
 var firstPartCollisionAnimation = true;

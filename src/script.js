@@ -50,6 +50,10 @@ function getAttributesAndUniforms(){
                 normalMapLocation = gl.getUniformLocation(programs[i], "normalMap");
                 metalnessMapLocation = gl.getUniformLocation(programs[i], "metalnessMap");
                 break;
+
+            case RING_INDEX:
+                changeColorLocation = gl.getUniformLocation(programs[i], "changeColor");
+                isMissedLocation = gl.getUniformLocation(programs[i], "isMissed");
         }
 
 
@@ -248,40 +252,48 @@ function drawObject(obj){ // obj is the node that represent the object to draw
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, obj.worldMatrix);
     let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
-    if (obj.drawInfo.type == XWING_INDEX){
+    switch (obj.drawInfo.type){
+        case XWING_INDEX:
 
-        // Diffuse map
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, textures[0]);
-        gl.uniform1i(textureLocation, 1);
+            // Diffuse map
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, textures[0]);
+            gl.uniform1i(textureLocation, 1);
+            break;
         
-    }
-    if (obj.drawInfo.type == ASTEROID_INDEX){
+        case ASTEROID_INDEX:
 
-        // Diffuse map
-        gl.activeTexture(gl.TEXTURE2);
-        gl.bindTexture(gl.TEXTURE_2D, textures[1]);
-        gl.uniform1i(diffuseMapLocation, 2);
+            // Diffuse map
+            gl.activeTexture(gl.TEXTURE2);
+            gl.bindTexture(gl.TEXTURE_2D, textures[1]);
+            gl.uniform1i(diffuseMapLocation, 2);
 
-        // Roughness map
-        gl.activeTexture(gl.TEXTURE3);
-        gl.bindTexture(gl.TEXTURE_2D, textures[2]);
-        gl.uniform1i(roughnessMapLocation, 3);
+            // Roughness map
+            gl.activeTexture(gl.TEXTURE3);
+            gl.bindTexture(gl.TEXTURE_2D, textures[2]);
+            gl.uniform1i(roughnessMapLocation, 3);
 
-        // Ambient Occlusion map
-        gl.activeTexture(gl.TEXTURE4);
-        gl.bindTexture(gl.TEXTURE_2D, textures[3]);
-        gl.uniform1i(aoMapLocation, 4);
+            // Ambient Occlusion map
+            gl.activeTexture(gl.TEXTURE4);
+            gl.bindTexture(gl.TEXTURE_2D, textures[3]);
+            gl.uniform1i(aoMapLocation, 4);
     
-        // Normal map
-        gl.activeTexture(gl.TEXTURE5);
-        gl.bindTexture(gl.TEXTURE_2D, textures[4]);
-        gl.uniform1i(normalMapLocation, 5);
+            // Normal map
+            gl.activeTexture(gl.TEXTURE5);
+            gl.bindTexture(gl.TEXTURE_2D, textures[4]);
+            gl.uniform1i(normalMapLocation, 5);
 
-        // Metalness map
-        gl.activeTexture(gl.TEXTURE6);
-        gl.bindTexture(gl.TEXTURE_2D, textures[5]);
-        gl.uniform1i(metalnessMapLocation, 6);
+            // Metalness map
+            gl.activeTexture(gl.TEXTURE6);
+            gl.bindTexture(gl.TEXTURE_2D, textures[5]);
+            gl.uniform1i(metalnessMapLocation, 6);
+
+            break;
+
+        case RING_INDEX:
+            gl.uniform1i(changeColorLocation, obj.drawInfo.changeColor);
+            gl.uniform1i(isMissedLocation, obj.drawInfo.isMissed);
+            break;
     }
 
     gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
