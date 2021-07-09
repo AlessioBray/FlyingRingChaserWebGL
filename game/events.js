@@ -170,7 +170,7 @@ function doMouseWheel(event) {
 
 function onSelectedObjChange(objectId){
     
-    console.log("Selected obj changed to "+ objectId);
+    //console.log("Selected obj changed to "+ objectId);
 
     switch (objectId) {
         case XWING_INDEX:
