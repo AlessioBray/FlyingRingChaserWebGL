@@ -67,7 +67,7 @@ var camera_z = 50;
 var camera_elevation = 0;
 var camera_angle = 0;
 
-var lookRadius = 50; //same initialization as camera_z (variable used in the showcase to keep track of the zoom effect)
+var lookRadius = camera_z; //same initialization as camera_z (variable used in the showcase to keep track of the zoom effect)
 
 // Perspective matrix
 var perspectiveMatrix;

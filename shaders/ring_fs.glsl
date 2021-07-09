@@ -10,7 +10,7 @@ const float roughness = 0.4;
 const float metallic = 0.9;
 const float ao = 1.0;
 
-const vec3 gold_albedo = vec3(255.0/255.0, 240.0/255.0, 26.0/255.0);
+const vec3 gold_albedo = vec3(255.0, 240.0, 26.0)/255.0;
 const vec3 red_albedo = vec3(1.0, 0.0, 0.0);
 const vec3 green_albedo = vec3(0.0, 1.0, 0.0);
 

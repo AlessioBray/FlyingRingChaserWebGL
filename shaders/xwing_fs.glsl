@@ -5,7 +5,7 @@ const float PI = 3.14159265359;
 const float distance = 0.5; // lights are directional ones
 
 // material parameters
-const vec3 albedo = vec3(1.0, 1.0, 1.0);
+const vec3 albedo = vec3(145.0, 145.0, 145.0)/255.0;
 const float roughness = 0.6;
 const float metallic = 0.9;
 const float ao = 1.0;

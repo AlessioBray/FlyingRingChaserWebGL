@@ -379,7 +379,7 @@ function handleObjects(){
 
     for (var i = 0; i < objects.length; i++){
 
-        if(objects[i].worldMatrix[11] > 60 ){ //out of bounds
+        if(objects[i].worldMatrix[11] > 60){ //out of bounds
             objects.shift(); //removes first object spawned in scene
             if(i == collision_index) collision_index = -1; 
         }
@@ -394,6 +394,8 @@ function startGame(){
 
     //console.log("Cancelling animation: " + requestAnimationId);
     window.cancelAnimationFrame(requestAnimationId);
+
+    window.onresize = changeGameRender;
 
     HideShowElement(lightController);
     HideShowElement(moveController);
@@ -472,10 +474,14 @@ function gameOver(){
     
     createPopup("gameover");
 
+    window.onresize = changeRender;
+
     textScore.nodeValue = "0"; //reset current score
     starshipY = 0;
     starshipZ = 0;
     restoreMaxLife();
+    camera_z = 50;
+    lookRadius = 50;
 
     // enable mouse event listener
     canvas.addEventListener("mousedown", doMouseDown, false);
@@ -593,4 +599,17 @@ function createCloseButtonPopup(){
     closeButtonPopup.setAttribute('onClick', 'closePopup()');
     closeButtonPopup.innerText = "Return to Showcase";
     return closeButtonPopup;
+}
+
+function changeGameRender(){
+    window.cancelAnimationFrame(requestAnimationId);
+    gameRender();
+}
+
+function gameRender(){
+
+    utils.resizeCanvasToDisplaySize(gl.canvas);
+    setViewportAndCanvas();
+
+    drawGameScene();
 }
