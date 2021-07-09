@@ -50,12 +50,32 @@ ul {
     padding-top: 15px;
 }
 
-#healthbar {
+
+progress {
+    border-radius: 7px; 
     width: 350px;
-    height: 50px;
+    height: 28px;
+
     position: absolute; 
     right: 40px; 
     top: 30px;
+    
+    box-shadow: rgba(252, 186, 3, 0.4) -5px 5px, 
+                rgba(252, 186, 3, 0.3) -10px 10px, 
+                rgba(252, 186, 3, 0.2) -15px 15px, 
+                rgba(252, 186, 3, 0.1) -20px 20px, 
+                rgba(252, 186, 3, 0.05) -25px 25px;
+}
+
+progress::-webkit-progress-bar {
+    background-color: rgba(252, 186, 3, 1);
+    border-radius: 7px;
+}
+  
+progress::-webkit-progress-value {
+    background-color: green;
+    border-radius: 7px;
+    box-shadow: 1px 1px 1px 1px #000000;
 }
 
 
@@ -205,4 +225,3 @@ button.closeButton:hover {
     background-color: #ffcf4a;
     z-index: 7;
 }
-

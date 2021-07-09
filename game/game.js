@@ -447,6 +447,7 @@ function game(){ // function called for each frame of time
 
 function restoreMaxLife(){
     healthBar.value = healthBar.max;
+    healthBar.className = "progressGreen"; //////////////////////////////////////////////////////////////
 }
 
 function addScore(){
@@ -459,6 +460,7 @@ function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
     let newHealth = healthBar.value - damage;
     if(newHealth < healthBar.min) newHealth = healthBar.min;
     healthBar.value = newHealth;
+    healthBar.className = ""
 }
 
 function isGameOver(){
@@ -496,8 +498,6 @@ function gameOver(){
     HideShowElement(healthBar);
 
     gameOn = !gameOn;
-
-    
 
     createShowcaseSceneGraph();
     changeRender();
