@@ -6,8 +6,8 @@ const float distance = 0.5; // lights are directional ones
 
 // material parameters
 
-const float roughness = 0.5;
-const float metallic = 0.4;
+const float roughness = 0.4;
+const float metallic = 0.8;
 const float ao = 1.0;
 
 const vec3 green_albedo = vec3(0.0, 1.0, 0.0);
