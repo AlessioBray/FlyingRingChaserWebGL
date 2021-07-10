@@ -16,6 +16,7 @@ var xwingMesh;
 var ringMesh;
 var asteroidMesh;
 var healthMesh;
+var speedMesh;
 
 // ------
 
@@ -28,7 +29,10 @@ var XWING_INDEX = 0;
 var RING_INDEX = 1;
 var ASTEROID_INDEX = 2;
 var HEALTH_INDEX = 3;
-var SKYBOX_INDEX = 4;
+var SPEED_INDEX = 4;
+var SKYBOX_INDEX = 5;
+
+var NUMBER_SHOWCASE_OBJECTS = 5;
 
 var showcaseNode;
 var xwingNode;

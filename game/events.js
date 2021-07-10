@@ -5,9 +5,9 @@ function keyDownFunction(e){
         case "ArrowLeft":
         case "a":  
             if (!gameOn){
-                selectedObjId = (selectedObjId - 1) % 4;
+                selectedObjId = (selectedObjId - 1) % NUMBER_SHOWCASE_OBJECTS;
                 if (selectedObjId < 0){
-                    selectedObjId = selectedObjId + 4;
+                    selectedObjId = selectedObjId + NUMBER_SHOWCASE_OBJECTS;
                 }
                 onSelectedObjChange(selectedObjId);
                 break;
@@ -21,7 +21,7 @@ function keyDownFunction(e){
         case "ArrowRight":
         case "d":
             if (!gameOn){
-                selectedObjId = (selectedObjId + 1) % 4;
+                selectedObjId = (selectedObjId + 1) % NUMBER_SHOWCASE_OBJECTS;
                 onSelectedObjChange(selectedObjId);
                 break;
             }
@@ -188,6 +188,10 @@ function onSelectedObjChange(objectId){
         case HEALTH_INDEX:
             objSelected.textContent = "Health";
             selectedObjId = HEALTH_INDEX;
+            break;
+        case SPEED_INDEX:
+            objSelected.textContent = "Speed-Up";
+            selectedObjId = SPEED_INDEX;
             break;
       }
     

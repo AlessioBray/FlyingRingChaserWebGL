@@ -86,6 +86,16 @@ function createShowcaseSceneGraph(){ //scene graph show case
             };
             showcaseNode.localMatrix = utils.MakeScaleMatrix(0.2);
             break;
+        
+        case SPEED_INDEX:
+            showcaseNode.drawInfo = {
+                type: SPEED_INDEX,
+                programInfo: programs[SPEED_INDEX],
+                bufferLength: allMeshes[SPEED_INDEX].indices.length,
+                vertexArray: vaos[SPEED_INDEX],
+            };
+            showcaseNode.localMatrix = utils.MakeScaleMatrix(0.3);
+            break;
     }
 
     objects = [showcaseNode];
