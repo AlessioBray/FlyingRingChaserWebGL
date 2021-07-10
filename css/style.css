@@ -73,7 +73,7 @@ progress::-webkit-progress-bar {
 }
   
 progress::-webkit-progress-value {
-    background-color: green;
+    background-color: var(--c,red);
     border-radius: 7px;
     box-shadow: 1px 1px 1px 1px #000000;
 }

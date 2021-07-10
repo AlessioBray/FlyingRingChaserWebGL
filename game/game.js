@@ -320,11 +320,10 @@ function detectCollision(i){
                 object.drawInfo["changeColor"] = true;
                 addScore();
             }
-            else if (distance > COLLISION_RADIUS_RING && tz > -2.4) {
+            else if (distance > COLLISION_RADIUS_RING && tz > -2.4) { // Ring is missed
                 object.drawInfo["isMissed"] = true;
                 object.drawInfo["changeColor"] = true;
             }
-            // Aggiungi situazione in cui l'anello non viene preso
 
             break;
 
@@ -409,7 +408,7 @@ function game(){ // function called for each frame of time
 
 function restoreMaxLife(){
     healthBar.value = healthBar.max;
-    healthBar.className = "progressGreen"; //////////////////////////////////////////////////////////////
+    healthBar.style.setProperty("--c", "rgb(0,255,0)");
 }
 
 function addScore(){
@@ -422,7 +421,15 @@ function takeDamage(damage){  //should be called takeDamage(ASTEROID_DAMAGE)
     let newHealth = healthBar.value - damage;
     if(newHealth < healthBar.min) newHealth = healthBar.min;
     healthBar.value = newHealth;
-    healthBar.className = ""
+    if (healthBar.value > 70){
+        healthBar.style.setProperty("--c", "rgb(0,255,0)");
+    }
+    else if (healthBar.value > 30) {
+        healthBar.style.setProperty("--c", "rgb(255,255,0)");
+    }
+    else {
+        healthBar.style.setProperty("--c", "rgb(255,0,0)");
+    }
 }
 
 function isGameOver(){
