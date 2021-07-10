@@ -297,6 +297,8 @@ function drawGameScene() {
         gameOver();
         startCollisionAnimation = false; 
         window.cancelAnimationFrame(drawGameScene);
+        window.addEventListener("keydown", keyDownFunction, false);
+        window.addEventListener("keyup", keyUpFunction, false);
     }
     else{
         requestAnimationId = window.requestAnimationFrame(drawGameScene);
