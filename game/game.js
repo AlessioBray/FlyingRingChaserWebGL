@@ -443,9 +443,10 @@ function isGameOver(){
 //game over
 function gameOver(){
     
+    window.removeEventListener("keydown", keyDownFunction, false);
+    window.removeEventListener("keyup", keyUpFunction, false);
+    
     createPopup("gameover");
-
-    window.onresize = changeRender;
 
     textScore.nodeValue = "0"; //reset current score
     starshipY = 0;
@@ -454,12 +455,6 @@ function gameOver(){
     camera_z = 50;
     lookRadius = 50;
 
-    // enable mouse event listener
-    canvas.addEventListener("mousedown", doMouseDown, false);
-    canvas.addEventListener("mouseup", doMouseUp, false);
-    canvas.addEventListener("mousemove", doMouseMove, false);
-    canvas.addEventListener("mousewheel", doMouseWheel, false);
-
     // show controllers 
     HideShowElement(lightController);  
     HideShowElement(moveController);
@@ -467,7 +462,9 @@ function gameOver(){
     HideShowElement(healthBar);
 
     gameOn = !gameOn;
-
+    
+    // "Return" to the showcase setup 
+    window.onresize = changeRender;
     createShowcaseSceneGraph();
     changeRender();
 
@@ -561,6 +558,11 @@ function closePopup(){
     document.body.removeChild(popup);
     window.addEventListener("keydown", keyDownFunction, false);
     window.addEventListener("keyup", keyUpFunction, false);
+    // enable mouse event listener
+    canvas.addEventListener("mousedown", doMouseDown, false);
+    canvas.addEventListener("mouseup", doMouseUp, false);
+    canvas.addEventListener("mousemove", doMouseMove, false);
+    canvas.addEventListener("mousewheel", doMouseWheel, false);
 }
 
 //creates a close button popup

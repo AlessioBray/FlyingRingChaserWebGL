@@ -72,8 +72,6 @@ function keyUpFunction(e){
 
         }
         else{
-            window.removeEventListener("keydown", keyDownFunction, false);
-            window.removeEventListener("keyup", keyUpFunction, false);
             gameOver();
         }    
     }
