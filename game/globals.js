@@ -26,7 +26,8 @@ var objects = [];
 var XWING_INDEX = 0;
 var RING_INDEX = 1;
 var ASTEROID_INDEX = 2;
-var SKYBOX_INDEX = 3;
+var HEALTH_INDEX = 3;
+var SKYBOX_INDEX = 4;
 
 var showcaseNode;
 var xwingNode;

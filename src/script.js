@@ -54,6 +54,7 @@ function getAttributesAndUniforms(){
             case RING_INDEX:
                 changeColorLocation = gl.getUniformLocation(programs[i], "changeColor");
                 isMissedLocation = gl.getUniformLocation(programs[i], "isMissed");
+                break;
         }
 
 
@@ -394,6 +395,13 @@ async function loadShaders() {
         programs[ASTEROID_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
     });
 
+    await utils.loadFiles([shaderDir + 'health_vs.glsl', shaderDir + 'health_fs.glsl'], function (shaderText) {
+        var vertexShader = utils.createShader(gl, gl.VERTEX_SHADER, shaderText[0]);
+        var fragmentShader = utils.createShader(gl, gl.FRAGMENT_SHADER, shaderText[1]);
+        
+        programs[HEALTH_INDEX] = utils.createProgram(gl, vertexShader, fragmentShader);
+    });
+
 }
 
 async function loadMeshes() {
@@ -401,8 +409,9 @@ async function loadMeshes() {
     xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter.obj");
     ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj");
+    healthMesh = await utils.loadMesh(modelsDir + "health2.obj");
 
-    allMeshes = [xwingMesh, ringMesh, asteroidMesh];
+    allMeshes = [xwingMesh, ringMesh, asteroidMesh, healthMesh];
 
 }
 

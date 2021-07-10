@@ -76,6 +76,16 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 vertexArray: vaos[ASTEROID_INDEX],
             };
             break;
+        
+        case HEALTH_INDEX:
+            showcaseNode.drawInfo = {
+                type: HEALTH_INDEX,
+                programInfo: programs[HEALTH_INDEX],
+                bufferLength: allMeshes[HEALTH_INDEX].indices.length,
+                vertexArray: vaos[HEALTH_INDEX],
+            };
+            showcaseNode.localMatrix = utils.MakeScaleMatrix(0.2);
+            break;
     }
 
     objects = [showcaseNode];

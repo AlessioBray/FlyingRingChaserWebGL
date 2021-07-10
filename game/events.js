@@ -5,9 +5,9 @@ function keyDownFunction(e){
         case "ArrowLeft":
         case "a":  
             if (!gameOn){
-                selectedObjId = (selectedObjId - 1) % 3;
+                selectedObjId = (selectedObjId - 1) % 4;
                 if (selectedObjId < 0){
-                    selectedObjId = selectedObjId + 3;
+                    selectedObjId = selectedObjId + 4;
                 }
                 onSelectedObjChange(selectedObjId);
                 break;
@@ -21,7 +21,7 @@ function keyDownFunction(e){
         case "ArrowRight":
         case "d":
             if (!gameOn){
-                selectedObjId = (selectedObjId + 1) % 3;
+                selectedObjId = (selectedObjId + 1) % 4;
                 onSelectedObjChange(selectedObjId);
                 break;
             }
@@ -184,6 +184,10 @@ function onSelectedObjChange(objectId){
         case ASTEROID_INDEX:
             objSelected.textContent = "Asteroid";
             selectedObjId = ASTEROID_INDEX;
+            break;
+        case HEALTH_INDEX:
+            objSelected.textContent = "Health";
+            selectedObjId = HEALTH_INDEX;
             break;
       }
     
