@@ -93,6 +93,7 @@ var moveController = document.getElementById("movecontroller");
 var objSelected = document.getElementById("objSelected");
 var objDiv = document.getElementById("obj");
 var score = document.getElementById('score');
+var scoretab = document.getElementById('showcaseScoringTab');
 var bestscore = document.getElementById('bestscore');
 var healthBar = document.getElementById("healthbar");
 healthBar.style.display = "none"; // healthbar is initially is hidden

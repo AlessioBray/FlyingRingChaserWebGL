@@ -200,6 +200,7 @@ function onSelectedObjChange(objectId){
 
 
 createScore();
+HideShowElement(score);
 
 // Light event listeners
 dirLightAlphaASlider.addEventListener("input",updateLights,false);

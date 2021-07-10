@@ -19,7 +19,30 @@ ul {
     padding-left: 25px;
 }
   
-#scoringtab {
+#showcaseScoringTab {
+    width: 200px;
+    height: 85px;
+    
+    text-align: center;
+    font-size: 18px;
+
+    font-family: Soloist; 
+    position: absolute; 
+    left: 0px; 
+    top: 0px; 
+    background-color: #fcba03; 
+    opacity: 1.0; 
+    padding: 0px 0px 0px 0px; 
+    overflow: auto; 
+    border-radius: 5px 15px 30px 15px; 
+    box-shadow: rgba(252, 186, 3, 0.4) 5px 5px, 
+                rgba(252, 186, 3, 0.3) 10px 10px, 
+                rgba(252, 186, 3, 0.2) 15px 15px, 
+                rgba(252, 186, 3, 0.1) 20px 20px, 
+                rgba(252, 186, 3, 0.05) 25px 25px;
+}
+
+#gameScoringTab {
     width: 200px;
     height: 150px;
     

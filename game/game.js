@@ -370,6 +370,8 @@ function startGame(){
     HideShowElement(moveController);
     HideShowElement(objDiv);
     HideShowElement(healthBar);
+    HideShowElement(score);
+    scoretab.id = "gameScoringTab";
 
     restoreMaxLife();
   
@@ -460,6 +462,8 @@ function gameOver(){
     HideShowElement(moveController);
     HideShowElement(objDiv);
     HideShowElement(healthBar);
+    HideShowElement(score);
+    scoretab.id = "showcaseScoringTab";
 
     gameOn = !gameOn;
     
