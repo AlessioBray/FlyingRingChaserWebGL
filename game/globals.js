@@ -15,6 +15,7 @@ var allMeshes;
 var xwingMesh;
 var ringMesh;
 var asteroidMesh;
+var healthMesh;
 
 // ------
 
