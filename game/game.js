@@ -97,8 +97,6 @@ function drawGameInitializationScene(){
         //// used to keep track of rotation of starship
         Rx = 0;
         Rz = 0;
-        //Ry = 0;
-        ////
     }
     else{ 
         requestAnimationId = window.requestAnimationFrame(drawGameInitializationScene);
@@ -118,6 +116,7 @@ function setGameMatrices(){
 
 function updateGameMatrices(){ 
 
+    // update starship world matrix
     let newWorldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0],
                                          GAME_XWING_POSITION[1],
                                          GAME_XWING_POSITION[2],
@@ -128,88 +127,71 @@ function updateGameMatrices(){
 
     xwingNode.updateWorldMatrix(newWorldMatrix);
 
-    moveObjects('ahead');
+    //update objects world matrices
+    moveObjects();
 
 }
 
-function moveObjects(action){
+function moveObjects(){
 
     let matrix = [];
 
     let deltaMoveX = 30 * SPEED * Math.tan(utils.degToRad(deltaRotRx)); 
     let deltaMoveZ = 20 * SPEED * Math.tan(utils.degToRad(deltaRotRz)); 
 
-    switch(action){
-       case 'ahead': matrix = utils.MakeTranslateMatrix(0,0,SPEED); break;
-       case 'up' : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,0); break;
-       case 'down' : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,0); break;
-       case 'right' : matrix = utils.MakeTranslateMatrix(deltaMoveZ,0,0); break;
-       case 'left' : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,0); break;
+    switch(state){
+       case STATE_MOVING_DOWN : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,SPEED); break;
+       case STATE_MOVING_UP : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,SPEED); break;
+       case STATE_MOVING_LEFT : matrix = utils.MakeTranslateMatrix(deltaMoveZ,0,SPEED); break;
+       case STATE_MOVING_RIGHT : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,SPEED); break;
+       default: matrix = utils.MakeTranslateMatrix(0,0,SPEED); break;
     }
 
     for (var i = 0; i < objects.length; i++){  
         let object = objects[i];
-        if(action=="ahead"){   // TO BE OPTIMIZED (objects movement should be grouped all together and then update)
-          let newWorldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
-          object.updateWorldMatrix(newWorldMatrix); // traslate and rotate (because of local matrices)
-        }
-        else{ //no additional rotate is needed 
-          object.worldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
-        }
+        let newWorldMatrix = utils.multiplyMatrices(matrix,object.worldMatrix);
+        object.updateWorldMatrix(newWorldMatrix); 
     }  
 
 }
 
-function  moveStarship(action){
+function moveStarshipUp(){
+    if((Rx - deltaRotRx) < - MAX_ROTATION_X_STARSHIP){
+        Rx = -MAX_ROTATION_X_STARSHIP;
 
-    switch(action){
+    }
+    else{
 
-        case 'up': 
-            if((Rx - deltaRotRx) < - MAX_ROTATION_X_STARSHIP){
-                Rx = -MAX_ROTATION_X_STARSHIP;
-
-            }
-            else{
-
-                Rx = Rx - deltaRotRx;
-            }
-            moveObjects('down');
-            break;
-
-        case 'down' : 
-            if((Rx + deltaRotRx) > MAX_ROTATION_X_STARSHIP){
-                Rx = MAX_ROTATION_X_STARSHIP;
-            }
-            else{
-                Rx = Rx + deltaRotRx;
-            }
-            moveObjects('up');
-            break;
-        
-        case 'right' : 
-            if((Rz - deltaRotRz) < -MAX_ROTATION_Z_STARSHIP){
-                Rz = -MAX_ROTATION_Z_STARSHIP;
-            }
-            else{
-                Rz = Rz - deltaRotRz;
-            }
-            moveObjects('left');
-            break;
-        
-        case 'left' : 
-            if((Rz + deltaRotRz) > MAX_ROTATION_Z_STARSHIP){
-                Rz = MAX_ROTATION_Z_STARSHIP;
-            }
-            else{
-                Rz = Rz + deltaRotRz;
-            }
-            moveObjects('right');
-            break;
+        Rx = Rx - deltaRotRx;
     }
 }
 
+function moveStarshipDown(){
+    if((Rx + deltaRotRx) > MAX_ROTATION_X_STARSHIP){
+        Rx = MAX_ROTATION_X_STARSHIP;
+    }
+    else{
+        Rx = Rx + deltaRotRx;
+    }
+}
 
+function moveStarshipRight(){
+    if((Rz - deltaRotRz) < -MAX_ROTATION_Z_STARSHIP){
+        Rz = -MAX_ROTATION_Z_STARSHIP;
+    }
+    else{
+        Rz = Rz - deltaRotRz;
+    }   
+}
 
+function moveStarshipLeft(){
+    if((Rz + deltaRotRz) > MAX_ROTATION_Z_STARSHIP){
+        Rz = MAX_ROTATION_Z_STARSHIP;
+    }
+    else{
+        Rz = Rz + deltaRotRz;
+    }
+}
 
 function animateGame(){
 
@@ -217,69 +199,55 @@ function animateGame(){
     if (Date.now() - lastNewRingTime > SPAWNTIME) {
         spawnNewObject();
     }
-    
-    movementControllerStarship();
-    stabilizeStarship(); //function which checks if starship needs stabilization and apply it if necessary
-    collisionAnimation();  // if there is collission starts the animation for asteroid collision
-    
-}
 
-function movementControllerStarship(){ //can we handle here all states in future? (TO BE OPTIMIZED)
-                                       //or maybe a class for starship with all state machine functions , one function for each state + changeState + states controller
+    // animate according to current state
     switch(state){
-        case STATE_MOVING_UP: moveStarship("up"); break;
-        case STATE_MOVING_DOWN: moveStarship("down"); break;
-        case STATE_MOVING_RIGHT: moveStarship("right"); break;
-        case STATE_MOVING_LEFT: moveStarship("left"); break;
+        case STATE_STABLE: stabilizeStarship(); break;
+        case STATE_MOVING_UP: moveStarshipUp(); break;
+        case STATE_MOVING_DOWN: moveStarshipDown(); break;
+        case STATE_MOVING_RIGHT: moveStarshipRight(); break;
+        case STATE_MOVING_LEFT: moveStarshipLeft(); break;
+        case STATE_COLLISSION_1: collisionAnimation1(); break;
+        case STATE_COLLISSION_2: collisionAnimation2(); break;
+        case STATE_COLLISSION_3: collisionAnimation3(); break;
+        default: console.log("Error in state machine, state undefined!!");
     }
+    
 }
 
-
-function collisionAnimation(){
-
-    if(isCurrentState(STATE_COLLISSION_1)){
-    //if(initAnimation){
-        maxRz = Rz + deltaImpact;
-        minRz = Rz - deltaImpact;
-        window.removeEventListener("keydown", keyDownFunction, false);
-        window.removeEventListener("keyup", keyUpFunction, false);
+//COLLISSION ANIMATION
+function collisionAnimation1(){
+    if(Math.abs(maxRz - delta) < Rz ){
         changeState(STATE_COLLISSION_2);
-    }
-
-    if(isCurrentState(STATE_COLLISSION_2)){
-        if(Math.abs(maxRz - delta) < Rz ){
-             changeState(STATE_COLLISSION_3);
-        }
-        else{
-            Rz = Rz+ delta;
-        }
-    }
-
-    if(isCurrentState(STATE_COLLISSION_3)){
-        if( (minRz+ delta) > Rz  ){
-            changeState(STATE_COLLISSION_4);
-        }
-        else{
-            Rz = Rz - delta;
-        }
-    }
-
-    if(isCurrentState(STATE_COLLISSION_4)){
-        if(Math.abs(Rz) < delta){
-             Rz=0;
-             window.addEventListener("keydown", keyDownFunction, false);
-             window.addEventListener("keyup", keyUpFunction, false);
-             changeState(STATE_STABLE);
-        }
-        else{
-            Rz = Rz+ delta;
-        }
-    }
-  
+   }
+   else{
+       Rz = Rz+ delta;
+   }
 }
+
+function collisionAnimation2(){
+    if( (minRz+ delta) > Rz  ){
+        changeState(STATE_COLLISSION_3);
+    }
+    else{
+        Rz = Rz - delta;
+    }
+}
+
+function collisionAnimation3(){
+    if(Math.abs(Rz) < delta){
+        Rz=0;
+        window.addEventListener("keydown", keyDownFunction, false);
+        window.addEventListener("keyup", keyUpFunction, false);
+        changeState(STATE_STABLE);
+   }
+   else{
+       Rz = Rz+ delta;
+   }
+}
+
 
 function stabilizeStarship(){
-    if(isCurrentState(STATE_STABLE)){
         //stabilize starship
       let deltaRz = 1*deltaRotRz;
       let deltaRx = 1*deltaRotRx;
@@ -302,7 +270,6 @@ function stabilizeStarship(){
                 Rx = Rx + deltaRx;
             }
         }
-     }
 }
 
 function drawGameScene() {    
@@ -351,7 +318,6 @@ function detectCollision(i){
                 collision_index = i;
                 object.drawInfo["isMissed"] = false;
                 object.drawInfo["changeColor"] = true;
-                console.log(tz, ty, tx);
                 addScore();
             }
             else if (distance > COLLISION_RADIUS_RING && tz > -2.4) {
@@ -368,6 +334,10 @@ function detectCollision(i){
             if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
                 collision_index = i;
                 takeDamage(ASTEROID_DAMAGE);
+                maxRz = Rz + deltaImpact;
+                minRz = Rz - deltaImpact;
+                window.removeEventListener("keydown", keyDownFunction, false);
+                window.removeEventListener("keyup", keyUpFunction, false);
                 changeState(STATE_COLLISSION_1);
             }
 
@@ -421,14 +391,6 @@ function changeState(newState){
 
 }
 
-function isCurrentState(currentState){
-
-    if (currentState == state) 
-        return true;
-    else
-        return false;
-    
-}
 /////////////////////////////////
 
 
