@@ -297,8 +297,6 @@ function drawGameScene() {
         gameOver();
         startCollisionAnimation = false; 
         window.cancelAnimationFrame(drawGameScene);
-        window.addEventListener("keydown", keyDownFunction, false);
-        window.addEventListener("keyup", keyUpFunction, false);
     }
     else{
         requestAnimationId = window.requestAnimationFrame(drawGameScene);
@@ -462,7 +460,7 @@ function gameOver(){
     canvas.addEventListener("mousemove", doMouseMove, false);
     canvas.addEventListener("mousewheel", doMouseWheel, false);
 
-    // shows controllers 
+    // show controllers 
     HideShowElement(lightController);  
     HideShowElement(moveController);
     HideShowElement(objDiv);
@@ -561,6 +559,8 @@ function closePopup(){
       return;
     
     document.body.removeChild(popup);
+    window.addEventListener("keydown", keyDownFunction, false);
+    window.addEventListener("keyup", keyUpFunction, false);
 }
 
 //creates a close button popup
