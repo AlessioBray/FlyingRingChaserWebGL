@@ -103,7 +103,7 @@ function createShowcaseSceneGraph(){ //scene graph show case
 }
 
 
-function createGameSceneGraph(){   // objects array not used in game
+function createGameSceneGraph(){  
 
     objects = [];
     xwingNode = new Node();
@@ -117,38 +117,77 @@ function createGameSceneGraph(){   // objects array not used in game
 
 }
 
+function weighted_random() {
+    var i;
+
+    var weights = [];
+
+    for (i = 0; i < spawnRates.length; i++)
+        weights[i] = spawnRates[i] + (weights[i - 1] || 0);
+    
+    var random = Math.random();
+    
+    for (i = 0; i < weights.length; i++)
+        if (weights[i] > random)
+            break;
+    
+    return i+1; // + 1 to account for starship at 0 
+}
+
 
 function spawnNewObject(){
 
     // randomizations
-    let indexes = [RING_INDEX, ASTEROID_INDEX];
+    let indexes = [RING_INDEX, ASTEROID_INDEX, HEALTH_INDEX, SPEED_INDEX];
     let index = indexes[0];
     //MAX = 2 MIN = 1
     let tx = Math.random() * MAX_X - MIN_X;  // x in [-1,1] (not considering starship pos)
     let ty = Math.random() * MAX_Y - MIN_Y;  // y in [-1,1] 
 
-    if(Math.random() <= ASTEROIDSPAWNRATE) index = indexes[1];
+    index = weighted_random(); 
 
     let objectNode = getFreeNode();
-    objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
-                                             GAME_XWING_POSITION[1] - ty,
-                                             GAME_XWING_POSITION[2] - Tz - 60,
-                                             90.0, Ry, Rz + 90, S*(3-index));                                    
+                                  
     objectNode.drawInfo = {
         type: index,
         programInfo: programs[index],
         bufferLength: allMeshes[index].indices.length,
         vertexArray: vaos[index],
     };
+
     
     switch(index){
 
         case 1: 
             objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
+            objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
+                GAME_XWING_POSITION[1] - ty,
+                GAME_XWING_POSITION[2] - Tz - 60,
+                90.0,270, 90, S*2);
             break;
     
         case 2:
             objectNode.localMatrix = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
+            objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
+                GAME_XWING_POSITION[1] - ty,
+                GAME_XWING_POSITION[2] - Tz - 60,
+                90.0,270, 90, S);
+            break;
+
+        case 3: 
+            objectNode.localMatrix = utils.MakeWorld(0,0,0,0,0,ANGULARSPEED_Z, 1);
+            objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
+                GAME_XWING_POSITION[1] - ty,
+                GAME_XWING_POSITION[2] - Tz - 60,
+                90.0, 270, 90, S*0.2);
+            break;
+        
+        case 4: 
+            objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);;//utils.MakeWorld(0,0,0,ANGULARSPEED_Y,0,0, 1);
+            objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
+                GAME_XWING_POSITION[1] - ty,
+                GAME_XWING_POSITION[2] - Tz - 60,
+                0, 0, 0, S*0.3);
             break;
 
     }

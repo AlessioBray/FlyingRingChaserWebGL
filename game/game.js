@@ -341,6 +341,14 @@ function detectCollision(i){
             }
 
             break;
+
+        case HEALTH_INDEX:
+            if(distance < COLLISION_RADIUS_HEALTH && i!=collision_index){
+                collision_index = i;
+                restoreLife(20);
+            }
+
+            break;
     }
 }
 
@@ -409,8 +417,24 @@ function game(){ // function called for each frame of time
 }
 
 function restoreMaxLife(){
-    healthBar.value = healthBar.max;
-    healthBar.style.setProperty("--c", "rgb(0,255,0)");
+    //healthBar.value = healthBar.max;
+    //healthBar.style.setProperty("--c", "rgb(0,255,0)");
+    restoreLife(100);
+}
+
+function restoreLife(hp){
+    let newHealth = healthBar.value + hp;
+    if(newHealth > healthBar.max) newHealth = healthBar.max;
+    healthBar.value = newHealth;
+    if (healthBar.value > 70){
+        healthBar.style.setProperty("--c", "rgb(0,255,0)");
+    }
+    else if (healthBar.value > 30) {
+        healthBar.style.setProperty("--c", "rgb(255,255,0)");
+    }
+    else {
+        healthBar.style.setProperty("--c", "rgb(255,0,0)");
+    }
 }
 
 function addScore(){
