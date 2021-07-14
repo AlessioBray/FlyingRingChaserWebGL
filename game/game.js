@@ -394,7 +394,7 @@ function handleObjects(){
                         xwingNode.drawInfo.isCollided = false;
                         xwingNode.drawInfo.isHealthCollision = false;
                         break;
-                        
+
                     case SPEED_INDEX:
                         xwingNode.drawInfo.isCollided = false;
                         xwingNode.drawInfo.isSpeedCollision = false;
@@ -460,8 +460,6 @@ function game(){ // function called for each frame of time
 }
 
 function restoreMaxLife(){
-    //healthBar.value = healthBar.max;
-    //healthBar.style.setProperty("--c", "rgb(0,255,0)");
     restoreLife(100);
 }
 
