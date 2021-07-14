@@ -154,7 +154,8 @@ function spawnNewObject(){
         bufferLength: allMeshes[index].indices.length,
         vertexArray: vaos[index],
     };
-
+    
+    let tz= 200;
     
     switch(index){
 
@@ -162,7 +163,7 @@ function spawnNewObject(){
             objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);
             objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
                 GAME_XWING_POSITION[1] - ty,
-                GAME_XWING_POSITION[2] - Tz - 60,
+                GAME_XWING_POSITION[2] - Tz - tz,
                 90.0,270, 90, S*2);
             break;
     
@@ -170,7 +171,7 @@ function spawnNewObject(){
             objectNode.localMatrix = utils.MakeWorld(0,0,0,ANGULARSPEED_X,ANGULARSPEED_Y,ANGULARSPEED_Z, 1);
             objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
                 GAME_XWING_POSITION[1] - ty,
-                GAME_XWING_POSITION[2] - Tz - 60,
+                GAME_XWING_POSITION[2] - Tz - tz,
                 90.0,270, 90, S);
             break;
 
@@ -178,7 +179,7 @@ function spawnNewObject(){
             objectNode.localMatrix = utils.MakeWorld(0,0,0,0,0,ANGULARSPEED_Z, 1);
             objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
                 GAME_XWING_POSITION[1] - ty,
-                GAME_XWING_POSITION[2] - Tz - 60,
+                GAME_XWING_POSITION[2] - Tz - tz,
                 90.0, 270, 90, S*0.2);
             break;
         
@@ -186,7 +187,7 @@ function spawnNewObject(){
             objectNode.localMatrix = utils.MakeWorld(0,0,0,0,ANGULARSPEED_Y,0, 1);;//utils.MakeWorld(0,0,0,ANGULARSPEED_Y,0,0, 1);
             objectNode.worldMatrix = utils.MakeWorld(GAME_XWING_POSITION[0] -  tx, 
                 GAME_XWING_POSITION[1] - ty,
-                GAME_XWING_POSITION[2] - Tz - 60,
+                GAME_XWING_POSITION[2] - Tz - tz,
                 0, 0, 0, S*0.3);
             break;
 

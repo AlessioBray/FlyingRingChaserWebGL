@@ -136,15 +136,17 @@ function moveObjects(){
 
     let matrix = [];
 
-    let deltaMoveX = 30 * SPEED * Math.tan(utils.degToRad(deltaRotRx)); 
-    let deltaMoveZ = 20 * SPEED * Math.tan(utils.degToRad(deltaRotRz)); 
+    let boostMitigation = 0.3;
+    let boost = (speed - INITIAL_SPEED) * boostMitigation;
+    let deltaMoveX = 30 * (INITIAL_SPEED + boost) * Math.tan(utils.degToRad(deltaRotRx)); // deltaMoveX : deltaMove Z = 3:2
+    let deltaMoveZ = 20 * (INITIAL_SPEED + boost) * Math.tan(utils.degToRad(deltaRotRz)); 
 
     switch(state){
-       case STATE_MOVING_DOWN : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,SPEED); break;
-       case STATE_MOVING_UP : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,SPEED); break;
-       case STATE_MOVING_LEFT : matrix = utils.MakeTranslateMatrix(deltaMoveZ,0,SPEED); break;
-       case STATE_MOVING_RIGHT : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,SPEED); break;
-       default: matrix = utils.MakeTranslateMatrix(0,0,SPEED); break;
+       case STATE_MOVING_DOWN : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,speed); break;
+       case STATE_MOVING_UP : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,speed); break;
+       case STATE_MOVING_LEFT : matrix = utils.MakeTranslateMatrix(deltaMoveZ,0,speed); break;
+       case STATE_MOVING_RIGHT : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,speed); break;
+       default: matrix = utils.MakeTranslateMatrix(0,0,speed); break;
     }
 
     for (var i = 0; i < objects.length; i++){  
@@ -196,8 +198,13 @@ function moveStarshipLeft(){
 function animateGame(){
 
     // spawn objects
-    if (Date.now() - lastNewRingTime > SPAWNTIME) {
+    if (Date.now() - lastNewRingTime > spawnTime) {
         spawnNewObject();
+    }
+
+    if (Date.now() - timestampStartLevel > DURATION_LEVEL){
+        updateLevel();
+        console.log(spawnTime);
     }
 
     // animate according to current state
@@ -293,15 +300,18 @@ function drawGameScene() {
         detectCollision(i);
     }
 
-    if(isGameOver()) {
-        gameOver();
-        startCollisionAnimation = false; 
-        window.cancelAnimationFrame(drawGameScene);
+    if(isGameOver()) {  // should differentiate victory or loss
+        gameOver("gameover");  
+    }
+    else if (level > MAX_LEVEL){
+        gameOver("win");
     }
     else{
         requestAnimationId = window.requestAnimationFrame(drawGameScene);
     }
 }
+
+
 
 function detectCollision(i){
 
@@ -374,11 +384,13 @@ function startGame(){
 
     window.onresize = changeGameRender;
 
+    updateLevel();
     HideShowElement(lightController);
     HideShowElement(moveController);
     HideShowElement(objDiv);
     HideShowElement(healthBar);
     HideShowElement(score);
+    HideShowElement(levelTab);
     scoretab.id = "gameScoringTab";
 
     restoreMaxLife();
@@ -395,9 +407,7 @@ function startGame(){
 
 /////////////////// little state machine
 function changeState(newState){
-
     state = newState;
-
 }
 
 /////////////////////////////////
@@ -467,14 +477,19 @@ function isGameOver(){
 }
 
 //game over
-function gameOver(){
+function gameOver(action){
     
+    window.cancelAnimationFrame(drawGameScene);
     window.removeEventListener("keydown", keyDownFunction, false);
     window.removeEventListener("keyup", keyUpFunction, false);
     
-    createPopup("gameover");
+    createPopup(action);
 
     textScore.nodeValue = "0"; //reset current score
+    levelNode.nodeValue = 0;
+    level = 0;
+    speed = INITIAL_SPEED;
+    spawnTime = INITIAL_SPAWN;
     starshipY = 0;
     starshipZ = 0;
     restoreMaxLife();
@@ -487,6 +502,7 @@ function gameOver(){
     HideShowElement(objDiv);
     HideShowElement(healthBar);
     HideShowElement(score);
+    HideShowElement(levelTab);
     scoretab.id = "showcaseScoringTab";
 
     gameOn = !gameOn;
@@ -508,6 +524,20 @@ function HideShowElement(x){ // takes an element and hides/shows it
     }
 }
 
+function updateLevel(){
+    if(levelNode == null){ //first initialization
+      level = 1;
+      levelNode = document.createTextNode(1);
+      levelTab.appendChild(levelNode);
+    }
+    else{
+        level = level + 1;
+        levelNode.nodeValue = level; //update levelNode text
+        speed = speed + 0.15;
+        spawnTime = spawnTime - 600;
+    }
+    timestampStartLevel = Date.now();
+}
 // initializes scores to zero
 function createScore(){
     textScore = document.createTextNode(0);
@@ -549,6 +579,37 @@ function createScorePopup(){
     return scoreDiv;
 }
 
+function createWinPopup(){
+    var scoreDiv = document.createElement('div');
+    var ulElement = document.createElement('ul');
+    ulElement.style = 'padding-left: 0px;'
+    var liElement;
+    
+    liElement = document.createElement('li');
+    liElement.innerText = "You win!!";
+    liElement.style = 'padding-bottom: 24px;'
+    ulElement.appendChild(liElement);
+    
+    liElement = document.createElement('li');
+    var currentScore = parseInt(textScore.nodeValue);
+    liElement.innerText = "Your score is: " +  currentScore;
+    liElement.style = 'padding-bottom: 24px;'
+    ulElement.appendChild(liElement);
+
+    if(currentScore > maxScore){
+        liElement = document.createElement('li');
+        liElement.innerText = 'New best score!!';
+        ulElement.appendChild(liElement);
+        
+        maxScore = currentScore;
+        bestScore.nodeValue = maxScore;
+    }
+    
+    scoreDiv.appendChild(ulElement);
+    
+    return scoreDiv;
+}
+
 //creates a generic popup
 function createPopup(action){
 
@@ -566,10 +627,8 @@ function createPopup(action){
     if (action=='gameover'){
         content.appendChild(createScorePopup());
     }
-    else {
-      console.log("Quit not yet implemented");
-      //content.appendChild(createQuitText());  
-      //content.appendChild(createQuitButtonPopup(action));
+    else { //win
+        content.appendChild(createWinPopup());
     }
     
     popup.appendChild(content);

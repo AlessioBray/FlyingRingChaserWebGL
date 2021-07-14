@@ -96,7 +96,9 @@ var score = document.getElementById('score');
 var scoretab = document.getElementById('showcaseScoringTab');
 var bestscore = document.getElementById('bestscore');
 var healthBar = document.getElementById("healthbar");
+var levelTab = document.getElementById("levelTab");
 healthBar.style.display = "none"; // healthbar is initially is hidden
+levelTab.style.display = "none";
 
 // Light controller elements
 var dirLightAlphaASlider = document.getElementById("dirLightAlphaA");
@@ -119,6 +121,14 @@ var maxScore = null;
 POPUP_ID = 'gameOverPopup';
 POPUP_CONTENT_ID = 'popupContent' ;
 CLOSE_BUTTON_ID = 'closeButton';
+
+//Level system
+var levelNode = null;
+var level = 1;
+var timestampStartLevel;
+var DURATION_LEVEL =  20000;
+var MAX_LEVEL = 5;
+
 
 // -------------
 
@@ -211,13 +221,15 @@ var stable = true;
 
 // Spawn
 var lastNewRingTime = Date.now();
-var SPAWNTIME = 2500;
+var INITIAL_SPEED = 0.30;
+var INITIAL_SPAWN = 3000;
+var speed = INITIAL_SPEED;
+var spawnTime = INITIAL_SPAWN;// * speed * (Math.pow(level,8)) ; // spawntime decreases with levels
 var RINGSPAWNRATE = 0.35;
 var ASTEROIDSPAWNRATE = 0.45;
 var HEALTHSPAWNRATE = 0.1;
 var SPEEDSPAWNRATE = 0.1;
 var spawnRates = [RINGSPAWNRATE,ASTEROIDSPAWNRATE,HEALTHSPAWNRATE,SPEEDSPAWNRATE];
-var SPEED = 0.30;
 var deltaMove = 0.01;
 var deltaRotRz = 0.25;//0.3;
 var deltaRotRx = 0.15;//deltaRotRz * 0.25; 
@@ -249,9 +261,8 @@ var maxRz;
 var minRz;
 var delta = 2.5;
 
-
 // Object pooling
-var NUM_OBJECTS_IN_SCENE = 3;
+var NUM_OBJECTS_IN_SCENE = 10;
 var nodes = [];
 var freeslot = 0;
 var collision_index = -1;

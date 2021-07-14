@@ -72,7 +72,7 @@ function keyUpFunction(e){
 
         }
         else{
-            gameOver();
+            gameOver("gameover");
         }    
     }
 
