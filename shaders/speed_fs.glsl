@@ -20,7 +20,7 @@ uniform vec3 lightColorB;
 
 // define specular component of color
 const vec3 specularColor = vec3(0.24, 1, 0);
-const float specShine = 0.4*64.0;
+const float specShine = 0.5*64.0;
 
 // uniform vec3 mDiffColor;
 // uniform vec3 emit;
@@ -34,7 +34,6 @@ const vec3 emit = vec3(0);
 
 const vec3 ambientLightCol = vec3(0.8, 0.8, 0.8); 
 const vec3 ambientMat = vec3(0.8, 0.8, 0.8);
-  
 
 
 ////////////////////////////////////////////////////////////////////////////////

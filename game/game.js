@@ -225,6 +225,9 @@ function animateGame(){
 
 //COLLISSION ANIMATION
 function collisionAnimation1(){
+    xwingNode.drawInfo.isCollided = true;
+    xwingNode.drawInfo.collisionTimeElapsed += 1.0; /////////////////////////////////////////////////////////
+    //console.log(xwingNode.drawInfo.collisionTimeElapsed); //////////////////////////////////////////////////
     if(Math.abs(maxRz - delta) < Rz ){
         changeState(STATE_COLLISSION_2);
    }
@@ -234,7 +237,11 @@ function collisionAnimation1(){
 }
 
 function collisionAnimation2(){
-    if( (minRz+ delta) > Rz  ){
+    xwingNode.drawInfo.isCollided = true;
+    xwingNode.drawInfo.isAsteroidCollision = true;
+    xwingNode.drawInfo.collisionTimeElapsed += 1.0; /////////////////////////////////////////////////////////////
+    //console.log(xwingNode.drawInfo.collisionTimeElapsed); ////////////////////////////////////////////////////
+    if((minRz+ delta) > Rz){
         changeState(STATE_COLLISSION_3);
     }
     else{
@@ -243,10 +250,16 @@ function collisionAnimation2(){
 }
 
 function collisionAnimation3(){
+    xwingNode.drawInfo.isCollided = true;
+    xwingNode.drawInfo.isAsteroidCollision = true;
+    xwingNode.drawInfo.collisionTimeElapsed += 1.0; /////////////////////////////////////////////////////////////
+    //console.log(xwingNode.drawInfo.collisionTimeElapsed); /////////////////////////////////////////////////////
     if(Math.abs(Rz) < delta){
-        Rz=0;
+        Rz = 0;
         window.addEventListener("keydown", keyDownFunction, false);
         window.addEventListener("keyup", keyUpFunction, false);
+        xwingNode.drawInfo.isCollided = false;
+        xwingNode.drawInfo.isAsteroidCollision = false;
         changeState(STATE_STABLE);
    }
    else{
@@ -257,10 +270,10 @@ function collisionAnimation3(){
 
 function stabilizeStarship(){
         //stabilize starship
-      let deltaRz = 1*deltaRotRz;
-      let deltaRx = 1*deltaRotRx;
+        let deltaRz = 1*deltaRotRz;
+        let deltaRx = 1*deltaRotRx;
 
-      if(Math.abs(Rz)< deltaRz)Rz=0; // if close to stability put stable
+        if(Math.abs(Rz)< deltaRz) Rz=0; // if close to stability put stable
         else{
             if(Rz > 0){
                 Rz = Rz-deltaRz;
@@ -348,17 +361,22 @@ function detectCollision(i){
                 minRz = Rz - deltaImpact;
                 window.removeEventListener("keydown", keyDownFunction, false);
                 window.removeEventListener("keyup", keyUpFunction, false);
+                startingCollisionTime = Date.now();
+                xwingNode.drawInfo.isCollided = true;
+                xwingNode.drawInfo.isAsteroidCollision = true;
+                xwingNode.drawInfo.collisionTimeElapsed = 0.0; //////////////////////////////////////////////////////////
                 changeState(STATE_COLLISSION_1);
             }
-
             break;
 
         case HEALTH_INDEX:
             if(distance < COLLISION_RADIUS_HEALTH && i!=collision_index){
                 collision_index = i;
                 restoreLife(20);
+                xwingNode.drawInfo.isCollided = true;
+                xwingNode.drawInfo.isHealthCollision = true;
             }
-
+            
             break;
     }
 }
@@ -368,8 +386,21 @@ function handleObjects(){
     for (var i = 0; i < objects.length; i++){
 
         if(objects[i].worldMatrix[11] > 60){ //out of bounds
-            objects.shift(); //removes first object spawned in scene
-            if(i == collision_index) collision_index = -1; 
+            var removedObj = objects.shift(); //removes first object spawned in scene
+            
+            if (i == collision_index) {
+                switch (removedObj.drawInfo.type){
+                    case HEALTH_INDEX:
+                        xwingNode.drawInfo.isCollided = false;
+                        xwingNode.drawInfo.isHealthCollision = false;
+                        break;
+                    case SPEED_INDEX:
+                        xwingNode.drawInfo.isCollided = false;
+                        xwingNode.drawInfo.isSpeedCollision = false;
+                        break;
+                }
+                collision_index = -1;
+            } 
         }
 
     }
@@ -440,7 +471,7 @@ function restoreLife(hp){
     if (healthBar.value > 70){
         healthBar.style.setProperty("--c", "rgb(0,255,0)");
     }
-    else if (healthBar.value > 30) {
+    else if (healthBar.value > 15) {
         healthBar.style.setProperty("--c", "rgb(255,255,0)");
     }
     else {

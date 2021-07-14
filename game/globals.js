@@ -153,6 +153,13 @@ var lightColorHandleB = new Array();
 
 // X-Wing
 var textureLocation;
+var isCollidedLocation;
+
+var isAsteroidCollisionLocation;
+var isHealthCollisionLocation;
+var isSpeedCollisionLocation;
+
+var collisionTimeElapsedLocation; /////////////////////////////
 
 // Asteroid maps
 var normalMapLocation;
@@ -249,6 +256,8 @@ var COLLISION_RADIUS_RING = 2.5;
 var COLLISION_RADIUS_HEALTH = 1.0;
 var SCORE_RING = 300;
 var ASTEROID_DAMAGE = 30;
+
+var startingCollisionTime;
 
 // Collision Animation
 var deltaImpact = 30;

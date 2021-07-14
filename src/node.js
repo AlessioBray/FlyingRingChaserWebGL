@@ -52,6 +52,11 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 programInfo: programs[XWING_INDEX],
                 bufferLength: allMeshes[XWING_INDEX].indices.length,
                 vertexArray: vaos[XWING_INDEX],
+                isCollided: false,
+                collisionTimeElapsed: 0.0, ///////////////////////////////////////////////////////////////
+                isAsteroidCollision: false,
+                isHealthCollision: false,
+                isSpeedCollision: false,
             };
             showcaseNode.localMatrix = utils.multiplyMatrices(utils.MakeRotateYMatrix(270), utils.MakeTranslateMatrix(0,0.5,0));
             break;

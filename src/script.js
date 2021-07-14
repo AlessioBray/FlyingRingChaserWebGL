@@ -41,6 +41,13 @@ function getAttributesAndUniforms(){
             
             case XWING_INDEX:
                 textureLocation = gl.getUniformLocation(programs[i], "in_texture");
+                isCollidedLocation = gl.getUniformLocation(programs[i], "isCollided");
+                isAsteroidCollisionLocation = gl.getUniformLocation(programs[i], "isAsteroidCollision");
+                isHealthCollisionLocation = gl.getUniformLocation(programs[i], "isHealthCollision");
+                isSpeedCollisionLocation = gl.getUniformLocation(programs[i], "isSpeedCollision");
+
+                collisionTimeElapsedLocation = gl.getUniformLocation(programs[i], "collisionTimeElapsed"); /////////////////// 
+
                 break;
             
             case ASTEROID_INDEX:
@@ -260,6 +267,14 @@ function drawObject(obj){ // obj is the node that represent the object to draw
             gl.activeTexture(gl.TEXTURE1);
             gl.bindTexture(gl.TEXTURE_2D, textures[0]);
             gl.uniform1i(textureLocation, 1);
+            
+            gl.uniform1i(isCollidedLocation, obj.drawInfo.isCollided);
+            gl.uniform1i(isAsteroidCollisionLocation, obj.drawInfo.isAsteroidCollision);
+            gl.uniform1i(isHealthCollisionLocation, obj.drawInfo.isHealthCollision);
+            gl.uniform1i(isSpeedCollisionLocation, obj.drawInfo.isSpeedCollision);
+
+            gl.uniform1i(collisionTimeElapsedLocation, obj.drawInfo.collisionTimeElapsed); /////////////////////////////////////////////
+            
             break;
         
         case ASTEROID_INDEX:
@@ -414,7 +429,7 @@ async function loadShaders() {
 async function loadMeshes() {
 
     xwingMesh = await utils.loadMesh(modelsDir + "xwing_tiefighter.obj");
-    ringMesh = await utils.loadMesh(modelsDir + "ring2.obj" );
+    ringMesh = await utils.loadMesh(modelsDir + "ring3.obj" );
     asteroidMesh = await utils.loadMesh(modelsDir + "sphere_triangulate.obj");
     healthMesh = await utils.loadMesh(modelsDir + "health2.obj");
     speedMesh = await utils.loadMesh(modelsDir + "speed2.obj");

@@ -23,6 +23,19 @@ uniform vec3 lightColorA;
 uniform vec3 lightDirectionB; 
 uniform vec3 lightColorB;
 
+// Collision light (directional)
+const vec3 lightDirectionC = vec3(0, -1, 0);
+const vec3 asteroidlightColorC = vec3(1.0, 0.0, 0.0);
+const vec3 healthlightColorC = vec3(0.0, 1.0, 0.0);
+const vec3 speedlightColorC = vec3(1.0, 1.0, 0.0);
+
+// Collision detection 
+uniform bool isCollided;
+uniform bool isAsteroidCollision;
+uniform bool isHealthCollision;
+uniform bool isSpeedCollision;
+uniform float collisionTimeElepsed;
+
 //texture
 uniform sampler2D in_texture;
 
@@ -89,7 +102,7 @@ void main() {
     // calculate per-light radiance
     vec3 L = normalize(-lightDirectionA);
     vec3 H = normalize(V + L);
-    //float distance = 10.0;
+    
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightColorA * attenuation;
 
@@ -127,7 +140,7 @@ void main() {
     // calculate per-light radiance
     L = normalize(-lightDirectionB);
     H = normalize(V + L);
-    //distance = 10.0;
+    
     attenuation = 1.0 / (distance * distance);
     radiance = lightColorB * attenuation;
 
@@ -157,6 +170,62 @@ void main() {
     // add to outgoing radiance Lo
     Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
     
+    // -------
+
+    // Light C
+    // -------
+    
+    if (isCollided) {
+
+        vec3 lightColorC;
+        if (isAsteroidCollision){
+            lightColorC = asteroidlightColorC;
+        }
+        if (isHealthCollision) {
+            lightColorC = healthlightColorC;
+        }
+        if (isSpeedCollision) {
+            lightColorC = speedlightColorC;
+        }
+
+        float collisionLightDistance = 0.15;
+
+        // calculate per-light radiance
+        L = normalize(-lightDirectionC);
+        H = normalize(V + L);
+        
+        
+        attenuation = 1.0 / (collisionLightDistance * collisionLightDistance);
+        radiance = lightColorC * attenuation;
+
+        // Cook-Torrance BRDF
+        NDF = DistributionGGX(N, H, roughness);   
+        G   = GeometrySmith(N, V, L, roughness);      
+        F   = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
+            
+        numerator    = NDF * G * F; 
+        denominator  = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+        specular     = numerator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0
+            
+        // kS is equal to Fresnel
+        kS = F;
+        // for energy conservation, the diffuse and specular light can't
+        // be above 1.0 (unless the surface emits light); to preserve this
+        // relationship the diffuse component (kD) should equal 1.0 - kS.
+        kD = vec3(1.0) - kS;
+        // multiply kD by the inverse metalness such that only non-metals 
+        // have diffuse lighting, or a linear blend if partly metal (pure metals
+        // have no diffuse light).
+        kD *= 1.0 - metallic;	  
+
+        // scale light by NdotL
+        NdotL = max(dot(N, L), 0.0);        
+
+        // add to outgoing radiance Lo
+        Lo += (kD * albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
+        
+    }
+
     // -------
     
     // ambient lighting
