@@ -158,7 +158,7 @@ function doMouseMove(event) {
 
 function doMouseWheel(event) {
 	var nLookRadius = lookRadius + event.wheelDelta / 100.0;
-	if((nLookRadius > 5.0) && (nLookRadius < 70.0)) {
+	if((nLookRadius > 30.0) && (nLookRadius < 70.0)) {
 		lookRadius = nLookRadius;
 	}
 

@@ -394,6 +394,7 @@ function handleObjects(){
                         xwingNode.drawInfo.isCollided = false;
                         xwingNode.drawInfo.isHealthCollision = false;
                         break;
+                        
                     case SPEED_INDEX:
                         xwingNode.drawInfo.isCollided = false;
                         xwingNode.drawInfo.isSpeedCollision = false;

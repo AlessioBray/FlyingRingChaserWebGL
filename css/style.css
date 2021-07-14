@@ -52,22 +52,23 @@ ul {
     font-family: Soloist; 
     position: absolute; 
     left: 650px; 
-    top: 10px; 
+    top: 10px;
+    
     background-color: #fcba03; 
     opacity: 1.0; 
     padding: 0px 0px 0px 0px; 
     overflow: auto; 
-    border-radius: 30px 30px 30px 30px; 
-    box-shadow: rgba(252, 186, 3, 0.4) 5px 5px, 
-                rgba(252, 186, 3, 0.3) 10px 10px, 
-                rgba(252, 186, 3, 0.2) 15px 15px, 
-                rgba(252, 186, 3, 0.1) 20px 20px, 
-                rgba(252, 186, 3, 0.05) 25px 25px;
+    border-radius: 15px 15px 15px 15px; 
+    box-shadow: rgba(252, 186, 3, 0.4) 0px 0px 0px 3px, 
+                rgba(252, 186, 3, 0.3) 0px 0px 0px 6px, 
+                rgba(252, 186, 3, 0.2) 0px 0px 0px 9px, 
+                rgba(252, 186, 3, 0.1) 0px 0px 0px 12px, 
+                rgba(252, 186, 3, 0.05) 0px 0px 0px 15px;
 }
 
 #level{
     position: relative;   
-    top:5px;
+    top: 5px;
 }
 
 #gameScoringTab {
