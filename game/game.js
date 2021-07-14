@@ -204,6 +204,7 @@ function animateGame(){
 
     if (Date.now() - timestampStartLevel > DURATION_LEVEL){
         updateLevel();
+        spawnTime = spawnTime - 600;
         console.log(spawnTime);
     }
 
@@ -486,7 +487,6 @@ function gameOver(action){
     createPopup(action);
 
     textScore.nodeValue = "0"; //reset current score
-    levelNode.nodeValue = 0;
     level = 0;
     speed = INITIAL_SPEED;
     spawnTime = INITIAL_SPAWN;
@@ -534,7 +534,6 @@ function updateLevel(){
         level = level + 1;
         levelNode.nodeValue = level; //update levelNode text
         speed = speed + 0.15;
-        spawnTime = spawnTime - 600;
     }
     timestampStartLevel = Date.now();
 }
