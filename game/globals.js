@@ -124,10 +124,9 @@ CLOSE_BUTTON_ID = 'closeButton';
 
 //Level system
 var levelNode = null;
-var level = 1;
-var timestampStartLevel;
-var DURATION_LEVEL =  20000;
-var MAX_LEVEL = 5;
+var MAX_LEVEL = 4;
+var MIN_LEVEL = 1;
+var level;
 
 
 // -------------
@@ -254,6 +253,7 @@ var MAX_ROTATION_Z_STARSHIP = 10;
 var COLLISION_RADIUS_ASTEROID = 1.5;
 var COLLISION_RADIUS_RING = 2.5;
 var COLLISION_RADIUS_HEALTH = 1.0;
+var COLLISION_RADIUS_SPEED = 1.0;
 var SCORE_RING = 300;
 var ASTEROID_DAMAGE = 30;
 

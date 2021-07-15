@@ -202,12 +202,6 @@ function animateGame(){
         spawnNewObject();
     }
 
-    if (Date.now() - timestampStartLevel > DURATION_LEVEL){
-        updateLevel();
-        spawnTime = spawnTime - 600;
-        console.log(spawnTime);
-    }
-
     // animate according to current state
     switch(state){
         case STATE_STABLE: stabilizeStarship(); break;
@@ -252,8 +246,7 @@ function collisionAnimation2(){
 function collisionAnimation3(){
     xwingNode.drawInfo.isCollided = true;
     xwingNode.drawInfo.isAsteroidCollision = true;
-    xwingNode.drawInfo.collisionTimeElapsed += 1.0; /////////////////////////////////////////////////////////////
-    //console.log(xwingNode.drawInfo.collisionTimeElapsed); /////////////////////////////////////////////////////
+    xwingNode.drawInfo.collisionTimeElapsed += 1.0;
     if(Math.abs(Rz) < delta){
         Rz = 0;
         window.addEventListener("keydown", keyDownFunction, false);
@@ -357,15 +350,18 @@ function detectCollision(i){
             if(distance < COLLISION_RADIUS_ASTEROID && i!=collision_index){
                 collision_index = i;
                 takeDamage(ASTEROID_DAMAGE);
-                maxRz = Rz + deltaImpact;
-                minRz = Rz - deltaImpact;
-                window.removeEventListener("keydown", keyDownFunction, false);
-                window.removeEventListener("keyup", keyUpFunction, false);
+                levelDown();
+                if(!xwingNode.drawInfo.isCollided){
                 startingCollisionTime = Date.now();
                 xwingNode.drawInfo.isCollided = true;
                 xwingNode.drawInfo.isAsteroidCollision = true;
                 xwingNode.drawInfo.collisionTimeElapsed = 0.0; //////////////////////////////////////////////////////////
+                window.removeEventListener("keydown", keyDownFunction, false);
+                window.removeEventListener("keyup", keyUpFunction, false);
+                maxRz = Rz + deltaImpact;
+                minRz = Rz - deltaImpact;
                 changeState(STATE_COLLISSION_1);
+                }
             }
             break;
 
@@ -378,6 +374,15 @@ function detectCollision(i){
             }
             
             break;
+
+        case SPEED_INDEX:
+
+                if(distance < COLLISION_RADIUS_SPEED && i!=collision_index && !xwingNode.drawInfo.isCollided){
+                    collision_index = i;
+                    levelUp();
+                }
+                
+                break;
     }
 }
 
@@ -417,7 +422,7 @@ function startGame(){
 
     window.onresize = changeGameRender;
 
-    updateLevel();
+    if(levelNode == null) initLevel();
     HideShowElement(lightController);
     HideShowElement(moveController);
     HideShowElement(objDiv);
@@ -480,7 +485,7 @@ function restoreLife(hp){
 
 function addScore(){
     currentScore = parseInt(textScore.nodeValue);
-    newScore = currentScore + SCORE_RING;
+    newScore = currentScore + SCORE_RING*level;
     textScore.nodeValue = newScore;
 }
 
@@ -517,7 +522,8 @@ function gameOver(action){
     createPopup(action);
 
     textScore.nodeValue = "0"; //reset current score
-    level = 0;
+    level = MIN_LEVEL;
+    levelNode.nodeValue = MIN_LEVEL;
     speed = INITIAL_SPEED;
     spawnTime = INITIAL_SPAWN;
     starshipY = 0;
@@ -554,19 +560,30 @@ function HideShowElement(x){ // takes an element and hides/shows it
     }
 }
 
-function updateLevel(){
-    if(levelNode == null){ //first initialization
-      level = 1;
-      levelNode = document.createTextNode(1);
-      levelTab.appendChild(levelNode);
-    }
-    else{
-        level = level + 1;
-        levelNode.nodeValue = level; //update levelNode text
-        speed = speed + 0.15;
-    }
-    timestampStartLevel = Date.now();
+function initLevel(){
+    level = MIN_LEVEL;
+    levelNode = document.createTextNode(MIN_LEVEL);
+    levelTab.appendChild(levelNode);
 }
+
+function levelUp(){
+    if(level<MAX_LEVEL){
+        level = level + 1;
+        levelNode.nodeValue = level; 
+        speed = speed + 0.15;
+        spawnTime = spawnTime - 600;
+    }
+}
+
+function levelDown(){
+    if(level>MIN_LEVEL){
+        level = level - 1;
+        levelNode.nodeValue = level; 
+        speed = speed - 0.15;
+        spawnTime = spawnTime + 600;
+    }
+}
+
 // initializes scores to zero
 function createScore(){
     textScore = document.createTextNode(0);
@@ -608,37 +625,6 @@ function createScorePopup(){
     return scoreDiv;
 }
 
-function createWinPopup(){
-    var scoreDiv = document.createElement('div');
-    var ulElement = document.createElement('ul');
-    ulElement.style = 'padding-left: 0px;'
-    var liElement;
-    
-    liElement = document.createElement('li');
-    liElement.innerText = "You win!!";
-    liElement.style = 'padding-bottom: 24px;'
-    ulElement.appendChild(liElement);
-    
-    liElement = document.createElement('li');
-    var currentScore = parseInt(textScore.nodeValue);
-    liElement.innerText = "Your score is: " +  currentScore;
-    liElement.style = 'padding-bottom: 24px;'
-    ulElement.appendChild(liElement);
-
-    if(currentScore > maxScore){
-        liElement = document.createElement('li');
-        liElement.innerText = 'New best score!!';
-        ulElement.appendChild(liElement);
-        
-        maxScore = currentScore;
-        bestScore.nodeValue = maxScore;
-    }
-    
-    scoreDiv.appendChild(ulElement);
-    
-    return scoreDiv;
-}
-
 //creates a generic popup
 function createPopup(action){
 
@@ -655,9 +641,6 @@ function createPopup(action){
     content.appendChild(createCloseButtonPopup());
     if (action=='gameover'){
         content.appendChild(createScorePopup());
-    }
-    else { //win
-        content.appendChild(createWinPopup());
     }
     
     popup.appendChild(content);
