@@ -59,17 +59,7 @@ function keyUpFunction(e){
 
     if (e.keyCode == 32) {  // spacebar
         if (!gameOn){
-
-            canvas.removeEventListener("mousedown", doMouseDown, false);
-            canvas.removeEventListener("mouseup", doMouseUp, false);
-            canvas.removeEventListener("mousemove", doMouseMove, false);
-            canvas.removeEventListener("mousewheel", doMouseWheel, false);
-
-            window.removeEventListener("keydown", keyDownFunction, false);
-            window.removeEventListener("keyup", keyUpFunction, false);
-            
             startGame();
-
         }
         else{
             gameOver("gameover");

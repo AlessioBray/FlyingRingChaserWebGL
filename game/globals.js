@@ -288,8 +288,3 @@ var STATE_COLLISSION_2 = 6;
 var STATE_COLLISSION_3 = 7;
 
 // ----
-
-//--------------------------------------------------------------------
-
-
-var movementDirection = 'none';

@@ -160,7 +160,6 @@ function moveObjects(){
 function moveStarshipUp(){
     if((Rx - deltaRotRx) < - MAX_ROTATION_X_STARSHIP){
         Rx = -MAX_ROTATION_X_STARSHIP;
-
     }
     else{
 
@@ -416,6 +415,14 @@ function handleObjects(){
 
 //start the game!!
 function startGame(){
+
+    canvas.removeEventListener("mousedown", doMouseDown, false);
+    canvas.removeEventListener("mouseup", doMouseUp, false);
+    canvas.removeEventListener("mousemove", doMouseMove, false);
+    canvas.removeEventListener("mousewheel", doMouseWheel, false);
+
+    window.removeEventListener("keydown", keyDownFunction, false);
+    window.removeEventListener("keyup", keyUpFunction, false);
 
     //console.log("Cancelling animation: " + requestAnimationId);
     window.cancelAnimationFrame(requestAnimationId);
