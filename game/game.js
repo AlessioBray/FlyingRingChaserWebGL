@@ -370,18 +370,28 @@ function detectCollision(i){
                 restoreLife(20);
                 xwingNode.drawInfo.isCollided = true;
                 xwingNode.drawInfo.isHealthCollision = true;
+                setTimeout(function(){ 
+                                xwingNode.drawInfo.isCollided = false;
+                                xwingNode.drawInfo.isHealthCollision = false; 
+                            }, 500);
             }
             
             break;
 
         case SPEED_INDEX:
 
-                if(distance < COLLISION_RADIUS_SPEED && i!=collision_index && !xwingNode.drawInfo.isCollided){
-                    collision_index = i;
-                    levelUp();
-                }
+            if(distance < COLLISION_RADIUS_SPEED && i!=collision_index && !xwingNode.drawInfo.isCollided){
+                collision_index = i;
+                levelUp();
+                xwingNode.drawInfo.isCollided = true;
+                xwingNode.drawInfo.isSpeedCollision = true;
+                setTimeout(function(){ 
+                                xwingNode.drawInfo.isCollided = false;
+                                xwingNode.drawInfo.isSpeedCollision = false; 
+                            }, 500);
+            }
                 
-                break;
+            break;
     }
 }
 
@@ -393,6 +403,7 @@ function handleObjects(){
             var removedObj = objects.shift(); //removes first object spawned in scene
             
             if (i == collision_index) {
+                /*
                 switch (removedObj.drawInfo.type){
                     case HEALTH_INDEX:
                         xwingNode.drawInfo.isCollided = false;
@@ -404,6 +415,7 @@ function handleObjects(){
                         xwingNode.drawInfo.isSpeedCollision = false;
                         break;
                 }
+                */
                 collision_index = -1;
             } 
         }
