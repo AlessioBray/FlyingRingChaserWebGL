@@ -18,22 +18,25 @@ uniform vec3 lightColorB;
 //uniform vec3 specularColor;
 //uniform float specShine;
 
+
+const vec3 diffColor = vec3(1, 1, 0);
+
 // define specular component of color
 const vec3 specularColor = vec3(0.24, 1, 0);
-const float specShine = 0.5*64.0;
+const float specShine = 16.0;
 
 // uniform vec3 mDiffColor;
 // uniform vec3 emit;
 
-const vec3 materialDiffColor = vec3(0.66, 0.66, 0.01);
+const vec3 materialDiffColor = vec3(1, 1, 0);
 const vec3 emit = vec3(0);
 
 //ambient
 //uniform vec3 ambientLightCol;
 //uniform vec3 ambientMat;
 
-const vec3 ambientLightCol = vec3(0.8, 0.8, 0.8); 
-const vec3 ambientMat = vec3(0.8, 0.8, 0.8);
+const vec3 ambientLightCol = vec3(0.4, 0.4, 0.4); 
+const vec3 ambientMat = vec3(1, 1, 1);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +46,7 @@ out vec4 outColor;
 //computes the lambert diffuse
 vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
 
-    vec3 diffL = lightCol * clamp(dot(normalVec, lightDir), 0.0, 1.0);
+    vec3 diffL = lightCol * diffColor * clamp(dot(normalVec, lightDir), 0.0, 1.0);
     return diffL;
 }
 
