@@ -185,6 +185,8 @@ function loadObjectsTextures(){
     };
     images[5].src = textureDir + "asteroid/copper-rock-metal.png";
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+
     textures[6] = gl.createTexture();
 
     images[6] = new Image();
