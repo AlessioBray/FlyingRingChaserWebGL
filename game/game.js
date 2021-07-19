@@ -219,8 +219,6 @@ function animateGame(){
 //COLLISSION ANIMATION
 function collisionAnimation1(){
     xwingNode.drawInfo.isCollided = true;
-    xwingNode.drawInfo.collisionTimeElapsed += 1.0; /////////////////////////////////////////////////////////
-    //console.log(xwingNode.drawInfo.collisionTimeElapsed); //////////////////////////////////////////////////
     if(Math.abs(maxRz - delta) < Rz ){
         changeState(STATE_COLLISSION_2);
    }
@@ -232,8 +230,6 @@ function collisionAnimation1(){
 function collisionAnimation2(){
     xwingNode.drawInfo.isCollided = true;
     xwingNode.drawInfo.isAsteroidCollision = true;
-    xwingNode.drawInfo.collisionTimeElapsed += 1.0; /////////////////////////////////////////////////////////////
-    //console.log(xwingNode.drawInfo.collisionTimeElapsed); ////////////////////////////////////////////////////
     if((minRz+ delta) > Rz){
         changeState(STATE_COLLISSION_3);
     }
@@ -245,7 +241,6 @@ function collisionAnimation2(){
 function collisionAnimation3(){
     xwingNode.drawInfo.isCollided = true;
     xwingNode.drawInfo.isAsteroidCollision = true;
-    xwingNode.drawInfo.collisionTimeElapsed += 1.0;
     if(Math.abs(Rz) < delta){
         Rz = 0;
         window.addEventListener("keydown", keyDownFunction, false);
@@ -354,7 +349,6 @@ function detectCollision(i){
                 startingCollisionTime = Date.now();
                 xwingNode.drawInfo.isCollided = true;
                 xwingNode.drawInfo.isAsteroidCollision = true;
-                xwingNode.drawInfo.collisionTimeElapsed = 0.0; //////////////////////////////////////////////////////////
                 window.removeEventListener("keydown", keyDownFunction, false);
                 window.removeEventListener("keyup", keyUpFunction, false);
                 maxRz = Rz + deltaImpact;

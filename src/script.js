@@ -46,8 +46,6 @@ function getAttributesAndUniforms(){
                 isHealthCollisionLocation = gl.getUniformLocation(programs[i], "isHealthCollision");
                 isSpeedCollisionLocation = gl.getUniformLocation(programs[i], "isSpeedCollision");
 
-                collisionTimeElapsedLocation = gl.getUniformLocation(programs[i], "collisionTimeElapsed"); /////////////////// 
-
                 break;
             
             case ASTEROID_INDEX:
@@ -274,8 +272,6 @@ function drawObject(obj){ // obj is the node that represent the object to draw
             gl.uniform1i(isAsteroidCollisionLocation, obj.drawInfo.isAsteroidCollision);
             gl.uniform1i(isHealthCollisionLocation, obj.drawInfo.isHealthCollision);
             gl.uniform1i(isSpeedCollisionLocation, obj.drawInfo.isSpeedCollision);
-
-            gl.uniform1i(collisionTimeElapsedLocation, obj.drawInfo.collisionTimeElapsed); /////////////////////////////////////////////
             
             break;
         

@@ -34,7 +34,6 @@ uniform bool isCollided;
 uniform bool isAsteroidCollision;
 uniform bool isHealthCollision;
 uniform bool isSpeedCollision;
-uniform float collisionTimeElepsed;
 
 //texture
 uniform sampler2D in_texture;

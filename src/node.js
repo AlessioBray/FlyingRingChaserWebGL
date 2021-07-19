@@ -53,7 +53,6 @@ function createShowcaseSceneGraph(){ //scene graph show case
                 bufferLength: allMeshes[XWING_INDEX].indices.length,
                 vertexArray: vaos[XWING_INDEX],
                 isCollided: false,
-                collisionTimeElapsed: 0.0, ///////////////////////////////////////////////////////////////
                 isAsteroidCollision: false,
                 isHealthCollision: false,
                 isSpeedCollision: false,
