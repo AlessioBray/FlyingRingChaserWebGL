@@ -287,4 +287,17 @@ var STATE_COLLISSION_1 = 5;
 var STATE_COLLISSION_2 = 6;
 var STATE_COLLISSION_3 = 7;
 
+var STATE_MOVING_LEFT_UP = 8;
+var STATE_MOVING_RIGHT_UP = 9;
+var STATE_MOVING_LEFT_DOWN = 10;
+var STATE_MOVING_RIGHT_DOWN = 11;
+
 // ----
+
+
+// Events
+// ------
+
+var keys = new Array();
+
+// ------

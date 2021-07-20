@@ -143,10 +143,16 @@ function moveObjects(){
 
     switch(state){
        case STATE_MOVING_DOWN : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,speed); break;
-       case STATE_MOVING_UP : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,speed); break;
+       case STATE_MOVING_UP : matrix = utils.MakeTranslateMatrix(0,-deltaMoveX,speed); break;  
        case STATE_MOVING_LEFT : matrix = utils.MakeTranslateMatrix(deltaMoveZ,0,speed); break;
        case STATE_MOVING_RIGHT : matrix = utils.MakeTranslateMatrix(-deltaMoveZ,0,speed); break;
-       default: matrix = utils.MakeTranslateMatrix(0,0,speed); break;
+
+        case STATE_MOVING_LEFT_UP: matrix = utils.MakeTranslateMatrix(deltaMoveZ, -deltaMoveX, speed); break;
+        case STATE_MOVING_RIGHT_UP: matrix = utils.MakeTranslateMatrix(-deltaMoveZ, -deltaMoveX, speed); break;
+        case STATE_MOVING_LEFT_DOWN: matrix = utils.MakeTranslateMatrix(deltaMoveZ, deltaMoveX, speed); break;
+        case STATE_MOVING_RIGHT_DOWN: matrix = utils.MakeTranslateMatrix(-deltaMoveZ, deltaMoveX, speed); break;
+
+       default: matrix = utils.MakeTranslateMatrix(0, 0, speed); break;
     }
 
     for (var i = 0; i < objects.length; i++){  
@@ -194,6 +200,7 @@ function moveStarshipLeft(){
     }
 }
 
+
 function animateGame(){
 
     // spawn objects
@@ -208,6 +215,12 @@ function animateGame(){
         case STATE_MOVING_DOWN: moveStarshipDown(); break;
         case STATE_MOVING_RIGHT: moveStarshipRight(); break;
         case STATE_MOVING_LEFT: moveStarshipLeft(); break;
+
+        case STATE_MOVING_LEFT_UP: moveStarshipLeft(); moveStarshipUp(); break;
+        case STATE_MOVING_RIGHT_UP: moveStarshipRight(); moveStarshipUp(); break;
+        case STATE_MOVING_LEFT_DOWN: matrix = moveStarshipLeft(); moveStarshipDown();break;
+        case STATE_MOVING_RIGHT_DOWN: matrix = moveStarshipRight(); moveStarshipDown(); break;
+
         case STATE_COLLISSION_1: collisionAnimation1(); break;
         case STATE_COLLISSION_2: collisionAnimation2(); break;
         case STATE_COLLISSION_3: collisionAnimation3(); break;

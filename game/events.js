@@ -13,7 +13,8 @@ function keyDownFunction(e){
                 break;
             }
             else{
-                changeState(STATE_MOVING_LEFT);
+                keys[e.keyCode] = true;
+                //changeState(STATE_MOVING_LEFT);
                 //moveStarship('left');
                 break;
             }
@@ -26,7 +27,8 @@ function keyDownFunction(e){
                 break;
             }
             else{
-                changeState(STATE_MOVING_RIGHT);
+                keys[e.keyCode] = true;
+                //changeState(STATE_MOVING_RIGHT);
                 //moveStarship('right');
                 break;
             }
@@ -34,7 +36,8 @@ function keyDownFunction(e){
         case "ArrowUp":
         case "w": 
             if (gameOn){
-                changeState(STATE_MOVING_UP);
+                keys[e.keyCode] = true;
+                //changeState(STATE_MOVING_UP);
                 //moveStarship('up');
             }
             
@@ -44,8 +47,9 @@ function keyDownFunction(e){
         case "s": 
             
             if (gameOn){
-               changeState(STATE_MOVING_DOWN);
-               //moveStarship('down');
+                keys[e.keyCode] = true;
+                //changeState(STATE_MOVING_DOWN);
+                //moveStarship('down');
             }
             break;
 
@@ -53,6 +57,30 @@ function keyDownFunction(e){
             break;  
     }
 
+    if (keys[37] && keys[38]){
+        changeState(STATE_MOVING_LEFT_UP);
+    }
+    else if (keys[39] && keys[38]){
+        changeState(STATE_MOVING_RIGHT_UP);
+    }
+    else if (keys[37] && keys[40]){
+        changeState(STATE_MOVING_LEFT_DOWN);
+    }
+    else if (keys[39] && keys[40]){
+        changeState(STATE_MOVING_RIGHT_DOWN);
+    }
+    else if (keys[37]){
+        changeState(STATE_MOVING_LEFT);
+    }
+    else if (keys[38]){
+        changeState(STATE_MOVING_UP);
+    }
+    else if (keys[39]){
+        changeState(STATE_MOVING_RIGHT);
+    }
+    else if (keys[40]){
+        changeState(STATE_MOVING_DOWN);
+    }
 }
 
 function keyUpFunction(e){
@@ -72,8 +100,25 @@ function keyUpFunction(e){
         || e.keyCode == 83 // "s"
         || e.keyCode == 68 //"d" 
         ) && gameOn) {
-            changeState(STATE_STABLE);
-        };
+            keys[e.keyCode] = false;
+            //changeState(STATE_STABLE);
+    };
+
+    if (keys[37]){
+        changeState(STATE_MOVING_LEFT);
+    }
+    else if (keys[38]){
+        changeState(STATE_MOVING_UP);
+    }
+    else if (keys[39]){
+        changeState(STATE_MOVING_RIGHT);
+    }
+    else if (keys[40]){
+        changeState(STATE_MOVING_DOWN);
+    }
+    else{
+        changeState(STATE_STABLE);
+    }
 
 }
 
