@@ -106,63 +106,43 @@ function keyUpFunction(e){
             
             //changeState(STATE_STABLE);
     };
-    
-    var STATE_STABILIZE_LEFT = 12;
-    var STATE_STABILIZE_RIGHT = 13;
-    var STATE_STABILIZE_UP = 14;
-    var STATE_STABILIZE_DOWN = 15;
 
-    var STATE_STABILIZE_LEFT_UP = 16;
-    var STATE_STABILIZE_RIGHT_UP = 17;
-    var STATE_STABILIZE_LEFT_DOWN = 18;
-    var STATE_STABILIZE_RIGHT_DOWN = 19;
     */
     keys[e.keyCode] = false;
 
     if (e.keyCode == 37){
         if (stabilization == 0){
-            stabilization = STATE_STABILIZE_LEFT;
+            stabilization = STABILIZE_Z;
         }
-        else if (stabilization == STATE_STABILIZE_UP){
-            stabilization = STATE_STABILIZE_LEFT_UP;
-        }
-        else if (stabilization == STATE_STABILIZE_DOWN){
-            stabilization = STATE_STABILIZE_LEFT_DOWN;
+        else if (stabilization == STABILIZE_X){
+            stabilization = STABILIZE_X_Z;
         }
     }
     else if (e.keyCode == 38){
         if (stabilization == 0){
-            stabilization = STATE_STABILIZE_UP;
+            stabilization = STABILIZE_X;
         }
-        else if (stabilization == STATE_STABILIZE_LEFT){
-            stabilization = STATE_STABILIZE_LEFT_UP;
-        }
-        else if (stabilization == STATE_STABILIZE_RIGHT){
-            stabilization = STATE_STABILIZE_RIGHT_UP;
+        else if (stabilization == STABILIZE_Z){
+            stabilization = STABILIZE_X_Z;
         }
     }
     else if (e.keyCode == 39){
         if (stabilization == 0){
-            stabilization = STATE_STABILIZE_RIGHT;
+            stabilization = STABILIZE_Z;
         }
-        else if (stabilization == STATE_STABILIZE_UP){
-            stabilization = STATE_STABILIZE_RIGHT_UP;
+        else if (stabilization == STABILIZE_X){
+            stabilization = STABILIZE_X_Z;
         }
-        else if (stabilization == STATE_STABILIZE_DOWN){
-            stabilization = STATE_STABILIZE_RIGHT_DOWN;
-        }  
     }
     else if (e.keyCode == 40){
         if (stabilization == 0){
-            stabilization = STATE_STABILIZE_DOWN;
+            stabilization = STABILIZE_X;
         }
-        else if (stabilization == STATE_STABILIZE_LEFT){
-            stabilization = STATE_STABILIZE_LEFT_DOWN;
-        }
-        else if (stabilization == STATE_STABILIZE_RIGHT){
-            stabilization = STATE_STABILIZE_RIGHT_DOWN;
+        else if (stabilization == STABILIZE_Z){
+            stabilization = STABILIZE_X_Z;
         }
     }
+    console.log(stabilization);
 
     if (keys[37]){
         changeState(STATE_MOVING_LEFT);

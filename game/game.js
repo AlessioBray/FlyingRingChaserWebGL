@@ -264,7 +264,6 @@ function collisionAnimation3(){
         xwingNode.drawInfo.isCollided = false;
         xwingNode.drawInfo.isAsteroidCollision = false;
         changeState(STATE_STABLE);
-        
    }
    else{
        Rz = Rz + delta;
@@ -280,8 +279,7 @@ function stabilizeStarship(){
         let deltaRz = 1*deltaRotRz;
         let deltaRx = 1*deltaRotRx;
         
-        if (stabilization == STATE_STABILIZE_LEFT || stabilization == STATE_STABILIZE_LEFT_UP || stabilization == STATE_STABILIZE_LEFT_DOWN ||
-            stabilization == STATE_STABILIZE_RIGHT || stabilization == STATE_STABILIZE_RIGHT_UP || stabilization == STATE_STABILIZE_RIGHT_DOWN){
+        if (stabilization == STABILIZE_Z || stabilization == STABILIZE_X_Z){
 
             if(Math.abs(Rz) < deltaRz){
                 Rz = 0; // if close to stability put stable
@@ -297,8 +295,7 @@ function stabilizeStarship(){
             }
         }
 
-        if (stabilization == STATE_STABILIZE_UP || stabilization == STATE_STABILIZE_LEFT_UP || stabilization == STATE_STABILIZE_RIGHT_UP ||
-            stabilization == STATE_STABILIZE_DOWN || stabilization == STATE_STABILIZE_LEFT_DOWN || stabilization == STATE_STABILIZE_RIGHT_DOWN){
+        if (stabilization == STABILIZE_X || stabilization == STABILIZE_X_Z){
 
             if(Math.abs(Rx)< deltaRx){
                 Rx = 0; // if close to stability put stable
@@ -315,34 +312,22 @@ function stabilizeStarship(){
 
         if (Rz == 0){
             switch (stabilization){
-                case STATE_STABILIZE_LEFT:
-                case STATE_STABILIZE_RIGHT:
+                case STABILIZE_Z:
                     stabilization = 0;
                     break;
-                case STATE_STABILIZE_LEFT_UP:
-                case STATE_STABILIZE_RIGHT_UP:
-                    stabilization = STATE_STABILIZE_UP;
-                    break;
-                case STATE_STABILIZE_LEFT_DOWN:
-                case STATE_STABILIZE_RIGHT_DOWN:
-                    stabilization = STATE_STABILIZE_DOWN;
+                case STABILIZE_X_Z:
+                    stabilization = STABILIZE_X;
                     break;
             }
         }
 
         if (Rx == 0){
             switch (stabilization){
-                case STATE_STABILIZE_UP:
-                case STATE_STABILIZE_DOWN:
+                case STABILIZE_X:
                     stabilization = 0;
                     break;
-                case STATE_STABILIZE_LEFT_UP:
-                case STATE_STABILIZE_LEFT_DOWN:
-                    stabilization = STATE_STABILIZE_LEFT;
-                    break;
-                case STATE_STABILIZE_RIGHT_UP:
-                case STATE_STABILIZE_RIGHT_DOWN:
-                    stabilization = STATE_STABILIZE_RIGHT;
+                case STABILIZE_X_Z:
+                    stabilization = STABILIZE_Z;
                     break;
             }
         }
@@ -427,61 +412,24 @@ function detectCollision(i){
                 if (state == STATE_STABLE){
                     stabilization = 0;
                 }
-                else if (state == STATE_MOVING_LEFT){
+                else if (state == STATE_MOVING_LEFT || state == STATE_MOVING_RIGHT){
                     if (stabilization == 0){
-                        stabilization = STATE_STABILIZE_LEFT;
+                        stabilization = STABILIZE_Z;
                     }
-                    else if (stabilization == STATE_STABILIZE_UP){
-                        stabilization = STATE_STABILIZE_LEFT_UP;
-                    }
-                    else if (stabilization == STATE_STABILIZE_DOWN){
-                        stabilization = STATE_STABILIZE_LEFT_DOWN;
+                    else if (stabilization == STABILIZE_X){
+                        stabilization = STABILIZE_X_Z;
                     }
                 }
-                else if (state == STATE_MOVING_UP){
+                else if (state == STATE_MOVING_UP || state == STATE_MOVING_DOWN){
                     if (stabilization == 0){
-                        stabilization = STATE_STABILIZE_UP;
+                        stabilization = STABILIZE_X;
                     }
-                    else if (stabilization == STATE_STABILIZE_LEFT){
-                        stabilization = STATE_STABILIZE_LEFT_UP;
-                    }
-                    else if (stabilization == STATE_STABILIZE_RIGHT){
-                        stabilization = STATE_STABILIZE_RIGHT_UP;
+                    else if (stabilization == STABILIZE_Z){
+                        stabilization = STABILIZE_X_Z;
                     }
                 }
-                else if (state == STATE_MOVING_RIGHT){
-                    if (stabilization == 0){
-                        stabilization = STATE_STABILIZE_RIGHT;
-                    }
-                    else if (stabilization == STATE_STABILIZE_UP){
-                        stabilization = STATE_STABILIZE_RIGHT_UP;
-                    }
-                    else if (stabilization == STATE_STABILIZE_DOWN){
-                        stabilization = STATE_STABILIZE_RIGHT_DOWN;
-                    }  
-                }
-                else if (state == STATE_MOVING_DOWN){
-                    if (stabilization == 0){
-                        stabilization = STATE_STABILIZE_DOWN;
-                    }
-                    else if (stabilization == STATE_STABILIZE_LEFT){
-                        stabilization = STATE_STABILIZE_LEFT_DOWN;
-                    }
-                    else if (stabilization == STATE_STABILIZE_RIGHT){
-                        stabilization = STATE_STABILIZE_RIGHT_DOWN;
-                    }
-                }
-                else if (state == STATE_MOVING_LEFT_UP){
-                    stabilization = STATE_STABILIZE_LEFT_UP;
-                }
-                else if (state == STATE_MOVING_RIGHT_UP){
-                    stabilization = STATE_STABILIZE_RIGHT_UP;
-                }
-                else if (state == STATE_MOVING_LEFT_DOWN){
-                    stabilization = STATE_STABILIZE_LEFT_DOWN;
-                }
-                else if (state == STATE_MOVING_RIGHT_DOWN){
-                    stabilization = STATE_STABILIZE_RIGHT_DOWN;
+                else if (state == STATE_MOVING_LEFT_UP || state == STATE_MOVING_RIGHT_UP || state == STATE_MOVING_LEFT_DOWN || state == STATE_MOVING_RIGHT_DOWN){
+                    stabilization = STABILIZE_X_Z;
                 }
                 
                 changeState(STATE_COLLISSION_1);
