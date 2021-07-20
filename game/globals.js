@@ -276,7 +276,7 @@ var nodes = [];
 var freeslot = 0;
 var collision_index = -1;
 
-//state machine
+// State encoding for state machine
 var state = 0;
 var STATE_STABLE = 0;
 var STATE_MOVING_UP = 1;
@@ -294,7 +294,6 @@ var STATE_MOVING_LEFT_DOWN = 10;
 var STATE_MOVING_RIGHT_DOWN = 11;
 
 // Stabilization encoding
-
 var stabilization = 0;
 var STABILIZE_X = 1;
 var STABILIZE_Z = 2;
