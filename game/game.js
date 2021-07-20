@@ -210,7 +210,7 @@ function animateGame(){
 
     // animate according to current state
     switch(state){
-        case STATE_STABLE: stabilizeStarship(); break;
+        case STATE_STABLE: /*stabilizeStarship();*/ break;
         case STATE_MOVING_UP: moveStarshipUp(); break;
         case STATE_MOVING_DOWN: moveStarshipDown(); break;
         case STATE_MOVING_RIGHT: moveStarshipRight(); break;
@@ -226,6 +226,8 @@ function animateGame(){
         case STATE_COLLISSION_3: collisionAnimation3(); break;
         default: console.log("Error in state machine, state undefined!!");
     }
+
+    stabilizeStarship();
     
 }
 
@@ -269,29 +271,84 @@ function collisionAnimation3(){
 
 
 function stabilizeStarship(){
+
+    if (stabilization != 0){
+
         //stabilize starship
         let deltaRz = 1*deltaRotRz;
         let deltaRx = 1*deltaRotRx;
+        
+        if (stabilization == STATE_STABILIZE_LEFT || stabilization == STATE_STABILIZE_LEFT_UP || stabilization == STATE_STABILIZE_LEFT_DOWN ||
+            stabilization == STATE_STABILIZE_RIGHT || stabilization == STATE_STABILIZE_RIGHT_UP || stabilization == STATE_STABILIZE_RIGHT_DOWN){
 
-        if(Math.abs(Rz)< deltaRz) Rz=0; // if close to stability put stable
-        else{
-            if(Rz > 0){
-                Rz = Rz-deltaRz;
+            console.log("arrivo");
+            if(Math.abs(Rz) < deltaRz){
+                Rz = 0; // if close to stability put stable
             }
-            else{ //Rz < 0 
-                Rz = Rz + deltaRz;
-            }
-        }
-        if(Math.abs(Rx)< deltaRx) Rx=0; // if close to stability put stable
-        else{
-            if(Rx > 0){
-                Rx = Rx-deltaRx;
-            }
-            else{ //Rz < 0 
-                Rx = Rx + deltaRx;
+            else{
+                if(Rz > 0){
+                    Rz = Rz - deltaRz;
+                }
+                else{ //Rz < 0 
+                    Rz = Rz + deltaRz;
+                }
+        
             }
         }
+
+        if (stabilization == STATE_STABILIZE_UP || stabilization == STATE_STABILIZE_LEFT_UP || stabilization == STATE_STABILIZE_RIGHT_UP ||
+            stabilization == STATE_STABILIZE_DOWN || stabilization == STATE_STABILIZE_LEFT_DOWN || stabilization == STATE_STABILIZE_RIGHT_DOWN){
+
+            if(Math.abs(Rx)< deltaRx){
+                Rx = 0; // if close to stability put stable
+            }
+            else{
+                if(Rx > 0){
+                    Rx = Rx - deltaRx;
+                }
+                else{ //Rz < 0 
+                    Rx = Rx + deltaRx;
+                }
+            }
+        }
+
+        if (Rz == 0){
+            switch (stabilization){
+                case STATE_STABILIZE_LEFT:
+                case STATE_STABILIZE_RIGHT:
+                    stabilization = 0;
+                    break;
+                case STATE_STABILIZE_LEFT_UP:
+                case STATE_STABILIZE_RIGHT_UP:
+                    stabilization = STATE_STABILIZE_UP;
+                    break;
+                case STATE_STABILIZE_LEFT_DOWN:
+                case STATE_STABILIZE_RIGHT_DOWN:
+                    stabilization = STATE_STABILIZE_DOWN;
+                    break;
+            }
+        }
+
+        if (Rx == 0){
+            switch (stabilization){
+                case STATE_STABILIZE_UP:
+                case STATE_STABILIZE_DOWN:
+                    stabilization = 0;
+                    break;
+                case STATE_STABILIZE_LEFT_UP:
+                case STATE_STABILIZE_LEFT_DOWN:
+                    stabilization = STATE_STABILIZE_LEFT;
+                    break;
+                case STATE_STABILIZE_RIGHT_UP:
+                case STATE_STABILIZE_RIGHT_DOWN:
+                    stabilization = STATE_STABILIZE_RIGHT;
+                    break;
+            }
+        }
+        
+    }
 }
+
 
 function drawGameScene() {    
 
