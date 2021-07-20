@@ -277,7 +277,7 @@ var freeslot = 0;
 var collision_index = -1;
 
 //state machine
-var state;
+var state = 0;
 var STATE_STABLE = 0;
 var STATE_MOVING_UP = 1;
 var STATE_MOVING_DOWN = 2;

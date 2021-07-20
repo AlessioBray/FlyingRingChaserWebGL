@@ -88,9 +88,12 @@ function keyUpFunction(e){
     if (e.keyCode == 32) {  // spacebar
         if (!gameOn){
             startGame();
+            console.log(stabilization, state);
+            return;
         }
         else{
             gameOver("gameover");
+            return;
         }    
     }
     /*
@@ -154,13 +157,12 @@ function keyUpFunction(e){
             stabilization = STATE_STABILIZE_DOWN;
         }
         else if (stabilization == STATE_STABILIZE_LEFT){
-            stabilization = STATE_STABILIZE_DOWN_LEFT;
+            stabilization = STATE_STABILIZE_LEFT_DOWN;
         }
         else if (stabilization == STATE_STABILIZE_RIGHT){
-            stabilization = STATE_STABILIZE_DOWN_RIGHT;
+            stabilization = STATE_STABILIZE_RIGHT_DOWN;
         }
     }
-    console.log(stabilization);
 
     if (keys[37]){
         changeState(STATE_MOVING_LEFT);

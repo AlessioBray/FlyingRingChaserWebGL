@@ -210,16 +210,16 @@ function animateGame(){
 
     // animate according to current state
     switch(state){
-        case STATE_STABLE: /*stabilizeStarship();*/ break;
-        case STATE_MOVING_UP: moveStarshipUp(); break;
-        case STATE_MOVING_DOWN: moveStarshipDown(); break;
-        case STATE_MOVING_RIGHT: moveStarshipRight(); break;
-        case STATE_MOVING_LEFT: moveStarshipLeft(); break;
+        case STATE_STABLE: stabilizeStarship(); break;
+        case STATE_MOVING_UP: moveStarshipUp(); stabilizeStarship(); break;
+        case STATE_MOVING_DOWN: moveStarshipDown(); stabilizeStarship(); break;
+        case STATE_MOVING_RIGHT: moveStarshipRight(); stabilizeStarship(); break;
+        case STATE_MOVING_LEFT: moveStarshipLeft(); stabilizeStarship(); break;
 
-        case STATE_MOVING_LEFT_UP: moveStarshipLeft(); moveStarshipUp(); break;
-        case STATE_MOVING_RIGHT_UP: moveStarshipRight(); moveStarshipUp(); break;
-        case STATE_MOVING_LEFT_DOWN: matrix = moveStarshipLeft(); moveStarshipDown();break;
-        case STATE_MOVING_RIGHT_DOWN: matrix = moveStarshipRight(); moveStarshipDown(); break;
+        case STATE_MOVING_LEFT_UP: moveStarshipLeft(); moveStarshipUp(); stabilizeStarship(); break;
+        case STATE_MOVING_RIGHT_UP: moveStarshipRight(); moveStarshipUp(); stabilizeStarship(); break;
+        case STATE_MOVING_LEFT_DOWN: matrix = moveStarshipLeft(); moveStarshipDown(); stabilizeStarship(); break;
+        case STATE_MOVING_RIGHT_DOWN: matrix = moveStarshipRight(); moveStarshipDown(); stabilizeStarship(); break;
 
         case STATE_COLLISSION_1: collisionAnimation1(); break;
         case STATE_COLLISSION_2: collisionAnimation2(); break;
@@ -227,7 +227,7 @@ function animateGame(){
         default: console.log("Error in state machine, state undefined!!");
     }
 
-    stabilizeStarship();
+    
     
 }
 
@@ -258,14 +258,16 @@ function collisionAnimation3(){
     xwingNode.drawInfo.isAsteroidCollision = true;
     if(Math.abs(Rz) < delta){
         Rz = 0;
+        keys = new Array();
         window.addEventListener("keydown", keyDownFunction, false);
         window.addEventListener("keyup", keyUpFunction, false);
         xwingNode.drawInfo.isCollided = false;
         xwingNode.drawInfo.isAsteroidCollision = false;
         changeState(STATE_STABLE);
+        
    }
    else{
-       Rz = Rz+ delta;
+       Rz = Rz + delta;
    }
 }
 
@@ -281,7 +283,6 @@ function stabilizeStarship(){
         if (stabilization == STATE_STABILIZE_LEFT || stabilization == STATE_STABILIZE_LEFT_UP || stabilization == STATE_STABILIZE_LEFT_DOWN ||
             stabilization == STATE_STABILIZE_RIGHT || stabilization == STATE_STABILIZE_RIGHT_UP || stabilization == STATE_STABILIZE_RIGHT_DOWN){
 
-            console.log("arrivo");
             if(Math.abs(Rz) < deltaRz){
                 Rz = 0; // if close to stability put stable
             }
@@ -375,7 +376,7 @@ function drawGameScene() {
         gameOver("gameover");  
     }
     else if (level > MAX_LEVEL){
-        gameOver("win");
+        gameOver("win");                                                    ///////////////////////////////////////////////
     }
     else{
         requestAnimationId = window.requestAnimationFrame(drawGameScene);
@@ -423,6 +424,66 @@ function detectCollision(i){
                 window.removeEventListener("keyup", keyUpFunction, false);
                 maxRz = Rz + deltaImpact;
                 minRz = Rz - deltaImpact;
+                if (state == STATE_STABLE){
+                    stabilization = 0;
+                }
+                else if (state == STATE_MOVING_LEFT){
+                    if (stabilization == 0){
+                        stabilization = STATE_STABILIZE_LEFT;
+                    }
+                    else if (stabilization == STATE_STABILIZE_UP){
+                        stabilization = STATE_STABILIZE_LEFT_UP;
+                    }
+                    else if (stabilization == STATE_STABILIZE_DOWN){
+                        stabilization = STATE_STABILIZE_LEFT_DOWN;
+                    }
+                }
+                else if (state == STATE_MOVING_UP){
+                    if (stabilization == 0){
+                        stabilization = STATE_STABILIZE_UP;
+                    }
+                    else if (stabilization == STATE_STABILIZE_LEFT){
+                        stabilization = STATE_STABILIZE_LEFT_UP;
+                    }
+                    else if (stabilization == STATE_STABILIZE_RIGHT){
+                        stabilization = STATE_STABILIZE_RIGHT_UP;
+                    }
+                }
+                else if (state == STATE_MOVING_RIGHT){
+                    if (stabilization == 0){
+                        stabilization = STATE_STABILIZE_RIGHT;
+                    }
+                    else if (stabilization == STATE_STABILIZE_UP){
+                        stabilization = STATE_STABILIZE_RIGHT_UP;
+                    }
+                    else if (stabilization == STATE_STABILIZE_DOWN){
+                        stabilization = STATE_STABILIZE_RIGHT_DOWN;
+                    }  
+                }
+                else if (state == STATE_MOVING_DOWN){
+                    if (stabilization == 0){
+                        stabilization = STATE_STABILIZE_DOWN;
+                    }
+                    else if (stabilization == STATE_STABILIZE_LEFT){
+                        stabilization = STATE_STABILIZE_LEFT_DOWN;
+                    }
+                    else if (stabilization == STATE_STABILIZE_RIGHT){
+                        stabilization = STATE_STABILIZE_RIGHT_DOWN;
+                    }
+                }
+                else if (state == STATE_MOVING_LEFT_UP){
+                    stabilization = STATE_STABILIZE_LEFT_UP;
+                }
+                else if (state == STATE_MOVING_RIGHT_UP){
+                    stabilization = STATE_STABILIZE_RIGHT_UP;
+                }
+                else if (state == STATE_MOVING_LEFT_DOWN){
+                    stabilization = STATE_STABILIZE_LEFT_DOWN;
+                }
+                else if (state == STATE_MOVING_RIGHT_DOWN){
+                    stabilization = STATE_STABILIZE_RIGHT_DOWN;
+                }
+                
                 changeState(STATE_COLLISSION_1);
                 }
             }
@@ -602,6 +663,9 @@ function gameOver(action){
     window.removeEventListener("keydown", keyDownFunction, false);
     window.removeEventListener("keyup", keyUpFunction, false);
     
+    state = STATE_STABLE;
+    console.log(state);
+    
     createPopup(action);
 
     textScore.nodeValue = "0"; //reset current score
@@ -611,9 +675,16 @@ function gameOver(action){
     spawnTime = INITIAL_SPAWN;
     starshipY = 0;
     starshipZ = 0;
+    starshipX = 0;
     restoreMaxLife();
     camera_z = 50;
     lookRadius = 50;
+    keys = new Array();
+    Rz = 0;
+    Rx = 0;
+
+    stabilization = 0;
+    
 
     // show controllers 
     HideShowElement(lightController);  
