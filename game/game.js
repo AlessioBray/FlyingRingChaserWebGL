@@ -137,9 +137,9 @@ function moveObjects(){
     let matrix = [];
 
     let boostMitigation = 0.3;
-    let boost = (speed - INITIAL_SPEED) * boostMitigation;
-    let deltaMoveX = 30 * (INITIAL_SPEED + boost) * Math.tan(utils.degToRad(deltaRotRx)); // deltaMoveX : deltaMove Z = 3:2
-    let deltaMoveZ = 20 * (INITIAL_SPEED + boost) * Math.tan(utils.degToRad(deltaRotRz)); 
+    let boost = (speed - INITIAL_SPEED) * boostMitigation;  //deltaMoveX 30 , deltaMoveZ 20
+    let deltaMoveX = 39 * (INITIAL_SPEED + boost) * Math.tan(utils.degToRad(deltaRotRx)); // deltaMoveX : deltaMove Z = 3:2
+    let deltaMoveZ = 26 * (INITIAL_SPEED + boost) * Math.tan(utils.degToRad(deltaRotRz)); 
 
     switch(state){
        case STATE_MOVING_DOWN : matrix = utils.MakeTranslateMatrix(0,deltaMoveX,speed); break;

@@ -227,7 +227,7 @@ var stable = true;
 
 // Spawn
 var lastNewRingTime = Date.now();
-var INITIAL_SPEED = 0.30;
+var INITIAL_SPEED = 0.35; // 0.30
 var INITIAL_SPAWN = 3000;
 var speed = INITIAL_SPEED;
 var spawnTime = INITIAL_SPAWN;// * speed * (Math.pow(level,8)) ; // spawntime decreases with levels
@@ -242,8 +242,8 @@ var deltaRotRx = 0.15;//deltaRotRz * 0.25;
 var ANGULARSPEED_X = 0.6;
 var ANGULARSPEED_Y = 0.6;
 var ANGULARSPEED_Z = 0.6;
-var MAX_X = 4 - GAME_XWING_POSITION[0];//10;
-var MIN_X = 2 - GAME_XWING_POSITION[0]; //5; 
+var MAX_X = 8 - GAME_XWING_POSITION[0];//4;
+var MIN_X = 4 - GAME_XWING_POSITION[0]; //2; 
 var MAX_Y = 2 - GAME_XWING_POSITION[1]; //2 
 var MIN_Y = 1 - GAME_XWING_POSITION[1]; //1
 var MAX_ROTATION_X_STARSHIP = 5;
