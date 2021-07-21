@@ -9,7 +9,7 @@ out vec4 fsCamera;
 
 uniform mat4 worldViewProjectionMatrix; // World view rojection matrix (passed in js as transpose to match the glsl convention)
 uniform mat4 worldMatrix; // world matrix (passed in js as transpose to match the glsl convention)
-uniform mat4 normalMatrix; //normal matrix (passed in js as transpose to match the glsl convention)
+uniform mat4 normalMatrix; // normal matrix (passed in js as transpose to match the glsl convention)
 
 uniform vec4 cameraPosition;
 

@@ -110,7 +110,7 @@ function setGameMatrices(){
     // Compute the camera matrix
     aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     perspectiveMatrix = utils.MakePerspective(fieldOfViewDeg, aspect, zNear, zFar);
-    viewMatrix = utils.MakeView(GAME_CAMERA_POSITION[0], GAME_CAMERA_POSITION[1], GAME_CAMERA_POSITION[2], GAME_CAMERA_POSITION[3], GAME_CAMERA_POSITION[4]);
+    viewMatrix = utils.MakeView(GAME_CAMERA_POSITION[0], GAME_CAMERA_POSITION[1], GAME_CAMERA_POSITION[2], camera_elevation, camera_angle);
 
 }
 
@@ -168,8 +168,8 @@ function moveStarshipUp(){
         Rx = -MAX_ROTATION_X_STARSHIP;
     }
     else{
-
         Rx = Rx - deltaRotRx;
+        camera_elevation += 0.025;
     }
 }
 
@@ -179,6 +179,7 @@ function moveStarshipDown(){
     }
     else{
         Rx = Rx + deltaRotRx;
+        camera_elevation -= 0.025;
     }
 }
 
@@ -188,6 +189,7 @@ function moveStarshipRight(){
     }
     else{
         Rz = Rz - deltaRotRz;
+        camera_angle += 0.025;
     }   
 }
 
@@ -197,6 +199,7 @@ function moveStarshipLeft(){
     }
     else{
         Rz = Rz + deltaRotRz;
+        camera_angle -= 0.025;
     }
 }
 
@@ -283,13 +286,16 @@ function stabilizeStarship(){
 
             if(Math.abs(Rz) < deltaRz){
                 Rz = 0; // if close to stability put stable
+                camera_angle = 0;
             }
             else{
                 if(Rz > 0){
                     Rz = Rz - deltaRz;
+                    camera_angle += 0.025;
                 }
                 else{ //Rz < 0 
                     Rz = Rz + deltaRz;
+                    camera_angle -= 0.025;
                 }
         
             }
@@ -299,13 +305,16 @@ function stabilizeStarship(){
 
             if(Math.abs(Rx)< deltaRx){
                 Rx = 0; // if close to stability put stable
+                camera_elevation = 0;
             }
             else{
                 if(Rx > 0){
                     Rx = Rx - deltaRx;
+                    camera_elevation += 0.025;
                 }
                 else{ //Rz < 0 
                     Rx = Rx + deltaRx;
+                    camera_elevation -= 0.025;
                 }
             }
         }
