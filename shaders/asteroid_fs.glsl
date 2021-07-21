@@ -36,15 +36,23 @@ vec3 getNormalFromMap()
 {
     vec3 tangentNormal = texture(normalMap, fsUV).xyz * 2.0 - 1.0;
 
-    vec3 Q1  = vec3(dFdx(fsPosition));
-    vec3 Q2  = vec3(dFdy(fsPosition));
-    vec2 st1 = dFdx(fsUV);
-    vec2 st2 = dFdy(fsUV);
+    // Determine how the position coordinates changes on screen
+    vec3 p_dx  = vec3(dFdx(fsPosition));
+    vec3 p_dy  = vec3(dFdy(fsPosition));
+
+    // Determine how the UV coordinates changes on screen
+    vec2 tc_dx = dFdx(fsUV);  // approximate the derivatives of fsUV according to the horizontal edge of the screen
+    vec2 tc_dy = dFdy(fsUV);  // approximate the derivatives of fsUV according to the vertical edge of the screen
+
+    vec3 T = (tc_dy.y * p_dx - tc_dx.y * p_dy) / (tc_dx.x * tc_dy.y - tc_dy.x * tc_dx.y);
 
     vec3 N   = normalize(fsNormal);
-    vec3 T   = normalize(Q1*st2.t - Q2*st1.t);
+
+    T = normalize(T - N * dot(N, T)); // Gram-Schmidth normalization to make sure that the normal and tangent are still orthogonal after interpolation
+
     vec3 B   = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
+
+    mat3 TBN = mat3(T, B, N); // TBN frame matrix
 
     return normalize(TBN * tangentNormal);
 }
