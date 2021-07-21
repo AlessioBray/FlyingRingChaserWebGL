@@ -265,7 +265,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
 
     let normalMatrix = utils.invertMatrix(utils.transposeMatrix(obj.worldMatrix));
     let viewWorldMatrix = utils.multiplyMatrices(viewMatrix, obj.worldMatrix);
-    let projectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
+    let worldViewProjectionMatrix = utils.multiplyMatrices(perspectiveMatrix, viewWorldMatrix);
 
     switch (obj.drawInfo.type){
         case XWING_INDEX:
@@ -317,7 +317,7 @@ function drawObject(obj){ // obj is the node that represent the object to draw
             break;
     }
 
-    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(projectionMatrix));
+    gl.uniformMatrix4fv(worldViewProjectionMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(worldViewProjectionMatrix));
     gl.uniformMatrix4fv(normalMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(normalMatrix));
     gl.uniformMatrix4fv(worldMatrixLocation[obj.drawInfo.type], gl.FALSE, utils.transposeMatrix(obj.worldMatrix)); // for World Space as Shading Space
 

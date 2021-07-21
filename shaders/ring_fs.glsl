@@ -4,7 +4,7 @@ precision highp float;
 const float PI = 3.14159265359;
 const float distance = 0.5; // lights are directional ones
 
-// material parameters
+// Material parameters
 
 const float roughness = 0.4;
 const float metallic = 0.9;
@@ -16,13 +16,13 @@ const vec3 green_albedo = vec3(0.0, 1.0, 0.0);
 
 in vec3 fsNormal;
 in vec4 fsPosition;
-in vec4 fsCamera; // Camera position
+in vec4 fsCamera;
 
-//directional light A
+// Directional light A
 uniform vec3 lightDirectionA; 
 uniform vec3 lightColorA;
 
-//directional light B
+// Directional light B
 uniform vec3 lightDirectionB; 
 uniform vec3 lightColorB;
 

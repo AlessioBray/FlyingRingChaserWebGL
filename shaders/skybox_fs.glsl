@@ -10,9 +10,9 @@ uniform mat4 inverseViewProjMatrix;
 out vec4 outColor;
  
 void main() {
-    vec4 p = inverseViewProjMatrix * vec4(sampleDir, 1.0);
+    vec4 p = inverseViewProjMatrix * vec4(sampleDir, 1.0); 
     
-    vec4 rgba = texture(u_texture, normalize(p.xyz / p.w)); // instead of normalize p.xyw to obtain a moving effect
+    vec4 rgba = texture(u_texture, normalize(p.xyz / p.w));
     
     outColor = vec4(rgba.rgb, 1.0);
 }

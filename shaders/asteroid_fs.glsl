@@ -4,26 +4,20 @@ precision highp float;
 const float PI = 3.14159265359;
 const float distance = 0.5; // lights are directional ones
 
-// material parameters
-//const vec3 albedo = vec3(1.0, 1.0, 1.0);
-//const float roughness = 0.9;
-//const float metallic = 0.0;
-//const float ao = 1.0;
-
 in vec3 fsNormal;
 in vec4 fsPosition;
-in vec4 fsCamera; // Camera position
+in vec4 fsCamera;
 in vec2 fsUV;
 
-//directional light A
+// Directional light A
 uniform vec3 lightDirectionA; 
 uniform vec3 lightColorA;
 
-//directional light B
+// Directional light B
 uniform vec3 lightDirectionB; 
 uniform vec3 lightColorB;
 
-//texture
+// Texture
 uniform sampler2D diffuseMap;
 uniform sampler2D roughnessMap;
 uniform sampler2D aoMap;
@@ -101,12 +95,10 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 void main() {
 
     vec3 albedo = texture(diffuseMap, fsUV).rgb;
-    //albedo = vec3(pow(albedo.r, 2.2), pow(albedo.g, 2.2), pow(albedo.b, 2.2));
     float metallic  = texture(metalnessMap, fsUV).r;
     float roughness = texture(roughnessMap, fsUV).r;
     float ao =  texture(aoMap, fsUV).r;
     
-
     //normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = getNormalFromMap();
     vec3 V = vec3(normalize(fsCamera - fsPosition));

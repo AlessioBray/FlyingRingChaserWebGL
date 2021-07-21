@@ -88,7 +88,7 @@ function drawSkybox(){
     skyboxProgram = programs[SKYBOX_INDEX];
     gl.useProgram(skyboxProgram);
 
-    //Uniforms
+    // Uniforms
     skyboxTexHandle = gl.getUniformLocation(skyboxProgram, "u_texture"); 
     inverseViewProjMatrixHandle = gl.getUniformLocation(skyboxProgram, "inverseViewProjMatrix");
     skyboxVertPosAttr = gl.getAttribLocation(skyboxProgram, "inPosition");

@@ -15,8 +15,8 @@ uniform vec4 cameraPosition;
 
 void main() {
 
-    fsNormal = mat3(normalMatrix) * inNormal;
-    fsPosition = (worldMatrix * vec4(inPosition, 1.0)); // coordinates in world space
+    fsNormal = mat3(normalMatrix) * inNormal;           // World space as Shading Space
+    fsPosition = (worldMatrix * vec4(inPosition, 1.0)); // World space as Shading Space
 
     fsCamera = cameraPosition;
 

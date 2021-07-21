@@ -8,7 +8,7 @@ void main() {
     gl_Position = vec4(inPosition, 1.0);
  
     // Since the positions are
-    // centered around the origin we can just 
-    // pass the position
+    // centered around the origin we just 
+    // pass the position.
     sampleDir = inPosition;
 }

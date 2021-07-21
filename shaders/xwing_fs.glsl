@@ -15,11 +15,11 @@ in vec4 fsPosition;
 in vec4 fsCamera; // Camera position
 in vec2 fsUV;
 
-//directional light A
+// Directional light A
 uniform vec3 lightDirectionA; 
 uniform vec3 lightColorA;
 
-//directional light B
+// Directional light B
 uniform vec3 lightDirectionB; 
 uniform vec3 lightColorB;
 
@@ -35,7 +35,7 @@ uniform bool isAsteroidCollision;
 uniform bool isHealthCollision;
 uniform bool isSpeedCollision;
 
-//texture
+// Texture
 uniform sampler2D in_texture;
 
 out vec4 outColor;
@@ -171,8 +171,8 @@ void main() {
     
     // -------
 
-    // Light C
-    // -------
+    // Light C (i.e. collision light)
+    // ------------------------------
     
     if (isCollided) {
 
@@ -225,7 +225,7 @@ void main() {
         
     }
 
-    // -------
+    // ------------------------------
     
     // ambient lighting
     vec3 ambient = vec3(0.03) * albedo * ao;
