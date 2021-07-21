@@ -20,10 +20,10 @@ function loadEnvironment(){
     gl.vertexAttribPointer(skyboxVertPosAttr, 3, gl.FLOAT, false, 0, 0);
     
     skyboxTexture = gl.createTexture();
-    gl.activeTexture(gl.TEXTURE0 + 3);
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_CUBE_MAP, skyboxTexture);
     
-    var envTexDir = baseDir+"assets/env/";
+    var envTexDir = baseDir + "assets/env/";
  
     const faceInfos = [
         {
@@ -63,7 +63,7 @@ function loadEnvironment(){
         const format = gl.RGBA;
         const type = gl.UNSIGNED_BYTE;
         
-        // setup each face so it's immediately renderable
+        // Setup each face so it's immediately renderable
         gl.texImage2D(target, level, internalFormat, width, height, 0, format, type, null);
         
         // Asynchronously load an image
@@ -77,9 +77,6 @@ function loadEnvironment(){
             gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
             gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
             gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
         });
     
     });

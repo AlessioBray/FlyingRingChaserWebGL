@@ -53,8 +53,7 @@ vec3 lambertDiffuse(vec3 lightDir, vec3 lightCol, vec3 normalVec) {
 //computes the blinn specular
 vec3 blinnSpecular(vec3 lightDir, vec3 lightCol, vec3 normalVec, vec4 fsPosition, float specShine) {
     
-    // camera space implies eye position to be (0,0,0)
-    vec4 eyePosition = fsCamera;   // what is eyePos in world space??
+    vec4 eyePosition = fsCamera;
     vec3 eyeDir = vec3(normalize(eyePosition - fsPosition));
     vec3 halfVec = normalize(eyeDir + lightDir);
     vec3 specularBl = pow(max(dot(halfVec, normalVec), 0.0), specShine) * lightCol;
