@@ -71,7 +71,7 @@ void main() {
     vec3 ambient = ambientLightCol * ambientMat;
   
     // Computing BRDF color
-    vec4 color = vec4(clamp(blinnSpec + lambertDiff + ambient + emit, 0.0, 1.0).rgb,1.0);
+    vec4 color = vec4(clamp(blinnSpec + lambertDiff + ambient + emit, 0.0, 1.0).rgb, 1.0);
   
     outColor = color;
 
