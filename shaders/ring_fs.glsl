@@ -32,6 +32,8 @@ uniform bool isMissed;
 
 out vec4 outColor;
 
+// ----------------------------------------------------------------------------
+// Distribution term that accounts for the roughness
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
     float a = roughness*roughness;
@@ -57,6 +59,7 @@ float GeometrySchlickGGX(float NdotV, float roughness)
     return nom / denom;
 }
 // ----------------------------------------------------------------------------
+// Geometry term that connects the direction of the light to the viewer accounting how much you can see
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
     float NdotV = max(dot(N, V), 0.0);
@@ -67,6 +70,7 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
     return ggx1 * ggx2;
 }
 // ----------------------------------------------------------------------------
+// Fresnel term approximation i.e. accounts for the fresnel effect i.e. how the light responds change w.r.t. the relation of the light incidence angle and the viewer
 vec3 fresnelSchlick(float cosTheta, vec3 F0)
 {
     return F0 + (1.0 - F0) * pow(max(1.0 - cosTheta, 0.0), 5.0);
@@ -77,7 +81,7 @@ void main() {
 
     // normalize fsNormal, it might not be in the normalized form coming from the vs
     vec3 N = normalize(fsNormal);
-    vec3 V = vec3(normalize(fsCamera - fsPosition));
+    vec3 V = vec3(normalize(fsCamera - fsPosition)); // observer direction
 
     vec3 albedo;
 
@@ -94,7 +98,7 @@ void main() {
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
     vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, albedo, metallic);
+    F0 = mix(F0, albedo, metallic); // linearly interpolate (start, end, interpolation_coeff)
 
     // reflectance equation
     vec3 Lo = vec3(0.0);
@@ -105,7 +109,7 @@ void main() {
     // calculate per-light radiance
     vec3 L = normalize(-lightDirectionA);
     vec3 H = normalize(V + L);
-    //float distance = 10.0;
+    
     float attenuation = 1.0 / (distance * distance);
     vec3 radiance = lightColorA * attenuation;
 
@@ -115,7 +119,7 @@ void main() {
     vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
            
     vec3 numerator    = NDF * G * F; 
-    float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+    float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0); // normalizes the values of the numerator
     vec3 specular = numerator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0
         
     // kS is equal to Fresnel
@@ -153,7 +157,7 @@ void main() {
     F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
            
     numerator    = NDF * G * F; 
-    denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+    denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0); 
     specular = numerator / max(denominator, 0.001); // prevent divide by zero for NdotV=0.0 or NdotL=0.0
         
     // kS is equal to Fresnel
@@ -167,7 +171,7 @@ void main() {
     // have no diffuse light).
     kD *= 1.0 - metallic;	  
 
-    // scale light by NdotL
+    // scale light by NdotL (cosine of the angle between the light direction and the normal)
     NdotL = max(dot(N, L), 0.0);        
 
     // add to outgoing radiance Lo
