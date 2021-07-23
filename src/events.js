@@ -263,7 +263,7 @@ directionalLightColorBSlider.addEventListener("input",updateLights,false);
 canvas.addEventListener("mousedown", doMouseDown, false);
 canvas.addEventListener("mouseup", doMouseUp, false);
 canvas.addEventListener("mousemove", doMouseMove, false);
-canvas.addEventListener("mousewheel", doMouseWheel, false);
+//canvas.addEventListener("mousewheel", doMouseWheel, false);
 
 // Showcase event listeners (key)
 window.addEventListener("keydown", keyDownFunction, false);

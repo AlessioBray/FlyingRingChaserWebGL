@@ -497,7 +497,7 @@ function startGame(){
     canvas.removeEventListener("mousedown", doMouseDown, false);
     canvas.removeEventListener("mouseup", doMouseUp, false);
     canvas.removeEventListener("mousemove", doMouseMove, false);
-    canvas.removeEventListener("mousewheel", doMouseWheel, false);
+    //canvas.removeEventListener("mousewheel", doMouseWheel, false);
 
     window.removeEventListener("keydown", keyDownFunction, false);
     window.removeEventListener("keyup", keyUpFunction, false);
@@ -736,7 +736,7 @@ function closePopup(){
     canvas.addEventListener("mousedown", doMouseDown, false);
     canvas.addEventListener("mouseup", doMouseUp, false);
     canvas.addEventListener("mousemove", doMouseMove, false);
-    canvas.addEventListener("mousewheel", doMouseWheel, false);
+    //canvas.addEventListener("mousewheel", doMouseWheel, false);
 }
 
 // Creates a close button in the popup

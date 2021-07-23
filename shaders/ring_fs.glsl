@@ -184,9 +184,9 @@ void main() {
 
     vec3 color = ambient + Lo;
 
-    // HDR tonemapping
+    // HDR tonemapping (i.e. put values in [0, 1] range) Reinhard tonemapping
     color = color / (color + vec3(1.0));
-    // gamma correct
+    // gamma correction (non-linear transformation to brighten the colors, i.e. correct the color scale so that the monitor is able to display colours more physically accurate)
     color = pow(color, vec3(1.0/2.2)); 
 
     outColor = vec4(color, 1.0);
