@@ -26,3 +26,5 @@ health
 
 In the showcase two directional lights are used to enlight the assets. The user can change the color and the direction of these directional lights as well as see the objects from different perspectives by moving the camera.
 
+The space is implemented with a skybox.
+
