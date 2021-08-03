@@ -13,11 +13,16 @@ The collision with the asteroids decreases the life and slows down your starship
 
 # Graphics Design
 All the assets have been created and edited with Blender and are shown initially in the showcase before the game:
+
 starship
+
 asteroid
+
 ring
+
 speed
+
 health
-In the showcase two directional lights are used to enlight the assets. The user can change the color and the direction of these directional lights as well as see the objects from different perspectives
-by moving the camera.
+
+In the showcase two directional lights are used to enlight the assets. The user can change the color and the direction of these directional lights as well as see the objects from different perspectives by moving the camera.
 
